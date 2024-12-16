@@ -31,6 +31,13 @@ export function getCurrentSelectedData() {
 export function closePopup() {
 	currentSelectedData = null
 	currentSelectedObjType = null
+	history.replaceState(null, "", "/")
+}
+
+function openPopup(data: MapData, type: ObjectType) {
+	currentSelectedData = data
+	currentSelectedObjType = type
+	history.replaceState(null, "", getCurrentPath());
 }
 
 export function getCurrentPath() {
@@ -44,14 +51,9 @@ export function clickMapHandler(event: MapMouseEvent) {
 	// @ts-ignore
 	if (event.originalEvent.target?.dataset.objectType) {
 		// @ts-ignore
-		currentSelectedData = mapObjectsState[event.originalEvent.target.dataset.objectId]
-		// @ts-ignore
-		currentSelectedObjType = event.originalEvent.target.dataset.objectType
-
-		history.replaceState(null, "", getCurrentPath());
+		openPopup(mapObjectsState[event.originalEvent.target.dataset.objectId], event.originalEvent.target.dataset.objectType)
 	} else {
 		closePopup()
-		history.replaceState(null, "", "/")
 	}
 }
 
@@ -59,9 +61,7 @@ export function clickFeatureHandler(event: LayerClickInfo<Feature>) {
 	console.log(event)
 	if (event.features) {
 		const props = event.features[0].properties
-		currentSelectedData = mapObjectsState[props.id]
-		currentSelectedObjType = props.type
-		history.replaceState(null, "", getCurrentPath());
+		openPopup(mapObjectsState[props.id], props.type)
 	}
 }
 
