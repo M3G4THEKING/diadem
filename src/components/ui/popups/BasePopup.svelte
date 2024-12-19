@@ -4,9 +4,9 @@
 	import Card from '@/components/ui/Card.svelte';
 	import { X } from 'lucide-svelte';
 	import type { Snippet } from 'svelte';
-	import {closePopup} from '@/lib/mapObjects/mapObjects.svelte.js';
-	import {scale, slide, fly, draw, crossfade} from "svelte/transition"
-	import {cubicIn, cubicOut, quintIn} from 'svelte/easing';
+	import { closePopup } from '@/lib/mapObjects/mapObjects.svelte.js';
+	import { slide } from 'svelte/transition';
+	import { cubicIn, cubicOut } from 'svelte/easing';
 
 	let {
 		lat,

@@ -1,0 +1,54 @@
+[server.golbat]
+url = ""
+auth = ""
+
+### Map Styles
+
+[[client.mapStyles]]
+id = "positron"
+name = "Positron"
+url = "https://basemaps.cartocdn.com/gl/positron-gl-style/style.json"
+
+[[client.mapStyles]]
+id = "dark"
+name = "Dark"
+url = "https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json"
+
+[[client.mapStyles]]
+id = "voyager"
+name = "Voyager"
+url = "https://basemaps.cartocdn.com/gl/voyager-gl-style/style.json"
+
+
+### UICON Sets
+
+
+[[client.uiconSets]]
+id = "pogoOutline"
+name = "Default"
+url = "https://raw.githubusercontent.com/whitewillem/PogoAssets/refs/heads/main/uicons-outline/"
+scale = 0.25
+
+[[client.uiconSets]]
+id = "home"
+name = "Home"
+url = "https://raw.githubusercontent.com/nileplumb/PkmnHomeIcons/master/UICONS_OS_128/"
+scale = 0.25
+
+[[client.uiconSets]]
+id = "shuffle"
+name = "Shuffle"
+url = "https://raw.githubusercontent.com/nileplumb/PkmnShuffleMap/master/UICONS/"
+scale = 0.25
+
+[[client.uiconSets]]
+id = "shuffleShiny"
+name = "Shiny"
+url = "https://raw.githubusercontent.com/jms412/PkmnShuffleMap/master/UICONS_Half_Shiny_128/"
+scale = 0.25
+
+# [[client.uiconSets]]
+# id = "cage"
+# name = "Cage"
+# url = "https://raw.githubusercontent.com/RagingRectangle/CageMons/main"
+# scale = 0.035

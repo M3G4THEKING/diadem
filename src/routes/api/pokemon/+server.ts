@@ -1,5 +1,6 @@
 import { json } from '@sveltejs/kit';
-import {env} from '$env/dynamic/private';
+import {env} from '$env/dynamic/private'
+import { getServerConfig } from '@/lib/config.server';
 
 export async function POST({ request }) {
 	const reqBody = await request.json()
@@ -21,16 +22,13 @@ export async function POST({ request }) {
 			}
 		]
 	}
-	console.log(body)
-
-	console.log()
 
 	const response = await fetch(
-		env.GOLBAT_BACKEND_URL,
+		getServerConfig().golbat.url || env.GOLBAT_BACKEND_URL,
 		{
 			method: "POST",
 			headers: {
-				"Authorization": env.GOLBAT_BACKEND_AUTH,
+				"Authorization": getServerConfig().golbat.auth || env.GOLBAT_BACKEND_AUTH,
 			},
 			body: JSON.stringify(body)
 		}

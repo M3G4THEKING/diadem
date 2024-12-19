@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { isPopupExpanded, togglePopupExpanded } from '@/components/ui/popups/isPopupExpanded.svelte.js';
-	import { Eye, EyeClosed, Map, Share2 } from 'lucide-svelte';
+	import { Eye, EyeClosed, Map, Share2, SquareArrowOutUpRight, Navigation } from 'lucide-svelte';
 	import Button from '@/components/ui/Button.svelte';
 
 	let {
@@ -33,10 +33,10 @@
 <div class="flex px-4 gap-1.5 absolute bottom-4 w-full">
 	<Button size="default" onclick={togglePopupExpanded}>
 		{#if isPopupExpanded()}
-			<EyeClosed size="20"/>
+			<EyeClosed size="18"/>
 			<span class="max-[304px]:hidden">Hide details</span>
 		{:else}
-			<Eye size="20"/>
+			<Eye size="18"/>
 			<span class="max-[304px]:hidden">Show details</span>
 		{/if}
 	</Button>
@@ -47,7 +47,7 @@
 		href="https://maps.google.com?q={lat},{lon}"
 		target="_blank"
 	>
-		<Map size="20"/>
+		<Navigation size="18"/>
 		<span class="max-[364px]:hidden">Navigate</span>
 	</Button>
 
@@ -57,7 +57,7 @@
 			tag="button"
 			onclick={shareCurrentUrl}
 		>
-			<Share2 size="20"/>
+			<Share2 size="18"/>
 			<span class="max-[406px]:hidden">Share</span>
 		</Button>
 	{/if}

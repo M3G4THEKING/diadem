@@ -9,6 +9,8 @@
 		...rest
 	} = $props()
 
+	// TODO better logic with mod for each step
+
 	if (childCount > 4) {
 		childCount = 4
 	}

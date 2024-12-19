@@ -107,6 +107,7 @@
 			</div>
 
 			<SelectGroup
+				childCount={getConfig().mapStyles.length}
 				value={getUserSettings().mapStyle.id}
 				onValueChange={onMapStyleChange}
 			>

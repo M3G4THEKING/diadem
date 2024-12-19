@@ -142,11 +142,6 @@
 					<span>
 						Size M
 					</span>
-					<span class="ml-0.5">
-						({data.height?.toFixed(2)}m,
-						{data.weight?.toFixed(2)}kg)
-					</span>
-
 				{/snippet}
 			</IconValue>
 		{/if}

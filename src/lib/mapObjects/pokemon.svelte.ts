@@ -8,7 +8,7 @@ export async function updatePokemon(bounds: LngLatBounds) {
 		maxLat: bounds.getNorth(),
 		maxLon: bounds.getEast()
 	}
-	fetch("/pokemon", { method: "POST",  body: JSON.stringify(body)})
+	fetch("/api/pokemon", { method: "POST",  body: JSON.stringify(body)})
 		.then(r => {
 			r.json()
 				.then(pokemonList => {

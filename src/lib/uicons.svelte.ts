@@ -1,7 +1,8 @@
 import { UICONS } from "uicons.js"
 import {getUserSettings} from '@/lib/userSettings.svelte';
-import {getConfig, type UiconSet} from '@/lib/config';
+import {getConfig} from '@/lib/config';
 import type {PokemonData} from '@/lib/types/mapObjectData/pokemon';
+import type { UiconSet } from '@/lib/types/config';
 
 const iconSets: {[key: string]: UICONS} = {}
 

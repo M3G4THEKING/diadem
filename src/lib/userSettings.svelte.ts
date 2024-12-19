@@ -23,30 +23,33 @@ type UserSettings = {
 	isDarkMode: boolean | null
 }
 
-const defaultUserSettings = {
-	mapPosition: {
-		center: {
-			lat: 53.86762990550971,
-			lng: 10.687758976519007,
+function getDefaultUserSettings() {
+	return {
+		mapPosition: {
+			center: {
+				lat: 53.86762990550971,
+				lng: 10.687758976519007,
+			},
+			zoom: 15
 		},
-		zoom: 15
-	},
-	mapStyle: {
-		id: getConfig().mapStyles[0].id,
-		url: getConfig().mapStyles[0].url,
-	},
-	uiconSet: {
-		id: getConfig().uiconSets[0].id,
-		url: getConfig().uiconSets[0].url,
-	},
-	isLeftHanded: false,
-	isDarkMode: false
+		mapStyle: {
+			id: getConfig().mapStyles[0].id,
+			url: getConfig().mapStyles[0].url,
+		},
+		uiconSet: {
+			id: getConfig().uiconSets[0].id,
+			url: getConfig().uiconSets[0].url,
+		},
+		isLeftHanded: false,
+		isDarkMode: false
+	}
 }
 
-let userSettings: UserSettings = $state(defaultUserSettings)
+// @ts-ignore
+let userSettings: UserSettings = $state({})
 
 export function setUserSettings(newUserSettings: UserSettings) {
-	userSettings =  deepMerge(defaultUserSettings, newUserSettings)
+	userSettings =  deepMerge(getDefaultUserSettings(), newUserSettings)
 	console.log(userSettings)
 }
 
