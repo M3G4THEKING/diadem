@@ -9,10 +9,11 @@
 	} = $props()
 </script>
 
-<!--TODO disabled hover styles-->
-<button
+<Button
+	variant="ghost"
+	size=""
 	class="h-14 w-14 bg-card border rounded-xl shadow-lg flex items-center justify-center hover:bg-accent hover:text-accent-foreground pointer-events-auto disabled:pointer-events-none {class_}"
 	{...rest}
 >
 	{@render children()}
-</button>
+</Button>

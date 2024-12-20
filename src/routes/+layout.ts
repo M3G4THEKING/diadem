@@ -14,10 +14,12 @@ export const load = async ({fetch}) => {
 
 	if (browser) {
 		const rawUserSettings = localStorage.getItem('userSettings')
-		console.log(rawUserSettings)
-		if (rawUserSettings) setUserSettings(JSON.parse(rawUserSettings))
 
-		setUserSettings(getDefaultUserSettings())
-		updateUserSettings()
+		if (rawUserSettings) {
+			setUserSettings(JSON.parse(rawUserSettings))
+		} else {
+			setUserSettings(getDefaultUserSettings())
+			updateUserSettings()
+		}
 	}
 }

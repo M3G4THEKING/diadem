@@ -62,7 +62,7 @@
 	class:items-end={!getUserSettings().isLeftHanded}
 >
 	<div
-		class="mx-2 space-y-1.5 mb-2"
+		class="mx-2 gap-2 mb-2 flex-col flex"
 	>
 		<SearchFab />
 		<LocateFab {map} />

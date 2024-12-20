@@ -7,6 +7,7 @@
 	import { closePopup } from '@/lib/mapObjects/mapObjects.svelte.js';
 	import { slide } from 'svelte/transition';
 	import { cubicIn, cubicOut } from 'svelte/easing';
+	import Button from '@/components/ui/Button.svelte';
 
 	let {
 		lat,
@@ -44,9 +45,9 @@
 				</div>
 			{/if}
 		</div>
-		<button class="self-start ml-0.5" onclick={() => closePopup()}>
+		<Button variant="ghost" size="" class="self-start ml-0.5 rounded-sm -mt-2 p-2 -m-3" onclick={() => closePopup()}>
 			<X />
-		</button>
+		</Button>
 	</div>
 
 	{#if isPopupExpanded()}
