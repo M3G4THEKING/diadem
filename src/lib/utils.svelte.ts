@@ -15,3 +15,9 @@ export function updateDarkMode() {
 	}
 	document.documentElement.classList[isDark() ? 'add' : 'remove']('dark');
 }
+
+let loadedImages: {[key: string]: HTMLImageElement | ImageBitmap} = $state({})
+
+export function getLoadedImages() {
+	return loadedImages
+}

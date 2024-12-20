@@ -6,12 +6,13 @@
 		getMapObjects,
 		updateAllMapObjects
 	} from '@/lib/mapObjects/mapObjects.svelte.js';
-	import { GeoJSON, MapLibre, Marker, SymbolLayer } from 'svelte-maplibre';
+	import { GeoJSON, Layer, MapLibre, Marker, SymbolLayer } from 'svelte-maplibre';
 	import { getUserSettings, updateUserSettings } from '@/lib/userSettings.svelte';
-	import maplibre from 'maplibre-gl';
+	import maplibre, { GeoJSONSource } from 'maplibre-gl';
 	import { tick, untrack } from 'svelte';
 	import type { FeatureCollection } from 'geojson';
-	import { getCurrentUiconSetDetails, getIconPokemon, getIconPokestop } from '@/lib/uicons.svelte';
+	import { getCurrentUiconSetDetails, getIconPokemon, getIconPokestop, getIcon } from '@/lib/uicons.svelte';
+	import {getLoadedImages} from '@/lib/utils.svelte';
 
 	let {
 		map = $bindable()
@@ -31,33 +32,41 @@
 					coordinates: [obj.lon, obj.lat]
 				},
 				properties: {
-					imageUrl: getIconPokemon(obj),
-					id: "pokemon-" + obj.id,
-					type: "pokemon"
-					// image: "cat",
+					imageUrl: getIcon(obj),
+					id: obj.mapId,
+					type: obj.type
 				},
-				id: "pokemon-" + obj.id
+				id: obj.mapId
 			}
 		})
 	})
 
-	let loadedImages: string[] = []
-
-	async function addMapImage(id: string, url: string) {
+	const sessionImageUrls: string[] = []
+	async function addMapImage(url: string) {
+		// TODO come up with a system to update the icon scale evrytime the iconset changes
 		if (!map) return
-		if (loadedImages.includes(id)) return
-		loadedImages.push(id)
+		if (sessionImageUrls.includes(url)) return
+		sessionImageUrls.push(url)
 
-		const image = await map.loadImage(url)
-		map.addImage(id, image.data)
+		let imageData = getLoadedImages()[url]
+		if (!imageData) {
+			const image = await map.loadImage(url)
+			imageData = image.data
+			getLoadedImages()[url] = imageData
+		}
+
+		map.addImage(url, imageData)
 	}
 
-	async function loadMapObjects() {
-		if (!map) return
-		await updateAllMapObjects(map.getBounds())
+	async function loadMapObjects(removeOld: boolean = true) {
+		if (map) await updateAllMapObjects(map, removeOld)
 	}
+
+	let loadMapObjectInterval: undefined | NodeJS.Timeout
+	let isLoadMapObjectsRunning: boolean = false
 
 	async function onMapMoveEnd() {
+		if (loadMapObjectInterval !== undefined) clearInterval(loadMapObjectInterval)
 		loadMapObjects().then()
 		if (map) {
 			getUserSettings().mapPosition.zoom = map.getZoom()
@@ -66,23 +75,40 @@
 		}
 	}
 
+	async function runLoadMapObjects() {
+		if (isLoadMapObjectsRunning) return
+		try {
+			isLoadMapObjectsRunning = true
+			await loadMapObjects(false)
+		} catch (e) {
+
+		} finally {
+			isLoadMapObjectsRunning = false
+		}
+	}
+
+	async function onMapMoveStart() {
+		if (getUserSettings().loadMapObjectsWhileMoving) {
+			loadMapObjectInterval = setInterval(runLoadMapObjects, 200)
+		}
+	}
+
 	$effect(() => {
 		mapObjectsGeoJson
 		untrack(() => {
+			// @ts-ignore
+			map?.getSource("mapObjects")?.setData(mapObjectsGeoJson)
 			Promise.all(mapObjectsGeoJson.features.map(f => {
-				return addMapImage(f.properties?.imageUrl, f.properties?.imageUrl)
-			})).then(() => {
-				map?.getSource("mapObjects")?.setData(mapObjectsGeoJson)
-			})
+				return addMapImage(f.properties?.imageUrl)
+			})).then()
 		})
 	})
 
 	async function onMapLoad() {
 		await loadMapObjects()
 
-		// register this handler after layer handlers, so it can be prevented
 		await tick()
-		map.on("click", clickMapHandler)
+		map?.on("click", clickMapHandler)
 	}
 </script>
 
@@ -95,22 +121,22 @@
 	attributionControl={false}
 	interactive={!isModalOpen()}
 	onmoveend={onMapMoveEnd}
+	onmovestart={onMapMoveStart}
 	onload={onMapLoad}
 >
 	<GeoJSON
 		id="mapObjects"
 		data={mapObjectsGeoJson}
 	>
-
 		<SymbolLayer
 			id="mapObjectsLayer"
 			hoverCursor="pointer"
 			layout={{
-			"icon-image": ["get", "imageUrl"],
-			"icon-overlap": "always",
-			"icon-size": getCurrentUiconSetDetails()?.scale ?? 0.25,
-			"icon-allow-overlap": true
-		}}
+				"icon-image": ["get", "imageUrl"],
+				"icon-overlap": "always",
+				"icon-size": getCurrentUiconSetDetails("pokemon")?.scale ?? 0.25,
+				"icon-allow-overlap": true
+			}}
 			eventsIfTopMost={true}
 			onclick={clickFeatureHandler}
 		/>
@@ -121,7 +147,7 @@
 	>
 		<button
 			class="h-6 w-6 cursor-pointer bg-cover"
-			style="background-image: url({getIconPokestop()}/)"
+			style="background-image: url({getIconPokestop({})}/)"
 			data-object-type="pokestop"
 			data-object-id="pokestop-0"
 			aria-label="Pokestop"

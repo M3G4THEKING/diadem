@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { timestampToLocalTime } from '@/lib/utils.js';
+	import { timestampToLocalTime } from '@/lib/utils.svelte';
 	import { Clock } from 'lucide-svelte';
 	import Countdown from '@/components/utils/Countdown.svelte';
 	import type {IconProps} from 'lucide-svelte';

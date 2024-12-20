@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { PokemonData } from '@/lib/types/mapObjectData/pokemon';
 	import Countdown from '@/components/utils/Countdown.svelte';
-	import { timestampToLocalTime } from '@/lib/utils';
+	import { timestampToLocalTime } from '@/lib/utils.svelte';
 	import BasePopup from '@/components/ui/popups/BasePopup.svelte';
 	import PopupImage from '@/components/ui/popups/PopupImage.svelte';
 	import { getIconPokemon } from '@/lib/uicons.svelte';

@@ -9,28 +9,20 @@
 		...rest
 	} = $props()
 
-	// TODO better logic with mod for each step
-
-	if (childCount > 4) {
-		childCount = 4
-	}
-
-	let step1Cols = 3
+	let step0Cols = childCount === 5 ? 3 : 4
+	let step1Cols = childCount === 4 ? 2 : 3
 	let step2Cols = 2
 	let step3Cols = 1
-
-	if (childCount === 4) {
-		step1Cols = 2
-	}
 </script>
 
 <ToggleGroupPrimitive.Root
-	--cols={childCount}
+	--cols={childCount <= 4 ? childCount : 4}
+	--step-0-cols={step0Cols}
 	--step-1-cols={step1Cols}
 	--step-2-cols={step2Cols}
 	--step-3-cols={step3Cols}
 	bind:value
-	class="toggle-group grid w-fit self-center gap-4 {class_}"
+	class="toggle-group grid w-fit gap-4 {class_}"
 	{...rest}
 >
 	{@render children?.()}
@@ -39,7 +31,7 @@
 <style>
 	:global(.toggle-group) {
 		--min-cols: var(--cols);
-        grid-template-columns: repeat(min(var(--min-cols), var(--cols)), minmax(0, 1fr))
+        grid-template-columns: repeat(min(var(--min-cols), var(--step-0-cols)), minmax(0, 1fr))
 	}
 
     @media only screen and (max-width: 412px) {

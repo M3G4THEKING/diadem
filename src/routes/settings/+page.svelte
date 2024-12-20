@@ -3,16 +3,22 @@
 	import BottomNavSpacing from '@/components/ui/nav/BottomNavSpacing.svelte';
 	import Button from '@/components/ui/Button.svelte';
 	import { getUserSettings, updateUserSettings } from '@/lib/userSettings.svelte';
-	import { Cloud, Moon, Paintbrush, Sun, Image } from 'lucide-svelte';
+	import { Cloud, Moon, Paintbrush, Sun, Image, Code } from 'lucide-svelte';
 	import Switch from '@/components/ui/settings/Switch.svelte';
 	import SelectGroup from '@/components/ui/settings/SelectGroup.svelte';
 	import SelectGroupItem from '@/components/ui/settings/SelectGroupItem.svelte';
 	import SettingsCard from '@/components/ui/settings/SettingsCard.svelte';
-	import { getIconPokemon, getIconPokestop, getUiconSetDetails } from '@/lib/uicons.svelte';
+	import { getIconGym, getIconPokemon, getIconPokestop, getUiconSetDetails } from '@/lib/uicons.svelte';
 	import {getConfig} from '@/lib/config';
 	import { isModalOpen } from '@/lib/modal.svelte';
 	import { MapLibre } from 'svelte-maplibre';
 	import maplibre from 'maplibre-gl';
+	import type { MapObjectType } from '@/lib/types/mapObjectData/mapObjects';
+	import Input from '@/components/ui/settings/Input.svelte';
+	import SettingsToggle from '@/components/ui/settings/SettingsToggle.svelte';
+	import SettingsNumber from '@/components/ui/settings/SettingsNumber.svelte';
+	import SettingsSettingTitle from '@/components/ui/settings/SettingsSettingTitle.svelte';
+	import SettingsGeneric from '@/components/ui/settings/SettingsGeneric.svelte';
 
 	$effect(() => {
 		getUserSettings()
@@ -29,12 +35,16 @@
 		}
 	}
 
-	function onIconChange(iconSetId: string, iconType: string) {
+	function onIconChange(iconSetId: string, iconType: MapObjectType) {
 		const iconSet = getUiconSetDetails(iconSetId)
 		if (!iconSet) return
 
-		getUserSettings().uiconSet.id = iconSet.id
-		getUserSettings().uiconSet.url = iconSet.url
+		getUserSettings().uiconSet[iconType].id = iconSet.id
+		getUserSettings().uiconSet[iconType].url = iconSet.url
+	}
+
+	function getUiconSets(type: MapObjectType) {
+		return getConfig().uiconSets.filter(s => s.use.includes(type))
 	}
 
 	function onMapStyleChange(mapStyleId) {
@@ -46,6 +56,27 @@
 	}
 </script>
 
+{#snippet iconSelect(title, type, getIconFunc, getIconParams)}
+	<SettingsGeneric {title}>
+		<SelectGroup
+			childCount={getUiconSets(type).length}
+			value={getUserSettings().uiconSet[type].id}
+			onValueChange={(value) => onIconChange(value, type)}
+		>
+			{#each getUiconSets(type) as iconSet (iconSet.id)}
+				<SelectGroupItem class="p-4" value={iconSet.id}>
+					<img
+						class="w-5"
+						src={getIconFunc(getIconParams, iconSet.id)}
+						alt="{title} (Style: {iconSet.name})"
+					>
+					{iconSet.name}
+				</SelectGroupItem>
+			{/each}
+		</SelectGroup>
+	</SettingsGeneric>
+{/snippet}
+
 <div class="mt-2 mx-auto max-w-[30rem] space-y-4">
 	<SettingsCard>
 		{#snippet title()}
@@ -53,37 +84,18 @@
 			Appearance
 		{/snippet}
 
-		<Button
-			variant="ghost"
-			size=""
-			class="py-3 px-4 w-full flex justify-between items-center text-left rounded-md"
+		<SettingsToggle
+			title="Left-handed Mode"
+			description="Place UI elements on the left"
 			onclick={() => {getUserSettings().isLeftHanded = !getUserSettings().isLeftHanded}}
-		>
-			<div>
-				<p class="font-semibold text-base">
-					Left-handed mode
-				</p>
-				<p class="font-normal text-sm">
-					Place UI elements on the left
-				</p>
-			</div>
+			value={getUserSettings().isLeftHanded}
+		/>
 
-			<Switch
-				checked={getUserSettings().isLeftHanded}
-				aria-hidden="true"
-				tabindex="-1"
-			/>
-		</Button>
-		<div class="py-3 px-4 w-full flex flex-col gap-2">
-			<div>
-				<p class="font-semibold">
-					Theme
-				</p>
-			</div>
-
+		<SettingsGeneric title="Theme">
 			<SelectGroup
 				value={"" + getUserSettings().isDarkMode}
 				onValueChange={onThemeChange}
+				class="self-center"
 			>
 				<SelectGroupItem class="p-4" value="false">
 					<Sun size="20" />
@@ -98,18 +110,14 @@
 					Dark
 				</SelectGroupItem>
 			</SelectGroup>
-		</div>
-		<div class="py-3 px-4 w-full flex flex-col gap-2">
-			<div>
-				<p class="font-semibold">
-					Map Style
-				</p>
-			</div>
+		</SettingsGeneric>
 
+		<SettingsGeneric title="Map Style">
 			<SelectGroup
 				childCount={getConfig().mapStyles.length}
 				value={getUserSettings().mapStyle.id}
 				onValueChange={onMapStyleChange}
+				class="self-center"
 			>
 				{#each getConfig().mapStyles as mapStyle (mapStyle.id)}
 					<SelectGroupItem class="overflow-hidden" value={mapStyle.id}>
@@ -128,8 +136,7 @@
 					</SelectGroupItem>
 				{/each}
 			</SelectGroup>
-
-		</div>
+		</SettingsGeneric>
 	</SettingsCard>
 
 	<SettingsCard>
@@ -138,61 +145,35 @@
 			Icons
 		{/snippet}
 
-		<div class="py-3 px-4 w-full flex flex-col gap-2">
-			<div>
-				<p class="font-semibold">
-					Pokemon
-				</p>
-			</div>
+		{@render iconSelect("Pokemon", "pokemon", getIconPokemon, {pokemon_id: 25})}
+		{@render iconSelect("Pokestops", "pokestop", getIconPokestop, {})}
+		{@render iconSelect("Gyms", "gym", getIconGym, {})}
+	</SettingsCard>
 
-			<SelectGroup
-				childCount={getConfig().uiconSets.length}
-				value={getUserSettings().uiconSet.id}
-				onValueChange={(value) => onIconChange(value, "pokemon")}
-			>
-				{#each getConfig().uiconSets as iconSet (iconSet.id)}
-					<SelectGroupItem class="p-4" value={iconSet.id}>
-						<img
-							class="w-5"
-							src={getIconPokemon({pokemon_id: 25}, iconSet.id)}
-							alt="Pokemon"
-						>
-						{iconSet.name}
-					</SelectGroupItem>
-				{/each}
-			</SelectGroup>
+	<SettingsCard>
+		{#snippet title()}
+			<Code size="18" />
+			Advanced
+		{/snippet}
 
-		</div>
-		<div class="py-3 px-4 w-full flex flex-col gap-2">
-			<div>
-				<p class="font-semibold">
-					Pokestops
-				</p>
-			</div>
+		<SettingsToggle
+			title="Aggressive Map Updates"
+			description="Fetch data while moving the map"
+			onclick={() => {getUserSettings().loadMapObjectsWhileMoving = !getUserSettings().loadMapObjectsWhileMoving}}
+			value={getUserSettings().loadMapObjectsWhileMoving}
+		/>
 
-			<SelectGroup
-				childCount={getConfig().uiconSets.length}
-				value={getUserSettings().uiconSet.id}
-				onValueChange={(value) => onIconChange(value, "pokemon")}
-			>
-				{#each getConfig().uiconSets as iconSet (iconSet.id)}
-					<SelectGroupItem class="p-4" value={iconSet.id}>
-						<img
-							class="w-5"
-							src={getIconPokestop({}, iconSet.id)}
-							alt="Pokemon"
-						>
-						{iconSet.name}
-					</SelectGroupItem>
-				{/each}
-			</SelectGroup>
+		<SettingsNumber
+			title="Map Update Size"
+			description="Additional pixels to fetch around the map's bounding box"
+			value={getUserSettings().loadMapObjectsPadding}
+			onchange={e => getUserSettings().loadMapObjectsPadding = parseFloat(e.target.value) || 0}
+			min="0"
+			step="10"
+		/>
 
-		</div>
 	</SettingsCard>
 </div>
-
-
-
 
 <BottomNavSpacing />
 <BottomNavWrapper page="/settings" />

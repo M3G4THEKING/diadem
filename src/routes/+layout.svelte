@@ -4,7 +4,7 @@
 	import { onMount } from 'svelte';
 	import {getUserSettings} from '@/lib/userSettings.svelte';
 
-	import { updateDarkMode } from '@/lib/utils';
+	import { updateDarkMode } from '@/lib/utils.svelte';
 
 	let { children } = $props();
 

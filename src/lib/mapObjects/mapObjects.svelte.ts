@@ -1,83 +1,79 @@
-import type { PokemonData } from '@/lib/types/mapObjectData/pokemon';
-import type { PokestopData } from '@/lib/types/mapObjectData/pokestop';
-import type { LngLatBounds, MapLayerMouseEvent, MapMouseEvent } from 'maplibre-gl';
+import maplibre, { type LngLatBounds, type MapMouseEvent } from 'maplibre-gl';
 import type { LayerClickInfo } from 'svelte-maplibre';
-import type {Feature} from "geojson"
+import type { Feature } from 'geojson';
 import { updatePokemon } from '@/lib/mapObjects/pokemon.svelte';
+import type { MapData, MapObjectType } from '@/lib/types/mapObjectData/mapObjects';
 
-export const OBJ_TYPE_POKEMON = "pokemon"
-export const OBJ_TYPE_POKESTOP = "pokestop"
-
-type MapData = PokemonData | PokestopData
-type ObjectType = "pokemon" | "pokestop"
-
-let currentSelectedObjType: ObjectType | null = $state(null)
-let currentSelectedData: MapData | null = $state(null)
+let currentSelectedObjType: MapObjectType | null = $state(null);
+let currentSelectedData: MapData | null = $state(null);
 let mapObjectsState: {
-	[key: string]: MapData
-} = $state({})
+	[key: string]: MapData;
+} = $state({});
 
 // temp
-mapObjectsState["pokestop-0"] = {id: "0", name: "Pokestop Name", lat: 0, lon: 0}
+mapObjectsState['pokestop-0'] = { id: '0', mapId: "pokestop-0", type: "pokestop", name: 'Pokestop Name', lat: 0, lon: 0 };
 
-export async function updateAllMapObjects(bounds: LngLatBounds) {
-	await updatePokemon(bounds)
+export async function updateAllMapObjects(map: maplibre.Map, removeOld: boolean = true) {
+	await updatePokemon(map, removeOld);
 }
 
 export function getCurrentSelectedObjType() {
-	return currentSelectedObjType
+	return currentSelectedObjType;
 }
 
 export function getCurrentSelectedData() {
-	return currentSelectedData
+	return currentSelectedData;
 }
 
 export function closePopup() {
-	currentSelectedData = null
-	currentSelectedObjType = null
-	history.replaceState(null, "", "/")
+	currentSelectedData = null;
+	currentSelectedObjType = null;
+	history.replaceState(null, '', '/');
 }
 
-function openPopup(data: MapData, type: ObjectType) {
-	currentSelectedData = data
-	currentSelectedObjType = type
-	history.replaceState(null, "", getCurrentPath());
+function openPopup(data: MapData, type: MapObjectType) {
+	currentSelectedData = data;
+	currentSelectedObjType = type;
+	history.replaceState(null, '', getCurrentPath());
 }
 
 export function getCurrentPath() {
 	if (!currentSelectedData) {
-		return "/"
+		return '/';
 	}
-	return `/${currentSelectedObjType}/${currentSelectedData.id}`
+	return `/${currentSelectedObjType}/${currentSelectedData.id}`;
 }
 
 export function clickMapHandler(event: MapMouseEvent) {
-	if (event._defaultPrevented) return
+	if (event._defaultPrevented) return;
 	// @ts-ignore
 	if (event.originalEvent.target?.dataset.objectType) {
 		// @ts-ignore
-		openPopup(mapObjectsState[event.originalEvent.target.dataset.objectId], event.originalEvent.target.dataset.objectType)
+		openPopup(
+			mapObjectsState[event.originalEvent.target.dataset.objectId],
+			event.originalEvent.target.dataset.objectType
+		);
 	} else {
-		closePopup()
+		closePopup();
 	}
 }
 
 export function clickFeatureHandler(event: LayerClickInfo<Feature>) {
-	event.event.preventDefault()
+	event.event.preventDefault();
 	if (event.features) {
-		const props = event.features[0].properties
-		openPopup(mapObjectsState[props.id], props.type)
+		const props = event.features[0].properties;
+		openPopup(mapObjectsState[props.id], props.type);
 	}
 }
 
 export function getMapObjects() {
-	return mapObjectsState
+	return mapObjectsState;
 }
 
 export function addMapObject(key: string, data: MapData) {
-	mapObjectsState[key] = data
+	mapObjectsState[key] = data;
 }
 
 export function delMapObject(key: string) {
-	delete mapObjectsState[key]
+	delete mapObjectsState[key];
 }

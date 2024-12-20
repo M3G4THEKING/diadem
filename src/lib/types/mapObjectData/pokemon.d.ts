@@ -1,5 +1,7 @@
 export type PokemonData = {
 	id: string;
+	type: "pokemon"
+	mapId: string
 	pokestop_id: string | null;
 	spawn_id: number | null;
 	lat: number;

@@ -1,7 +1,10 @@
 import { getConfig } from '@/lib/config';
-import { untrack } from 'svelte';
+import type { MapObjectType } from '@/lib/types/mapObjectData/mapObjects';
 
-// TODO client-side config
+type UiconSet = {
+	id: string
+	url: string
+}
 
 type UserSettings = {
 	mapPosition: {
@@ -16,14 +19,22 @@ type UserSettings = {
 		url: string
 	}
 	uiconSet: {
-		id: string
-		url: string
+		pokemon: UiconSet
+		pokestop: UiconSet
+		gym: UiconSet
 	}
 	isLeftHanded: boolean,
-	isDarkMode: boolean | null
+	isDarkMode: boolean | null,
+	loadMapObjectsWhileMoving: boolean
+	loadMapObjectsPadding: number
 }
 
 function getDefaultUserSettings() {
+	const defaultIconSet = {
+		id: getConfig().uiconSets[0].id,
+		url: getConfig().uiconSets[0].url,
+	}
+
 	return {
 		mapPosition: {
 			center: {
@@ -37,11 +48,14 @@ function getDefaultUserSettings() {
 			url: getConfig().mapStyles[0].url,
 		},
 		uiconSet: {
-			id: getConfig().uiconSets[0].id,
-			url: getConfig().uiconSets[0].url,
+			pokemon: defaultIconSet,
+			pokestop: defaultIconSet,
+			gym: defaultIconSet
 		},
 		isLeftHanded: false,
-		isDarkMode: false
+		isDarkMode: false,
+		loadMapObjectsWhileMoving: false,
+		loadMapObjectsPadding: 20
 	}
 }
 
@@ -49,6 +63,7 @@ function getDefaultUserSettings() {
 let userSettings: UserSettings = $state({})
 
 export function setUserSettings(newUserSettings: UserSettings) {
+	// @ts-ignore
 	userSettings =  deepMerge(getDefaultUserSettings(), newUserSettings)
 	console.log(userSettings)
 }

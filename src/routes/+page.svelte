@@ -5,9 +5,7 @@
 	import {
 		closePopup,
 		getCurrentSelectedData,
-		getCurrentSelectedObjType,
-		OBJ_TYPE_POKEMON,
-		OBJ_TYPE_POKESTOP
+		getCurrentSelectedObjType
 	} from '@/lib/mapObjects/mapObjects.svelte.js';
 	import SearchFab from '@/components/ui/fab/SearchFab.svelte';
 	import LocateFab from '@/components/ui/fab/LocateFab.svelte';
@@ -15,22 +13,31 @@
 	import { closeModal, isModalOpen } from '@/lib/modal.svelte';
 	import Card from '@/components/ui/Card.svelte';
 	import { getUserSettings } from '@/lib/userSettings.svelte';
+	import { getConfig } from '@/lib/config';
 	import Map from '@/components/map/Map.svelte';
-	import maplibre from 'maplibre-gl';
+	import maplibre, { type EaseToOptions } from 'maplibre-gl';
+	import Search from '@/components/ui/search/Search.svelte';
 
 	let map: maplibre.Map | undefined = $state()
 
-	let inputElement: HTMLInputElement | undefined = $state()
-	$effect(() => {
-		isModalOpen
-		inputElement?.focus()
-	})
-
 	function resetMap() {
 		closePopup()
+		closeModal()
 		map?.easeTo({
 			bearing: 0,
 			pitch: 0
+		})
+	}
+
+	function flyTo(center: number[], zoom: number) {
+		closePopup()
+		closeModal()
+		map?.flyTo({
+			center: {lat: center[0], lng: center[1]},
+			zoom: zoom,
+			bearing: 0,
+			pitch: 0,
+			speed: 1.5
 		})
 	}
 </script>
@@ -40,12 +47,7 @@
 		transition:slide={{duration: 50}}
 		class="absolute z-30 top-2 w-full"
 	>
-		<Card class="mx-2">
-			<input
-				bind:this={inputElement}
-				class="h-8 w-full ring-1" role="text"
-			>
-		</Card>
+		<Search onjump={flyTo} />
 	</div>
 	<button
 		transition:fade={{duration: 50}}
@@ -74,9 +76,9 @@
 			style="pointer-events: all"
 			transition:slide={{duration: 50}}
 		>
-			{#if getCurrentSelectedObjType() === OBJ_TYPE_POKEMON}
+			{#if getCurrentSelectedObjType() === "pokemon"}
 				<PokemonPopup data={getCurrentSelectedData()} />
-			{:else if getCurrentSelectedObjType() === OBJ_TYPE_POKESTOP}
+			{:else if getCurrentSelectedObjType() === "pokestop"}
 				<PokestopPopup data={getCurrentSelectedData()} />
 			{/if}
 		</div>

@@ -3,6 +3,8 @@ import {getUserSettings} from '@/lib/userSettings.svelte';
 import {getConfig} from '@/lib/config';
 import type {PokemonData} from '@/lib/types/mapObjectData/pokemon';
 import type { UiconSet } from '@/lib/types/config';
+import type { MapData, MapObjectType } from '@/lib/types/mapObjectData/mapObjects';
+import type { PokestopData } from '@/lib/types/mapObjectData/pokestop';
 
 const iconSets: {[key: string]: UICONS} = {}
 
@@ -21,15 +23,23 @@ export function getUiconSetDetails(id: string): UiconSet | undefined {
 	return getConfig().uiconSets.find(s => s.id === id)
 }
 
-export function getCurrentUiconSetDetails(): UiconSet | undefined {
-	return getUiconSetDetails(getUserSettings().uiconSet.id)
+export function getCurrentUiconSetDetails(type: MapObjectType): UiconSet | undefined {
+	return getUiconSetDetails(getUserSettings().uiconSet[type].id)
 }
 
-export function getUicon() {
-	return iconSets[getUserSettings().uiconSet.id]
+export function getIcon(data: Partial<MapData>): string {
+	if (data.type === "pokemon") {
+		return getIconPokemon(data)
+	} else if (data.type === "pokestop") {
+		return getIconPokestop(data)
+	} else if (data.type === "gym") {
+		return getIconGym(data)
+	}
+	console.error("Unknown icon type: " + data.type)
+	return ""
 }
 
-export function getIconPokemon(data: Partial<PokemonData>, iconSet: string = getUserSettings().uiconSet.id) {
+export function getIconPokemon(data: Partial<PokemonData>, iconSet: string = getUserSettings().uiconSet.pokemon.id) {
 	return iconSets[iconSet].pokemon(
 		data.pokemon_id,
 		data.temp_evolution_id,
@@ -42,6 +52,10 @@ export function getIconPokemon(data: Partial<PokemonData>, iconSet: string = get
 	)
 }
 
-export function getIconPokestop(data: Partial<PokemonData>, iconSet: string = getUserSettings().uiconSet.id) {
+export function getIconPokestop(data: Partial<PokestopData>, iconSet: string = getUserSettings().uiconSet.pokestop.id) {
 	return iconSets[iconSet].pokestop()
+}
+
+export function getIconGym(data: Partial<PokemonData>, iconSet: string = getUserSettings().uiconSet.gym.id) {
+	return iconSets[iconSet].gym()
 }
