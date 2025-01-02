@@ -4,6 +4,7 @@
 	import maplibre from 'maplibre-gl';
 	import { openToast } from '@/components/ui/toast/toastUtils.svelte';
 	import { tick } from 'svelte';
+	import { setIsContxtMenuOpen } from '@/components/ui/contextmenu/utils.svelte';
 
 	let {
 		map
@@ -13,6 +14,7 @@
 
 	const errorReasonSupport = "Your browser doesn't have location support"
 	const errorReasonPerms = "Location permissions denied"
+	const errorReasonTimeout = "Timed out while fetching your location"
 	const errorReasonUnknown = "An error occured while fetching your location"
 
 	let geolocationEnabled: boolean = $state(false)
@@ -44,7 +46,6 @@
 		}
 
 		geolocationEnabled = geolocationOk
-		console.log(geolocationOk)
 		if (!geolocationOk && showResult && errorReason) {
 			openToast(errorReason)
 		}
@@ -52,33 +53,30 @@
 	}
 
 	function onClick() {
-		updateGeolocationEnabled(true).then((ok) => {
-			if (!ok) return
-			isFetchingLocation = true
-			navigator?.geolocation?.getCurrentPosition(
-				(s) => {
-					isFetchingLocation = false
-					geolocate._onSuccess(s)
-				},
-				(e) => {
-					geolocationEnabled = false
-					isFetchingLocation = false
-					geolocate._onError(e)
-
-					getGeolocationPermissionsState().then(permsState => {
-						if (permsState === "granted") {
-							openToast(errorReasonUnknown)
-						} else {
-							openToast(errorReasonPerms)
-						}
-					})
-				},
-				{
-					enableHighAccuracy: true
+		setIsContxtMenuOpen(false)
+		isFetchingLocation = true
+		navigator?.geolocation?.getCurrentPosition(
+			(s) => {
+				isFetchingLocation = false
+				geolocate._onSuccess(s)
+			},
+			(e) => {
+				if (e.code === 1) {
+					openToast(errorReasonPerms)
+				} else if (e.code === 2) {
+					openToast(errorReasonTimeout)
+				} else {
+					openToast(errorReasonUnknown)
 				}
-			)
-		})
 
+				geolocationEnabled = false
+				isFetchingLocation = false
+				geolocate._onError(e)
+			},
+			{
+				enableHighAccuracy: true
+			}
+		)
 	}
 
 	$effect(() => {

@@ -14,9 +14,10 @@
 	import { getCurrentUiconSetDetails, getIconPokemon, getIconPokestop, getIcon } from '@/lib/uicons.svelte';
 	import {getLoadedImages} from '@/lib/utils.svelte';
 	import ContextMenu from '@/components/ui/contextmenu/ContextMenu.svelte';
+	import { setContextMenuEvent, setIsContxtMenuOpen } from '@/components/ui/contextmenu/utils.svelte';
 
 	let {
-		map = $bindable()
+		map = $bindable(),
 	}: {
 		map: maplibre.Map | undefined
 	} = $props()
@@ -89,6 +90,7 @@
 	}
 
 	async function onMapMoveStart() {
+		setIsContxtMenuOpen(false)
 		if (getUserSettings().loadMapObjectsWhileMoving) {
 			loadMapObjectInterval = setInterval(runLoadMapObjects, 200)
 		}
@@ -118,13 +120,10 @@
 
 	let pressTimer: undefined | NodeJS.Timeout;
 	const longPressDuration = 500;
-	let div: HTMLDivElement
-	let isContextMenuOpen: boolean = $state(false)
-	let contextMenuPos: {x: number, y: number} = $state({x: 0, y: 0})
 
 	function onContextMenu(event: maplibre.MapTouchEvent | maplibre.MapMouseEvent) {
-		isContextMenuOpen = true
-		contextMenuPos = event.point
+		setContextMenuEvent(event)
+		setIsContxtMenuOpen(true)
 	}
 
 	function onTouchStart(e: maplibre.MapTouchEvent) {
@@ -152,6 +151,7 @@
 	onmovestart={onMapMoveStart}
 	onload={onMapLoad}
 	oncontextmenu={onContextMenu}
+	onclick={() => setIsContxtMenuOpen(false)}
 >
 	<GeoJSON
 		id="mapObjects"

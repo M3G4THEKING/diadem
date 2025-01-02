@@ -1,4 +1,5 @@
 import { getUserSettings } from '@/lib/userSettings.svelte';
+import { openToast } from '@/components/ui/toast/toastUtils.svelte';
 
 export function timestampToLocalTime(timestamp: number | null) {
 	if (!timestamp) return '';
@@ -20,4 +21,22 @@ let loadedImages: {[key: string]: HTMLImageElement | ImageBitmap} = $state({})
 
 export function getLoadedImages() {
 	return loadedImages
+}
+
+export function canNativeShare(content: ShareData) {
+	return navigator.share && navigator.canShare && navigator.canShare(content)
+}
+
+export function hasClipboardWrite() {
+	return navigator.clipboard && navigator.clipboard.writeText
+}
+
+export function copyToClipboard(content: string) {
+	navigator.clipboard.writeText(content)
+		.then(() => openToast("Copied to clipboard"))
+		.catch(e => openToast("Couldn't copy to clipboard"))
+}
+
+export function getMapsUrl(lat: number, lon: number) {
+	return `https://maps.google.com?q=${lat},${lon}`
 }

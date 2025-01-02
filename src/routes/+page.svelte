@@ -17,8 +17,11 @@
 	import Map from '@/components/map/Map.svelte';
 	import maplibre, { type EaseToOptions } from 'maplibre-gl';
 	import Search from '@/components/ui/search/Search.svelte';
+	import ContextMenu from '@/components/ui/contextmenu/ContextMenu.svelte';
+	import { getIsContxtMenuOpen } from '@/components/ui/contextmenu/utils.svelte';
 
 	let map: maplibre.Map | undefined = $state()
+
 
 	function resetMap() {
 		closePopup()
@@ -55,6 +58,10 @@
 		onclick={() => closeModal()}
 		aria-label="Close Modal"
 	></button>
+{/if}
+
+{#if getIsContxtMenuOpen()}
+	<ContextMenu />
 {/if}
 
 <div

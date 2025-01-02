@@ -3,6 +3,7 @@
 	import { Eye, EyeClosed, Map, Share2, SquareArrowOutUpRight, Navigation } from 'lucide-svelte';
 	import Button from '@/components/ui/Button.svelte';
 	import { openToast } from '@/components/ui/toast/toastUtils.svelte';
+	import { hasClipboardWrite, canNativeShare, copyToClipboard, getMapsUrl } from '@/lib/utils.svelte';
 
 	let {
 		lat,
@@ -12,21 +13,12 @@
 	  	lon: number
 	} = $props()
 
-	function hasNativeShare() {
-		return navigator.share && navigator.canShare
-	}
-
-	function hasClipboardWrite() {
-		return navigator.clipboard && navigator.clipboard.writeText
-	}
-
 	function shareCurrentUrl() {
 		const shareData = {url: window.location.toString()}
-		if (hasNativeShare() && navigator.canShare(shareData)) {
+		if (canNativeShare(shareData)) {
 			navigator.share(shareData)
 		} else if (hasClipboardWrite()) {
-			navigator.clipboard.writeText(window.location.toString())
-			openToast("Copied to clipboard")
+			copyToClipboard(window.location.toString())
 		}
 	}
 </script>
@@ -45,14 +37,14 @@
 		size="default"
 		variant="outline"
 		tag="a"
-		href="https://maps.google.com?q={lat},{lon}"
+		href={getMapsUrl(lat, lon)}
 		target="_blank"
 	>
 		<Navigation size="18"/>
 		<span class="max-[364px]:hidden">Navigate</span>
 	</Button>
 
-	{#if hasNativeShare() || hasClipboardWrite()}
+	{#if canNativeShare() || hasClipboardWrite()}
 		<Button
 			variant="outline"
 			tag="button"

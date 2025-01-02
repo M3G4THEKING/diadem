@@ -12,9 +12,7 @@ function _openToast(text: string, ms: number) {
 
 export function openToast(text: string, ms: number = 1500) {
 	if (isToastOpen) {
-		console.log("toast already open")
 		clearTimeout(timeout)
-		console.log(timeout)
 		isToastOpen = false
 
 		setTimeout(() => _openToast(text, ms), 50)

@@ -1,3 +1,5 @@
+import { setIsContxtMenuOpen } from '@/components/ui/contextmenu/utils.svelte';
+
 let isModalOpenState: boolean = $state(false)
 
 export function isModalOpen() {
@@ -5,6 +7,7 @@ export function isModalOpen() {
 }
 
 export function openModal() {
+	setIsContxtMenuOpen(false)
 	isModalOpenState = true
 }
 
