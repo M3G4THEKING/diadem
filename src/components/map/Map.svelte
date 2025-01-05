@@ -9,12 +9,13 @@
 	import { GeoJSON, Layer, MapLibre, Marker, SymbolLayer } from 'svelte-maplibre';
 	import { getUserSettings, updateUserSettings } from '@/lib/userSettings.svelte';
 	import maplibre, { GeoJSONSource } from 'maplibre-gl';
-	import { tick, untrack } from 'svelte';
+	import { onMount, tick, untrack } from 'svelte';
 	import type { FeatureCollection } from 'geojson';
 	import { getCurrentUiconSetDetails, getIconPokemon, getIconPokestop, getIcon } from '@/lib/uicons.svelte';
 	import {getLoadedImages} from '@/lib/utils.svelte';
 	import ContextMenu from '@/components/ui/contextmenu/ContextMenu.svelte';
 	import { setContextMenuEvent, setIsContxtMenuOpen } from '@/components/ui/contextmenu/utils.svelte';
+	import { getDirectLinkCoordinates, setDirectLinkCoordinates } from '@/lib/directLinks.svelte';
 
 	let {
 		map = $bindable(),
@@ -108,14 +109,14 @@
 	})
 
 	async function onMapLoad() {
-		await loadMapObjects()
+		if (map) {
+			map.on("click", clickMapHandler)
+			map.on("touchstart", onTouchStart)
+			map.on("touchend", onTouchEnd)
+			map.on("touchmove", onTouchMove)
+		}
 
-		await tick()
-		if (!map) return
-		map.on("click", clickMapHandler)
-		map.on("touchstart", onTouchStart)
-		map.on("touchend", onTouchEnd)
-		map.on("touchmove", onTouchMove)
+		await loadMapObjects()
 	}
 
 	let pressTimer: undefined | NodeJS.Timeout;
@@ -137,6 +138,18 @@
 	function onTouchMove() {
 		clearTimeout(pressTimer);
 	}
+
+	onMount(() => {
+		const data = getDirectLinkCoordinates()
+		if (data) {
+			if (data.lat) getUserSettings().mapPosition.center.lat = data.lat
+			if (data.lon) getUserSettings().mapPosition.center.lng = data.lon
+			getUserSettings().mapPosition.zoom = 18
+			updateUserSettings()
+
+			setDirectLinkCoordinates(undefined)
+		}
+	})
 </script>
 
 <MapLibre

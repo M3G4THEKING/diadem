@@ -38,7 +38,7 @@
 </script>
 
 <div
-	class="z-10 h-16 mx-2 w-60 text-sm grid grid-cols-3 divide-x rounded-lg border bg-card text-card-foreground shadow-lg"
+	class="z-10 h-16 mx-2 min-w-60 text-sm grid grid-cols-3 divide-x rounded-lg border bg-card text-card-foreground shadow-lg"
 	style="pointer-events: all"
 >
 	{#each buttons as btn}
@@ -47,7 +47,7 @@
 			tag={btn.onclick ? "button" : "a"}
 			variant="ghost"
 			size=""
-			class="flex justify-center items-center flex-col text-sm bg-background hover:bg-accent hover:text-accent-foreground first:rounded-l-lg last:rounded-r-lg"
+			class="flex px-2 justify-center items-center flex-col text-sm bg-background hover:bg-accent hover:text-accent-foreground first:rounded-l-lg last:rounded-r-lg"
 			href={btn.href}
 			onclick={btn.onclick}
 		>

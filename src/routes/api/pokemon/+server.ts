@@ -23,8 +23,11 @@ export async function POST({ request }) {
 		]
 	}
 
+	let url = getServerConfig().golbat.url || env.GOLBAT_BACKEND_URL
+	url += "/api/pokemon/v2/scan"
+
 	const response = await fetch(
-		getServerConfig().golbat.url || env.GOLBAT_BACKEND_URL,
+		url,
 		{
 			method: "POST",
 			headers: {
@@ -33,9 +36,6 @@ export async function POST({ request }) {
 			body: JSON.stringify(body)
 		}
 	)
-
 	const results = await response.json()
-
-	console.log("got " + results.length + " pokemon")
 	return json(results, { status: 201 });
 }

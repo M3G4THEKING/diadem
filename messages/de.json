@@ -28,7 +28,7 @@
     "locate_error_perms": "Standortberechtigungen verweigert",
     "locate_error_timeout": "Zeitüberschreitung beim Abrufen des Standorts",
     "locate_error_unknown": "Ein Fehler ist aufgetreten während des Abrufens deines Standortes",
-    "clipboard_copied": "In die Zwischenablage kopiert",
+    "clipboard_copied": "In Zwischenablage kopiert",
     "clipboard_error": "Konnte nicht in Zwischenablage kopiert werden",
     "popup_hide_details": "Details verstecken",
     "popup_show_details": "Details zeigen",

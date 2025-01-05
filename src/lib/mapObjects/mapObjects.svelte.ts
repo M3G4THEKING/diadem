@@ -3,6 +3,10 @@ import type { LayerClickInfo } from 'svelte-maplibre';
 import type { Feature } from 'geojson';
 import { updatePokemon } from '@/lib/mapObjects/pokemon.svelte';
 import type { MapData, MapObjectType } from '@/lib/types/mapObjectData/mapObjects';
+import { getDirectLinkObject } from '@/lib/directLinks.svelte';
+import { openToast } from '@/components/ui/toast/toastUtils.svelte';
+import * as m from "@/lib/paraglide/messages"
+
 
 let currentSelectedObjType: MapObjectType | null = $state(null);
 let currentSelectedData: MapData | null = $state(null);
@@ -15,6 +19,16 @@ mapObjectsState['pokestop-0'] = { id: '0', mapId: "pokestop-0", type: "pokestop"
 
 export async function updateAllMapObjects(map: maplibre.Map, removeOld: boolean = true) {
 	await updatePokemon(map, removeOld);
+
+	const directLinkData = getDirectLinkObject()
+	if (directLinkData) {
+		const mapObjectData = mapObjectsState[directLinkData.id]
+		if (mapObjectData) {
+			openPopup(mapObjectData, mapObjectData.type)
+		} else {
+			openToast(m.direct_link_not_found({type: m["pogo_" + directLinkData.type]()}), 5000)
+		}
+	}
 }
 
 export function getCurrentSelectedObjType() {

@@ -5,6 +5,7 @@
 	import { openToast } from '@/components/ui/toast/toastUtils.svelte';
 	import { hasClipboardWrite, canNativeShare, copyToClipboard, getMapsUrl } from '@/lib/utils.svelte';
 	import * as m from "@/lib/paraglide/messages"
+	import { getCurrentPath } from '@/lib/mapObjects/mapObjects.svelte';
 
 	let {
 		lat,
@@ -14,8 +15,9 @@
 	  	lon: number
 	} = $props()
 
-	function shareCurrentUrl() {
-		const shareData = {url: window.location.toString()}
+	function shareUrl() {
+		const url = window.location.origin + getCurrentPath()
+		const shareData = {url}
 		if (canNativeShare(shareData)) {
 			navigator.share(shareData)
 		} else if (hasClipboardWrite()) {
@@ -55,7 +57,7 @@
 		<Button
 			variant="outline"
 			tag="button"
-			onclick={shareCurrentUrl}
+			onclick={shareUrl}
 		>
 			<Share2 size="18"/>
 			<span class="max-[406px]:hidden">

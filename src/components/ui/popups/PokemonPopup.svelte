@@ -33,7 +33,7 @@
 
 		{#snippet value()}
 			{#if !hasTimer()}
-				<span>Found</span>
+				<span>{m.popup_found()}</span>
 			{/if}
 
 			<span class="font-semibold">
@@ -56,7 +56,7 @@
 				<MapPinX size="16"/>
 			{/snippet}
 			{#snippet value()}
-				Estimated location
+				{m.popup_estimated_location()}
 			{/snippet}
 		</IconValue>
 	{/if}
@@ -67,7 +67,7 @@
 				<SearchX size="16"/>
 			{/snippet}
 			{#snippet value()}
-				No IV scanned
+				{m.popup_no_iv_scanned()}
 			{/snippet}
 		</IconValue>
 	{/if}

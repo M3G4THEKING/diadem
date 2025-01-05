@@ -7,6 +7,8 @@ export async function updatePokemon(map: maplibre.Map, removeOld: boolean = true
 	const response = await fetch("/api/pokemon", { method: "POST",  body: JSON.stringify(body)})
 	const data = await response.json()
 
+	if (!data) return
+
 	if (removeOld) {
 		for (const key in getMapObjects()) {
 			if (key.startsWith("pokemon-")) {

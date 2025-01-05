@@ -11,7 +11,9 @@
     "settings_icons": "Icons",
     "pogo_pokemon": "Pokémon",
     "pogo_pokestops": "Pokéstops",
+    "pogo_pokestop": "Pokéstop",
     "pogo_gyms": "Gyms",
+    "pogo_gym": "Gym",
     "settings_advanced": "Advanced",
     "settings_load_map_objects_while_moving_title": "Aggressive Map Updates",
     "settings_load_map_objects_while_moving_description": "Fetch data while moving the map",
@@ -42,5 +44,6 @@
     "pogo_level": "Level {level}",
     "popup_found": "Found",
     "popup_estimated_location": "Estimated location",
-    "popup_no_iv_scanned": "No IV scanned"
+    "popup_no_iv_scanned": "No IV scanned",
+    "direct_link_not_found": "{type} either disappeared or isn't in filter list"
 }
