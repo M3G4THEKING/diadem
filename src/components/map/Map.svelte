@@ -91,6 +91,7 @@
 	}
 
 	async function onMapMoveStart() {
+		clearTimeout(pressTimer);
 		setIsContextMenuOpen(false)
 		if (getUserSettings().loadMapObjectsWhileMoving) {
 			loadMapObjectInterval = setInterval(runLoadMapObjects, 200)
