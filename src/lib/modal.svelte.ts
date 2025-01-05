@@ -1,4 +1,4 @@
-import { setIsContxtMenuOpen } from '@/components/ui/contextmenu/utils.svelte';
+import { setIsContextMenuOpen } from '@/components/ui/contextmenu/utils.svelte';
 import type { Snippet } from 'svelte';
 
 type ModalVertical = "top" | "center"
@@ -20,7 +20,7 @@ export function isModalOpen() {
 }
 
 export function openModal(snippet: Snippet, vertical: ModalVertical = "center") {
-	setIsContxtMenuOpen(false)
+	setIsContextMenuOpen(false)
 	modalOptions = {
 		isOpen: true,
 		snippet,

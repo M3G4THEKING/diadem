@@ -3,12 +3,12 @@ import type { LayerClickInfo } from 'svelte-maplibre';
 import type { Feature } from 'geojson';
 import { updatePokemon } from '@/lib/mapObjects/pokemon.svelte';
 import type { MapData, MapObjectType } from '@/lib/types/mapObjectData/mapObjects';
-import { getDirectLinkObject } from '@/lib/directLinks.svelte';
+import { getDirectLinkObject, setDirectLinkObject } from '@/lib/directLinks.svelte';
 import { openToast } from '@/components/ui/toast/toastUtils.svelte';
 import * as m from "@/lib/paraglide/messages"
+import { getConfig } from '@/lib/config';
+import { setIsContextMenuOpen } from '@/components/ui/contextmenu/utils.svelte';
 
-
-let currentSelectedObjType: MapObjectType | null = $state(null);
 let currentSelectedData: MapData | null = $state(null);
 let mapObjectsState: {
 	[key: string]: MapData;
@@ -24,15 +24,12 @@ export async function updateAllMapObjects(map: maplibre.Map, removeOld: boolean 
 	if (directLinkData) {
 		const mapObjectData = mapObjectsState[directLinkData.id]
 		if (mapObjectData) {
-			openPopup(mapObjectData, mapObjectData.type)
+			openPopup(mapObjectData)
 		} else {
 			openToast(m.direct_link_not_found({type: m["pogo_" + directLinkData.type]()}), 5000)
 		}
+		setDirectLinkObject(undefined)
 	}
-}
-
-export function getCurrentSelectedObjType() {
-	return currentSelectedObjType;
 }
 
 export function getCurrentSelectedData() {
@@ -41,31 +38,43 @@ export function getCurrentSelectedData() {
 
 export function closePopup() {
 	currentSelectedData = null;
-	currentSelectedObjType = null;
-	history.replaceState(null, '', '/');
+	setCurrentPath()
+
+	const title = document.head.querySelector("title")
+	if (title) title.innerText = getConfig().general.mapName
 }
 
-function openPopup(data: MapData, type: MapObjectType) {
+function openPopup(data: MapData) {
 	currentSelectedData = data;
-	currentSelectedObjType = type;
-	history.replaceState(null, '', getCurrentPath());
+	setCurrentPath()
+}
+
+export function updateCurrentPath() {
+	if (!currentSelectedData) return
+	if (window.location.pathname.includes(currentSelectedData.type)) return
+	setCurrentPath()
 }
 
 export function getCurrentPath() {
 	if (!currentSelectedData) {
 		return '/';
 	}
-	return `/${currentSelectedObjType}/${currentSelectedData.id}`;
+	return `/${currentSelectedData.type}/${currentSelectedData.id}`;
+}
+
+function setCurrentPath() {
+	history.replaceState(null, '', getCurrentPath());
 }
 
 export function clickMapHandler(event: MapMouseEvent) {
-	if (event._defaultPrevented) return;
+	setIsContextMenuOpen(false)
+
+	if (event.originalEvent.defaultPrevented) return;
 	// @ts-ignore
 	if (event.originalEvent.target?.dataset.objectType) {
 		// @ts-ignore
 		openPopup(
-			mapObjectsState[event.originalEvent.target.dataset.objectId],
-			event.originalEvent.target.dataset.objectType
+			mapObjectsState[event.originalEvent.target.dataset.objectId]
 		);
 	} else {
 		closePopup();
@@ -73,10 +82,10 @@ export function clickMapHandler(event: MapMouseEvent) {
 }
 
 export function clickFeatureHandler(event: LayerClickInfo<Feature>) {
-	event.event.preventDefault();
+	event.event.originalEvent.preventDefault()
 	if (event.features) {
 		const props = event.features[0].properties;
-		openPopup(mapObjectsState[props.id], props.type);
+		openPopup(mapObjectsState[props.id]);
 	}
 }
 

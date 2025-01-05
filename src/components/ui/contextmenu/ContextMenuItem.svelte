@@ -1,7 +1,7 @@
 <script lang="ts">
 	import Button from '@/components/ui/Button.svelte';
 	import type { Snippet } from 'svelte';
-	import { setIsContxtMenuOpen } from '@/components/ui/contextmenu/utils.svelte';
+	import { setIsContextMenuOpen } from '@/components/ui/contextmenu/utils.svelte';
 
 	let {
 		tag = "button",
@@ -16,7 +16,7 @@
 
 	function onClick() {
 		if (onclick) onclick()
-		setIsContxtMenuOpen(false)
+		setIsContextMenuOpen(false)
 	}
 </script>
 

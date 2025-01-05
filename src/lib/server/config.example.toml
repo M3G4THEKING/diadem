@@ -2,6 +2,10 @@
 url = ""
 auth = ""
 
+
+[client.general]
+mapName = "Maltemap"
+
 ### Map Styles
 
 [[client.mapStyles]]

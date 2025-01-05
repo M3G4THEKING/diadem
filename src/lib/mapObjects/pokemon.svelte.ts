@@ -17,6 +17,8 @@ export async function updatePokemon(map: maplibre.Map, removeOld: boolean = true
 		}
 	}
 
+	console.log(typeof data)
+
 	for (const pokemon of data) {
 		pokemon.type = "pokemon"
 		pokemon.mapId = "pokemon-" + pokemon.id

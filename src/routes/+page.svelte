@@ -5,7 +5,6 @@
 	import {
 		closePopup,
 		getCurrentSelectedData,
-		getCurrentSelectedObjType
 	} from '@/lib/mapObjects/mapObjects.svelte.js';
 	import SearchFab from '@/components/ui/fab/SearchFab.svelte';
 	import LocateFab from '@/components/ui/fab/LocateFab.svelte';
@@ -45,16 +44,15 @@
 
 	</div>
 
-
-	{#if getCurrentSelectedObjType()}
+	{#if getCurrentSelectedData()}
 		<div
 			class="w-full max-w-[30rem] mb-2 z-10"
 			style="pointer-events: all"
 			transition:slide={{duration: 50}}
 		>
-			{#if getCurrentSelectedObjType() === "pokemon"}
+			{#if getCurrentSelectedData().type === "pokemon"}
 				<PokemonPopup data={getCurrentSelectedData()} />
-			{:else if getCurrentSelectedObjType() === "pokestop"}
+			{:else if getCurrentSelectedData().type === "pokestop"}
 				<PokestopPopup data={getCurrentSelectedData()} />
 			{/if}
 		</div>

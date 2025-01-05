@@ -7,7 +7,7 @@ export function getIsContxtMenuOpen() {
 	return isContextMenuOpen
 }
 
-export function setIsContxtMenuOpen(state: boolean) {
+export function setIsContextMenuOpen(state: boolean) {
 	isContextMenuOpen = state
 }
 

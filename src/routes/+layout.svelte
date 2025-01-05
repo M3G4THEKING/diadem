@@ -13,6 +13,7 @@
 	import { closeModal, getModalOptions, isModalOpen } from '@/lib/modal.svelte';
 	import {fade, slide} from 'svelte/transition';
 	import { availableLanguageTags } from '@/lib/paraglide/runtime';
+	import { getConfig } from '@/lib/config';
 
 	let { children } = $props();
 
@@ -40,6 +41,10 @@
 		}
 	})
 </script>
+
+<svelte:head>
+	<title>{getConfig().general.mapName}</title>
+</svelte:head>
 
 <ParaglideJS languageTag={languageTag} {i18n}>
 

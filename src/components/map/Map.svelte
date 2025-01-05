@@ -4,7 +4,7 @@
 		clickFeatureHandler,
 		clickMapHandler,
 		getMapObjects,
-		updateAllMapObjects
+		updateAllMapObjects, updateCurrentPath
 	} from '@/lib/mapObjects/mapObjects.svelte.js';
 	import { GeoJSON, Layer, MapLibre, Marker, SymbolLayer } from 'svelte-maplibre';
 	import { getUserSettings, updateUserSettings } from '@/lib/userSettings.svelte';
@@ -14,7 +14,7 @@
 	import { getCurrentUiconSetDetails, getIconPokemon, getIconPokestop, getIcon } from '@/lib/uicons.svelte';
 	import {getLoadedImages} from '@/lib/utils.svelte';
 	import ContextMenu from '@/components/ui/contextmenu/ContextMenu.svelte';
-	import { setContextMenuEvent, setIsContxtMenuOpen } from '@/components/ui/contextmenu/utils.svelte';
+	import { setContextMenuEvent, setIsContextMenuOpen } from '@/components/ui/contextmenu/utils.svelte';
 	import { getDirectLinkCoordinates, setDirectLinkCoordinates } from '@/lib/directLinks.svelte';
 
 	let {
@@ -91,7 +91,7 @@
 	}
 
 	async function onMapMoveStart() {
-		setIsContxtMenuOpen(false)
+		setIsContextMenuOpen(false)
 		if (getUserSettings().loadMapObjectsWhileMoving) {
 			loadMapObjectInterval = setInterval(runLoadMapObjects, 200)
 		}
@@ -110,11 +110,14 @@
 
 	async function onMapLoad() {
 		if (map) {
-			map.on("click", clickMapHandler)
 			map.on("touchstart", onTouchStart)
 			map.on("touchend", onTouchEnd)
 			map.on("touchmove", onTouchMove)
+
+			// tick so feature handler registers first
+			tick().then(() => map.on("click", clickMapHandler))
 		}
+
 
 		await loadMapObjects()
 	}
@@ -124,7 +127,7 @@
 
 	function onContextMenu(event: maplibre.MapTouchEvent | maplibre.MapMouseEvent) {
 		setContextMenuEvent(event)
-		setIsContxtMenuOpen(true)
+		setIsContextMenuOpen(true)
 	}
 
 	function onTouchStart(e: maplibre.MapTouchEvent) {
@@ -140,6 +143,7 @@
 	}
 
 	onMount(() => {
+		updateCurrentPath()
 		const data = getDirectLinkCoordinates()
 		if (data) {
 			if (data.lat) getUserSettings().mapPosition.center.lat = data.lat
@@ -164,7 +168,6 @@
 	onmovestart={onMapMoveStart}
 	onload={onMapLoad}
 	oncontextmenu={onContextMenu}
-	onclick={() => setIsContxtMenuOpen(false)}
 >
 	<GeoJSON
 		id="mapObjects"

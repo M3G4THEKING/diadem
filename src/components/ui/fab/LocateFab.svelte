@@ -4,7 +4,7 @@
 	import maplibre from 'maplibre-gl';
 	import { openToast } from '@/components/ui/toast/toastUtils.svelte';
 	import { tick } from 'svelte';
-	import { setIsContxtMenuOpen } from '@/components/ui/contextmenu/utils.svelte';
+	import { setIsContextMenuOpen } from '@/components/ui/contextmenu/utils.svelte';
 	import * as m from "@/lib/paraglide/messages"
 
 	let {
@@ -54,7 +54,7 @@
 	}
 
 	function onClick() {
-		setIsContxtMenuOpen(false)
+		setIsContextMenuOpen(false)
 		isFetchingLocation = true
 		navigator?.geolocation?.getCurrentPosition(
 			(s) => {

@@ -11,6 +11,7 @@
 	import type { MasterPokemon } from '@/lib/types/masterfile';
 	import TextSeparator from '@/components/utils/TextSeparator.svelte';
 	import * as m from "@/lib/paraglide/messages"
+	import { getConfig } from '@/lib/config';
 
 	let {data} : {data: PokemonData} = $props()
 
@@ -19,7 +20,18 @@
 	function hasTimer() {
 		return data.expire_timestamp && data.expire_timestamp_verified
 	}
+
+	function getTitle() {
+		let title = getConfig().general.mapName
+		if (masterPokemon) title += " | " + masterPokemon.name
+		return title
+	}
 </script>
+
+<svelte:head>
+	<title>{getTitle()}</title>
+	<meta property="og:description" content="Test description. {masterPokemon?.name}" />
+</svelte:head>
 
 {#snippet timer()}
 	<IconValue>

@@ -14,6 +14,10 @@ export type Area = {
 	zoom: number
 }
 
+type General = {
+	mapName: string
+}
+
 export type ClientConfig = {
 	mapStyles: {
 		id: string
@@ -22,6 +26,7 @@ export type ClientConfig = {
 	}[]
 	uiconSets: UiconSet[]
 	areas: Area[]
+	general: General
 }
 
 export type ServerConfig = {
