@@ -15,13 +15,18 @@
 	function flyTo(center: number[], zoom: number) {
 		closePopup()
 		closeModal()
-		map?.flyTo({
-			center: {lat: center[0], lng: center[1]},
-			zoom: zoom,
-			bearing: 0,
-			pitch: 0,
-			speed: 1.5
-		})
+		map?.setCenter({lat: center[0], lng: center[1]})
+		map?.setZoom(zoom)
+		map?.setBearing(0)
+		map?.setPitch(0)
+
+		// map?.flyTo({
+		// 	center: {lat: center[0], lng: center[1]},
+		// 	zoom: zoom,
+		// 	bearing: 0,
+		// 	pitch: 0,
+		// 	speed: 1.5
+		// })
 	}
 </script>
 
