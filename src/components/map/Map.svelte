@@ -90,6 +90,8 @@
 		if (loadMapObjectInterval !== undefined) clearInterval(loadMapObjectInterval)
 		loadMapObjects().then()
 		if (map) {
+			resetUpdateMapObjectsInterval()
+
 			getUserSettings().mapPosition.zoom = map.getZoom()
 			getUserSettings().mapPosition.center = map.getCenter()
 			updateUserSettings()
@@ -145,6 +147,7 @@
 		}
 
 		await loadMapObjects(false)
+		resetUpdateMapObjectsInterval()
 	}
 
 	let pressTimer: NodeJS.Timeout[] = [];
@@ -166,6 +169,7 @@
 
 	async function onMapMoveStart() {
 		clearPressTimer()
+		clearUpdateMapObjectsInterval()
 
 		setIsContextMenuOpen(false)
 		if (getUserSettings().loadMapObjectsWhileMoving) {
@@ -173,10 +177,34 @@
 		}
 	}
 
+	let updateMapObjectsInterval: undefined | NodeJS.Timeout = undefined
+
+	function clearUpdateMapObjectsInterval() {
+		if (updateMapObjectsInterval) clearInterval(updateMapObjectsInterval)
+		updateMapObjectsInterval = undefined
+	}
+
+	function resetUpdateMapObjectsInterval() {
+		if (!map) return
+		clearUpdateMapObjectsInterval()
+		updateMapObjectsInterval = setInterval(() => updateAllMapObjects(map), 5000)
+	}
+
+	function onWindowFocus() {
+		if (!map) return
+		updateAllMapObjects(map)
+		resetUpdateMapObjectsInterval()
+	}
+
 	onMount(() => {
 		updateCurrentPath()
 	})
 </script>
+
+<svelte:window
+	onfocus={onWindowFocus}
+	onblur={clearUpdateMapObjectsInterval}
+></svelte:window>
 
 <MapLibre
 	bind:map
