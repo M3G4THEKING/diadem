@@ -35,6 +35,7 @@ export async function query(sql: string, values: any | undefined = undefined): P
 	}
 
 	const parsedResult: mysql.QueryResult = []
+	// TODO: Fix this shit
 	if (result) {
 		for (const row of result) {
 			const keys = Object.keys(row)
@@ -51,7 +52,7 @@ export async function query(sql: string, values: any | undefined = undefined): P
 					if (!lastResult[subRowKey]) {
 						lastResult[subRowKey] = []
 					}
-					lastResult[subRowKey] = [...lastResult[subRowKey], subRows[subRowKey]]
+					lastResult[subRowKey] = [...lastResult[subRowKey], subRows[subRowKey][0]]
 				}
 			} else {
 				parsedResult.push({

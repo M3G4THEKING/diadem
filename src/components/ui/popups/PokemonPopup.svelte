@@ -12,6 +12,7 @@
 	import TextSeparator from '@/components/utils/TextSeparator.svelte';
 	import * as m from "@/lib/paraglide/messages"
 	import { getConfig } from '@/lib/config';
+	import { ingame } from '@/lib/ingameLocale';
 
 	let {data} : {data: PokemonData} = $props()
 
@@ -131,9 +132,9 @@
 					</span>
 			{/if}
 			<span>
-				{defaultProp(masterPokemon, "name", "Pokemon")}
+				{ingame("poke_" + data.pokemon_id) || m.pogo_pokemon()}
 				{#if data.display_pokemon_id}
-					({defaultProp(getMasterPokemon(data.display_pokemon_id), "name", "Pokemon")})
+					{ingame("poke_" + data.display_pokemon_id) || m.pogo_pokemon()}
 				{/if}
 			</span>
 		</div>

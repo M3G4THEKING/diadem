@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { ParaglideJS } from '@inlang/paraglide-sveltekit'
-	import { i18n } from '@/lib/i18n'
+	import { i18n, resolveLanguageTag } from '@/lib/i18n';
 
 	import '../app.css';
 	import {initAllIconSets} from '@/lib/uicons.svelte';
@@ -14,6 +14,7 @@
 	import {fade, slide} from 'svelte/transition';
 	import { availableLanguageTags } from '@/lib/paraglide/runtime';
 	import { getConfig } from '@/lib/config';
+	import { loadRemoteLocale } from '@/lib/ingameLocale';
 
 	let { children } = $props();
 
@@ -33,12 +34,8 @@
 
 	let languageTag: string = $state("en")
 	$effect(() => {
-		if (getUserSettings().languageTag === "auto") {
-			const browserTag = window.navigator.language.toLowerCase().split("-")[0]
-			languageTag = availableLanguageTags.find(l => l === browserTag) ?? "en"
-		} else {
-			languageTag = getUserSettings().languageTag
-		}
+		languageTag = resolveLanguageTag(getUserSettings().languageTag)
+		loadRemoteLocale(languageTag)  // TODO this is called twice when changing language
 	})
 </script>
 

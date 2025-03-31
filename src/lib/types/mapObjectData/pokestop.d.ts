@@ -1,3 +1,5 @@
+import type { PokemonData } from '@/lib/types/mapObjectData/pokemon';
+
 export type PokestopData = {
 	id: string
 	mapId: string
@@ -71,4 +73,12 @@ export type Incident = {
 	slot_3_pokemon_id?: number
 	slot_3_form?: number
 }
+
+export type QuestReward = QuestRewardPokemon
+
+export type QuestRewardPokemon = {
+	type: 7
+	info: Partial<PokemonData>
+}
+
 

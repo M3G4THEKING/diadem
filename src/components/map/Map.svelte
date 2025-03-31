@@ -9,7 +9,7 @@
 	import { GeoJSON, Layer, MapLibre, Marker, SymbolLayer } from 'svelte-maplibre';
 	import { getUserSettings, updateUserSettings } from '@/lib/userSettings.svelte';
 	import maplibre, { GeoJSONSource } from 'maplibre-gl';
-	import { onMount, tick, untrack } from 'svelte';
+	import { onDestroy, onMount, tick, untrack } from 'svelte';
 	import type { FeatureCollection } from 'geojson';
 	import { getCurrentUiconSetDetails, getIconPokemon, getIconPokestop, getIconForMap } from '@/lib/uicons.svelte';
 	import {getLoadedImages} from '@/lib/utils.svelte';
@@ -198,6 +198,11 @@
 
 	onMount(() => {
 		updateCurrentPath()
+	})
+
+	onDestroy(() => {
+		clearUpdateMapObjectsInterval()
+		if (loadMapObjectInterval !== undefined) clearInterval(loadMapObjectInterval)
 	})
 </script>
 

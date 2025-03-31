@@ -2,11 +2,11 @@
 	let {
 		src,
 		alt,
-		class: class_
+		class: class_ = ""
 	}: {
 		src: string,
 		alt: string,
-		class: string
+		class?: string
 	} = $props()
 
 	let img: HTMLImageElement | undefined = $state(undefined)

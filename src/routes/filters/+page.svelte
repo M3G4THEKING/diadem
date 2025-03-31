@@ -5,7 +5,7 @@
 	import * as m from '@/lib/paraglide/messages';
 	import Card from '@/components/ui/Card.svelte';
 	import { getUserSettings, updateUserSettings } from '@/lib/userSettings.svelte';
-	import { Cloud, Eye, EyeOff, Filter, Moon, Pen, Pencil, Plus, Sun, X } from 'lucide-svelte';
+	import { ChevronDown, ChevronUp, Cloud, Eye, EyeOff, Filter, Moon, Pen, Pencil, Plus, Sun, X } from 'lucide-svelte';
 	import SelectGroupItem from '@/components/ui/settings/SelectGroupItem.svelte';
 	import SelectGroup from '@/components/ui/settings/SelectGroup.svelte';
 	import SettingsGeneric from '@/components/ui/settings/SettingsGeneric.svelte';
@@ -16,6 +16,8 @@
 	import FilterTypeSelect from '@/components/ui/filters/FilterTypeSelect.svelte';
 
 	import { slide, fly } from 'svelte/transition';
+
+	let test: boolean = $state(false)
 </script>
 
 <svelte:head>
@@ -117,18 +119,32 @@
 		<SettingsGeneric title="Plain Pokéstops">
 			<FilterTypeSelect category="pokestopPlain" />
 		</SettingsGeneric>
-		<SettingsGeneric title="Quests">
-			{@render showWhat()}
-		</SettingsGeneric>
-		<SettingsGeneric title="Team Rocket">
-			{@render showWhat()}
-		</SettingsGeneric>
-		<SettingsGeneric title="Showcases">
-			{@render showWhat()}
-		</SettingsGeneric>
-		<SettingsGeneric title="Lures">
-			{@render showWhat()}
-		</SettingsGeneric>
+		{#if test}
+		<div transition:slide={{ duration: 80 }}>
+			<SettingsGeneric title="Quests">
+				{@render showWhat()}
+			</SettingsGeneric>
+			<SettingsGeneric title="Team Rocket">
+				{@render showWhat()}
+			</SettingsGeneric>
+			<SettingsGeneric title="Showcases">
+				{@render showWhat()}
+			</SettingsGeneric>
+			<SettingsGeneric title="Lures">
+				{@render showWhat()}
+			</SettingsGeneric>
+		</div>
+		{/if}
+		<Button class="w-full" variant="ghost" onclick={() => test = !test}>
+			{#if test}
+				<ChevronUp size="18" />
+				<span>Less</span>
+			{:else}
+				<ChevronDown size="18" />
+				<span>More</span>
+			{/if}
+
+		</Button>
 	</Card>
 	<Card class="pt-4 pb-2 px-2 mx-2">
 		<SettingsGeneric title="Plain Gyms">
@@ -139,7 +155,7 @@
 		</SettingsGeneric>
 	</Card>
 	<Card class="pt-4 pb-2 px-2 mx-2">
-		<SettingsGeneric title="Plain Power Stations">
+		<SettingsGeneric title="Plain Power Spots">
 			<FilterTypeSelect category="stationMajor" />
 		</SettingsGeneric>
 	</Card>

@@ -4,9 +4,12 @@ import {getConfig} from '@/lib/config';
 import type {PokemonData} from '@/lib/types/mapObjectData/pokemon';
 import type { UiconSet } from '@/lib/types/config';
 import type { MapData, MapObjectType } from '@/lib/types/mapObjectData/mapObjects';
-import type { PokestopData } from '@/lib/types/mapObjectData/pokestop';
+import type { Incident, PokestopData } from '@/lib/types/mapObjectData/pokestop';
 import type { StationData } from '@/lib/types/mapObjectData/station';
 import type { GymData } from '@/lib/types/mapObjectData/gym';
+
+export const DEFAULT_UICONS = "_internal_default"
+const DEFAULT_URL = "https://raw.githubusercontent.com/WatWowMap/wwm-uicons/main/"
 
 const iconSets: {[key: string]: UICONS} = {}
 
@@ -18,7 +21,12 @@ export async function initIconSet(id: string, url: string) {
 }
 
 export async function initAllIconSets() {
-	await Promise.all(getConfig().uiconSets.map((s) => initIconSet(s.id, s.url)))
+	await Promise.all(
+		[
+			...getConfig().uiconSets.map(s => initIconSet(s.id, s.url)),
+			initIconSet(DEFAULT_UICONS, DEFAULT_URL)
+		]
+	)
 }
 
 export function getUiconSetDetails(id: string): UiconSet | undefined {
@@ -92,4 +100,8 @@ export function getIconGym(data: Partial<GymData>, iconSet: string = getUserSett
 
 export function getIconStation(data: Partial<StationData>, iconSet: string = getUserSettings().uiconSet.station.id) {
 	return iconSets[iconSet].station(!data.is_inactive)
+}
+
+export function getIconInvasion(incident: Incident) {
+	return iconSets[DEFAULT_UICONS].invasion(incident.character, Boolean(incident.confirmed))
 }
