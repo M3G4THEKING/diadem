@@ -2,6 +2,7 @@ import type { Feature } from 'geojson';
 import { getCurrentUiconSetDetails, getIconForMap, getIconInvasion, getIconReward } from '@/lib/uicons.svelte';
 import { getMapObjects, type MapObjectsStateType } from '@/lib/mapObjects/mapObjects.svelte';
 import { currentTimestamp } from '@/lib/utils.svelte';
+import { getUserSettings } from '@/lib/userSettings.svelte';
 
 type IconProperties = {
 	imageUrl: string
@@ -42,63 +43,71 @@ export function getMapFeatures(mapObjects: MapObjectsStateType): Feature[] {
 		}
 
 		if (obj.type === "pokestop") {
-			// TODO: only show if enabled in filters
-
-			const questSize = 0.13
-			const questOffsetX = -50
-			if (obj.alternative_quest_target && obj.alternative_quest_rewards) {
-				const reward = JSON.parse(obj.alternative_quest_rewards)[0]
-				features.push(getFeature(
-					obj.mapId + "-altquest-" + obj.alternative_quest_rewards,
-					[obj.lon, obj.lat],
-					{
-						imageUrl: getIconReward(reward),
-						imageSize: questSize,
-						imageOffset: [questOffsetX, 35],
-						id: obj.mapId
-					}
-				))
-			}
-			if (obj.quest_target && obj.quest_rewards) {
-				const reward = JSON.parse(obj.quest_rewards)[0]
-				features.push(getFeature(
-					obj.mapId + "-quest-" + obj.quest_rewards,
-					[obj.lon, obj.lat],
-					{
-						imageUrl: getIconReward(reward),
-						imageSize: questSize,
-						imageOffset: [questOffsetX, -85],
-						id: obj.mapId
-					}
-				))
-			}
-
-			for (const [index, incident] of obj.incident.entries()) {
-				if (
-					!incident.id
-					|| ![1, 2, 3].includes(incident.display_type)
-					|| incident.expiration < currentTimestamp()
-					) {
-					continue
+			if (getUserSettings().filters.quest.type !== "none") {
+				const questSize = 0.13
+				const questOffsetX = -50
+				if (obj.alternative_quest_target && obj.alternative_quest_rewards) {
+					const reward = JSON.parse(obj.alternative_quest_rewards)[0]
+					features.push(getFeature(
+						obj.mapId + "-altquest-" + obj.alternative_quest_rewards,
+						[obj.lon, obj.lat],
+						{
+							imageUrl: getIconReward(reward),
+							imageSize: questSize,
+							imageOffset: [questOffsetX, offsetY + 35],
+							id: obj.mapId
+						}
+					))
 				}
-				features.push(getFeature(
-					obj.mapId + "-incident-" + incident.id,
-					[obj.lon, obj.lat],
-					{
-						imageUrl: getIconInvasion(incident),
-						imageSize: 0.11,
-						imageOffset: [70, -85 + (index * 130)],
-						id: obj.mapId
+				if (obj.quest_target && obj.quest_rewards) {
+					const reward = JSON.parse(obj.quest_rewards)[0]
+					features.push(getFeature(
+						obj.mapId + "-quest-" + obj.quest_rewards,
+						[obj.lon, obj.lat],
+						{
+							imageUrl: getIconReward(reward),
+							imageSize: questSize,
+							imageOffset: [questOffsetX, offsetY + -85],
+							id: obj.mapId
+						}
+					))
+				}
+			}
+
+			if (getUserSettings().filters.invasion.type !== "none") {
+				for (const [index, incident] of obj.incident.entries()) {
+					if (
+						!incident.id
+						|| ![1, 2, 3].includes(incident.display_type)
+						|| incident.expiration < currentTimestamp()
+					) {
+						continue
 					}
-				))
+					features.push(getFeature(
+						obj.mapId + "-incident-" + incident.id,
+						[obj.lon, obj.lat],
+						{
+							imageUrl: getIconInvasion(incident),
+							imageSize: 0.11,
+							imageOffset: [70, offsetY + -85 + (index * 130)],
+							id: obj.mapId
+						}
+					))
+				}
 			}
 		}
+
+		// features.push(getFeature("debug-red-dot", [obj.lon, obj.lat], {
+		// 	imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/02/Red_Circle%28small%29.svg/29px-Red_Circle%28small%29.svg.png",
+		// 	id: obj.mapId,
+		// 	imageSize: 0.1
+		// }))
 
 		features.push(getFeature(obj.mapId, [obj.lon, obj.lat], {
 			imageUrl: getIconForMap(obj),
 			id: obj.mapId,
 			imageSize: scale,
-			// imageOffset: [offsetX, offsetY]
+			imageOffset: [offsetX, offsetY]
 		}))
 
 

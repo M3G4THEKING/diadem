@@ -64,7 +64,7 @@ url = "https://raw.githubusercontent.com/nileplumb/PkmnShuffleMap/master/UICONS/
 
 base = { scale = 0.09 }
 pokemon = { scale = 0.25 }
-pokestop = { default = true, offsetY = 20 }
+pokestop = { default = true, offsetY = -100 }
 gym = true
 station = { default = true }
 

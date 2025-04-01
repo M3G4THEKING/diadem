@@ -122,16 +122,16 @@
 		{#if test}
 		<div transition:slide={{ duration: 80 }}>
 			<SettingsGeneric title="Quests">
-				{@render showWhat()}
+				<FilterTypeSelect category="quest" />
 			</SettingsGeneric>
 			<SettingsGeneric title="Team Rocket">
-				{@render showWhat()}
+				<FilterTypeSelect category="invasion" />
 			</SettingsGeneric>
 			<SettingsGeneric title="Showcases">
-				{@render showWhat()}
+				<FilterTypeSelect category="contest" />
 			</SettingsGeneric>
 			<SettingsGeneric title="Lures">
-				{@render showWhat()}
+				<FilterTypeSelect category="lure" />
 			</SettingsGeneric>
 		</div>
 		{/if}
