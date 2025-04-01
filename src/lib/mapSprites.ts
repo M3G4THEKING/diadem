@@ -109,8 +109,6 @@ export function getMapFeatures(mapObjects: MapObjectsStateType): Feature[] {
 			imageSize: scale,
 			imageOffset: [offsetX, offsetY]
 		}))
-
-
 	}
 
 	return features

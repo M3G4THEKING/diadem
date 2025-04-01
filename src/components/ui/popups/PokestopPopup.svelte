@@ -1,22 +1,15 @@
 <script lang="ts">
-	import type { PokestopData, QuestReward } from '@/lib/types/mapObjectData/pokestop';
+	import type { PokestopData } from '@/lib/types/mapObjectData/pokestop';
 	import BasePopup from '@/components/ui/popups/BasePopup.svelte';
 	import { getIconInvasion, getIconItem, getIconPokemon, getIconPokestop, getIconReward } from '@/lib/uicons.svelte';
 	import ImagePopup from '@/components/ui/popups/ImagePopup.svelte';
-	import * as m from "@/lib/paraglide/messages"
+	import * as m from '@/lib/paraglide/messages';
 	import ImageFort from '@/components/ui/popups/ImageFort.svelte';
 	import { ingame } from '@/lib/ingameLocale';
-	import Countdown from '@/components/utils/Countdown.svelte';
-	import { currentTimestamp, timestampToLocalTime } from '@/lib/utils.svelte';
+	import { currentTimestamp } from '@/lib/utils.svelte';
 	import TimeWithCountdown from '@/components/ui/popups/TimeWithCountdown.svelte';
 
 	let {data} : {data: PokestopData} = $props()
-
-	function getRewardIcon(questReward: QuestReward) {
-		if (questReward.type === 7) return getIconPokemon(questReward.info)
-
-		return getIconPokemon({ pokemon_id: 0 })
-	}
 </script>
 
 {#snippet questSection(questTitle: string, questRewards: string, quest_target: number, isAr: boolean)}
@@ -157,6 +150,20 @@
 				{/if}
 			{/each}
 		</div>
+	{/snippet}
 
+	{#snippet content()}
+		{#if data.power_up_points > 0}
+			<div>
+				Power-Up Level: {data.power_up_level} ({data.power_up_points} points)
+			</div>
+		{/if}
+
+		{#if data.quest_target}
+			{@render questSection(data.quest_title ?? "", data.quest_rewards ?? "[]", data.quest_target ?? 0, true)}
+		{/if}
+		{#if data.alternative_quest_target}
+			{@render questSection(data.alternative_quest_title ?? "", data.alternative_quest_rewards ?? "[]", data.alternative_quest_target ?? 0, false)}
+		{/if}
 	{/snippet}
 </BasePopup>

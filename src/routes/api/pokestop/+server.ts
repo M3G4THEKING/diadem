@@ -7,7 +7,8 @@ export async function POST({ request }) {
 		"SELECT * FROM pokestop " +
 		"LEFT JOIN incident ON incident.pokestop_id = pokestop.id " +
 		"WHERE lat BETWEEN ? AND ? " +
-		"AND lon BETWEEN ? AND ?" +
+		"AND lon BETWEEN ? AND ? " +
+		"AND deleted = 0 " +
 		"LIMIT 10000",
 		[reqBody.minLat, reqBody.maxLat, reqBody.minLon, reqBody.maxLon]
 	)
