@@ -6,6 +6,7 @@ import { GYM_OUTDATED_SECONDS } from '@/lib/constants';
 import { getIconGym } from '@/lib/uicons.svelte';
 
 export const GYM_SLOTS = 6
+export const CONTEST_SLOTS = 200
 
 export function isIncidentInvasion(incident: Incident) {
 	return [1, 2, 3].includes(incident.display_type)
@@ -28,8 +29,8 @@ export function getRaidPokemon(gym: GymData): Partial<PokemonData> {
 		costume: gym.raid_pokemon_costume,
 		temp_evolution_id: gym.raid_pokemon_evolution,
 		alignment: gym.raid_pokemon_alignment,
-		move1: gym.raid_pokemon_move_1,
-		move2: gym.raid_pokemon_move_2,
+		move_1: gym.raid_pokemon_move_1,
+		move_2: gym.raid_pokemon_move_2,
 	}
 }
 

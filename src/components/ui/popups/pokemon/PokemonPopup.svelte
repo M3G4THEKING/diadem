@@ -1,20 +1,20 @@
 <script lang="ts">
 	import type { PokemonData } from '@/lib/types/mapObjectData/pokemon';
 	import Countdown from '@/components/utils/Countdown.svelte';
-	import { timestampToLocalTime } from '@/lib/utils.svelte';
+	import { timestampToLocalTime } from '@/lib/utils.svelte.js';
 	import BasePopup from '@/components/ui/popups/BasePopup.svelte';
-	import ImagePopup from '@/components/ui/popups/ImagePopup.svelte';
-	import { getIconPokemon } from '@/lib/uicons.svelte';
+	import ImagePopup from '@/components/ui/popups/common/ImagePopup.svelte';
+	import { getIconPokemon } from '@/lib/uicons.svelte.js';
 	import { Clock, ClockAlert, SearchX, MapPinX, DraftingCompass, ChartBar, Ruler } from 'lucide-svelte';
-	import IconValue from '@/components/ui/popups/IconValue.svelte';
+	import IconValue from '@/components/ui/popups/common/IconValue.svelte';
 	import {getMasterPokemon, defaultProp} from '@/lib/masterfile';
 	import type { MasterPokemon } from '@/lib/types/masterfile';
 	import TextSeparator from '@/components/utils/TextSeparator.svelte';
 	import * as m from "@/lib/paraglide/messages"
 	import { getConfig } from '@/lib/config';
 	import { ingame, pokemonName } from '@/lib/ingameLocale';
-	import TimeWithCountdown from '@/components/ui/popups/TimeWithCountdown.svelte';
-	import { getCurrentSelectedData, getMapObjects } from '@/lib/mapObjects/mapObjects.svelte';
+	import TimeWithCountdown from '@/components/ui/popups/common/TimeWithCountdown.svelte';
+	import { getCurrentSelectedData, getMapObjects } from '@/lib/mapObjects/mapObjects.svelte.js';
 	import { getPokemonSize } from '@/lib/pogoUtils';
 	import type { GymData } from '@/lib/types/mapObjectData/gym';
 
@@ -113,9 +113,9 @@
 					</span>
 			{/if}
 			<span>
-				{pokemonName(data.pokemon_id)}
+				{pokemonName(data)}
 				{#if data.display_pokemon_id}
-					({pokemonName(data.display_pokemon_id)})
+					({pokemonName({ pokemon_id: data.display_pokemon_id })})
 				{/if}
 			</span>
 		</div>

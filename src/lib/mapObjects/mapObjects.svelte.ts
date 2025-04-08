@@ -15,7 +15,7 @@ export type MapObjectsStateType = {
 
 let currentSelectedData: MapData | null = $state(null);
 let mapObjectsState: MapObjectsStateType = $state({});
-const allMapTypes: MapObjectType[] = ["pokemon", "pokestop", "gym", "station"]
+export const allMapTypes: MapObjectType[] = ["pokemon", "pokestop", "gym", "station"]
 
 export async function updateAllMapObjects(map: maplibre.Map, removeOld: boolean = true) {
 	await Promise.all(allMapTypes.map(type => {
@@ -89,10 +89,18 @@ export function clickMapHandler(event: MapMouseEvent) {
 
 export function clickFeatureHandler(event: LayerClickInfo<Feature>) {
 	event.event.originalEvent.preventDefault()
-	if (event.features) {
-		const props = event.features[0].properties;
-		openPopup(mapObjectsState[props.id]);
-	}
+	if (!event.features) return
+
+	let clickedFeature: Feature = event.features[0]
+	console.log(clickedFeature)
+
+	event.features.forEach(f => {
+		if (f.geometry.coordinates[1] < clickedFeature.geometry.coordinates[1]) {
+			clickedFeature = f
+		}
+	})
+
+	openPopup(mapObjectsState[clickedFeature.properties.id]);
 }
 
 export function getMapObjects() {

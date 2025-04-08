@@ -1,16 +1,16 @@
 <script lang="ts">
 	import type { GymData } from '@/lib/types/mapObjectData/gym';
 	import BasePopup from '@/components/ui/popups/BasePopup.svelte';
-	import { getIconGym, getIconPokemon, getIconRaidEgg } from '@/lib/uicons.svelte';
-	import ImagePopup from '@/components/ui/popups/ImagePopup.svelte';
+	import { getIconGym, getIconPokemon, getIconRaidEgg } from '@/lib/uicons.svelte.js';
+	import ImagePopup from '@/components/ui/popups/common/ImagePopup.svelte';
 	import * as m from "@/lib/paraglide/messages"
-	import CommonFortImage from '@/components/ui/popups/CommonFortImage.svelte';
-	import { currentTimestamp, timestampToLocalTime } from '@/lib/utils.svelte';
+	import FortImage from '@/components/ui/popups/common/FortImage.svelte';
+	import { currentTimestamp, timestampToLocalTime } from '@/lib/utils.svelte.js';
 	import { ingame, pokemonName } from '@/lib/ingameLocale';
 	import Countdown from '@/components/utils/Countdown.svelte';
 	import { getRaidPokemon, GYM_SLOTS, isFortOutdated } from '@/lib/pogoUtils';
-	import { getCurrentSelectedData, getMapObjects } from '@/lib/mapObjects/mapObjects.svelte';
-	import TimeWithCountdown from '@/components/ui/popups/TimeWithCountdown.svelte';
+	import { getCurrentSelectedData, getMapObjects } from '@/lib/mapObjects/mapObjects.svelte.js';
+	import TimeWithCountdown from '@/components/ui/popups/common/TimeWithCountdown.svelte';
 	import {
 		CircleFadingArrowUp,
 		Clock,
@@ -21,12 +21,12 @@
 		Trees,
 		UsersRound
 	} from 'lucide-svelte';
-	import IconValue from '@/components/ui/popups/IconValue.svelte';
-	import CommonUpdatedTimes from '@/components/ui/popups/CommonUpdatedTimes.svelte';
-	import CommonFortPowerUp from '@/components/ui/popups/CommonFortPowerUp.svelte';
+	import IconValue from '@/components/ui/popups/common/IconValue.svelte';
+	import UpdatedTimes from '@/components/ui/popups/common/UpdatedTimes.svelte';
+	import FortPowerUp from '@/components/ui/popups/common/FortPowerUp.svelte';
 	import { getConfig } from '@/lib/config';
 	import Button from '@/components/ui/Button.svelte';
-	import GymDefenderOverview from '@/components/ui/popups/GymDefenderOverview.svelte';
+	import GymDefenderOverview from '@/components/ui/popups/gym/GymDefenderOverview.svelte';
 
 	let { mapId } : { mapId: string } = $props()
 	let data: GymData = $derived(getMapObjects()[mapId] as GymData ?? getCurrentSelectedData() as GymData)
@@ -55,7 +55,7 @@
 			<div class="w-8 flex-shrink-0">
 				<ImagePopup
 					src={getIconPokemon(getRaidPokemon(data))}
-					alt={pokemonName(data.raid_pokemon_id, data.raid_pokemon_evolution)}
+					alt={pokemonName(getRaidPokemon(data))}
 					class="w-8"
 				/>
 			</div>
@@ -81,7 +81,7 @@
 
 				{#if data.raid_pokemon_id}
 					<b class="whitespace-nowrap">
-						· {pokemonName(data.raid_pokemon_id, data.raid_pokemon_evolution)}
+						· {pokemonName(getRaidPokemon(data))}
 					</b>
 				{/if}
 			</div>
@@ -133,7 +133,7 @@
 
 <BasePopup lat={data.lat} lon={data.lon}>
 	{#snippet image()}
-		<CommonFortImage
+		<FortImage
 			alt={data.name ?? m.pogo_gym()}
 			fortUrl={data.url}
 			fortIcon={getIconGym(data)}
@@ -185,7 +185,7 @@
 				</IconValue>
 			{/if}
 
-			<CommonFortPowerUp
+			<FortPowerUp
 				points={data.power_up_points}
 				level={data.power_up_level}
 				endTimestamp={data.power_up_end_timestamp}
@@ -193,7 +193,7 @@
 			/>
 		</div>
 
-		<CommonUpdatedTimes
+		<UpdatedTimes
 			updated={data.updated}
 			lastModified={data.last_modified_timestamp}
 			firstSeen={data.first_seen_timestamp}

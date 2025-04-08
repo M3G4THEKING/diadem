@@ -3,7 +3,7 @@
 	import { Clock, ClockAlert, ClockArrowUp, Gift, ScanEye } from 'lucide-svelte';
 	import { timestampToLocalTime } from '@/lib/utils.svelte.js';
 	import Countdown from '@/components/utils/Countdown.svelte';
-	import IconValue from '@/components/ui/popups/IconValue.svelte';
+	import IconValue from '@/components/ui/popups/common/IconValue.svelte';
 	import * as m from "@/lib/paraglide/messages"
 
 	let {

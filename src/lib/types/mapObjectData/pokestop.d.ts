@@ -50,6 +50,7 @@ export type PokestopData = {
 	alternative_quest_reward_amount?: number
 	showcase_pokemon_id?: number
 	showcase_pokemon_form_id?: number
+	showcase_focus?: string
 	showcase_pokemon_type_id?: number
 	showcase_ranking_standard?: number
 	showcase_expiry?: number
@@ -72,6 +73,27 @@ export type Incident = {
 	slot_2_form?: number
 	slot_3_pokemon_id?: number
 	slot_3_form?: number
+}
+
+export type ContestEntry = {
+	rank: number
+	score: number
+	pokemon_id: number
+	form: number
+	costume: number
+	gender: number
+	shiny: number
+	temp_evolution: number
+	temp_evolution_finish_ms: number
+	alignment: number
+	badge: number
+	location_card: number
+}
+
+export type ContestRankings = {
+	total_entries: number
+	last_update: number
+	contest_entries: ContestEntry[]
 }
 
 export type QuestReward = QuestRewardExperience

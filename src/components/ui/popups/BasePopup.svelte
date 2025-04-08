@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { isPopupExpanded } from '@/components/ui/popups/isPopupExpanded.svelte';
-	import PopupButtons from '@/components/ui/popups/PopupButtons.svelte';
+	import PopupButtons from '@/components/ui/popups/common/PopupButtons.svelte';
 	import Card from '@/components/ui/Card.svelte';
 	import { X } from 'lucide-svelte';
 	import type { Snippet } from 'svelte';

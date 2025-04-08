@@ -1,6 +1,6 @@
 <script lang="ts">
-	import IconValue from '@/components/ui/popups/IconValue.svelte';
-	import TimeWithCountdown from '@/components/ui/popups/TimeWithCountdown.svelte';
+	import IconValue from '@/components/ui/popups/common/IconValue.svelte';
+	import TimeWithCountdown from '@/components/ui/popups/common/TimeWithCountdown.svelte';
 	import { CircleFadingArrowUp } from 'lucide-svelte';
 	import { isFortOutdated } from '@/lib/pogoUtils';
 	import * as m from "@/lib/paraglide/messages"

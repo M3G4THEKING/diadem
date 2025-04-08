@@ -72,5 +72,10 @@
     "last_seen": "Last seen",
     "last_updated": "Last updated",
     "first_seen": "First seen",
-    "outdated_message": "Hasn't been updated in a while"
+    "outdated_message": "Hasn't been updated in a while",
+    "time_format_h_m": "{h}h {m}m",
+    "time_format_h_m_ago": "{h}h {m}m ago",
+    "yesterday_time": "yesterday, {time}",
+    "today_time": "today, {time}",
+    "tomorrow_time": "tomorrow, {time}"
 }

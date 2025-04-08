@@ -2,12 +2,38 @@ import { getUserSettings } from '@/lib/userSettings.svelte';
 import { openToast } from '@/components/ui/toast/toastUtils.svelte';
 import * as m from "@/lib/paraglide/messages"
 
+function isDaySame(date1: Date, date2: Date) {
+	return (
+		date1.getDate() === date2.getDate() &&
+		date1.getMonth() === date2.getMonth() &&
+		date1.getFullYear() === date2.getFullYear()
+	)
+}
+
 export function timestampToLocalTime(timestamp: number | null | undefined, showDate: boolean = false) {
 	if (!timestamp) return ''
 
 	const date = new Date(timestamp * 1000)
 
-	if (showDate) return date.toLocaleString()
+	if (showDate) {
+		const today = new Date()
+
+		if (isDaySame(today, date)) {
+			return m.today_time({ time: date.toLocaleTimeString() })
+		}
+
+		today.setDate(today.getDate() - 1)
+		if (isDaySame(today, date)) {
+			return m.yesterday_time({ time: date.toLocaleTimeString() })
+		}
+
+		today.setDate(today.getDate() + 2)
+		if (isDaySame(today, date)) {
+			return m.tomorrow_time({ time: date.toLocaleTimeString() })
+		}
+
+		return date.toLocaleString()
+	}
 
 	return date.toLocaleTimeString()
 }

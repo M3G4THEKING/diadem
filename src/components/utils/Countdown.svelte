@@ -41,10 +41,18 @@
 		} else if (showHours || absRemainingTime >= 60 * 60) {
 			const hours = Math.floor(absRemainingTime / 3600)
 
-			if (isPast) {
-				formattedTime = m.time_format_h_m_s_ago({h: hours, m: minutes, s: seconds})
+			if (absRemainingTime >= 60 * 60) {
+				if (isPast) {
+					formattedTime = m.time_format_h_m_ago({h: hours, m: minutes, s: seconds})
+				} else {
+					formattedTime = m.time_format_h_m({h: hours, m: minutes, s: seconds})
+				}
 			} else {
-				formattedTime = m.time_format_h_m_s({h: hours, m: minutes, s: seconds})
+				if (isPast) {
+					formattedTime = m.time_format_h_m_s_ago({h: hours, m: minutes, s: seconds})
+				} else {
+					formattedTime = m.time_format_h_m_s({h: hours, m: minutes, s: seconds})
+				}
 			}
 		} else {
 			minutes = Math.floor(absRemainingTime / 60)
@@ -53,7 +61,6 @@
 				formattedTime = m.time_format_m_s_ago({m: minutes, s: seconds})
 			} else {
 				formattedTime = m.time_format_m_s({m: minutes, s: seconds})
-
 			}
 		}
 

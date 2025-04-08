@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { slide } from 'svelte/transition';
-	import PokemonPopup from '@/components/ui/popups/PokemonPopup.svelte';
-	import PokestopPopup from '@/components/ui/popups/PokestopPopup.svelte';
+	import PokemonPopup from '@/components/ui/popups/pokemon/PokemonPopup.svelte';
+	import PokestopPopup from '@/components/ui/popups/pokestop/PokestopPopup.svelte';
 	import {
 		closePopup,
 		getCurrentSelectedData, getCurrentSelectedMapId
@@ -16,8 +16,8 @@
 	import ContextMenu from '@/components/ui/contextmenu/ContextMenu.svelte';
 	import { getIsContxtMenuOpen } from '@/components/ui/contextmenu/utils.svelte';
 	import { getConfig } from '@/lib/config';
-	import GymPopup from '@/components/ui/popups/GymPopup.svelte';
-	import StationPopup from '@/components/ui/popups/StationPopup.svelte';
+	import GymPopup from '@/components/ui/popups/gym/GymPopup.svelte';
+	import StationPopup from '@/components/ui/popups/station/StationPopup.svelte';
 
 	let map: maplibre.Map | undefined = $state()
 

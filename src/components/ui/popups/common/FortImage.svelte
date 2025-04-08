@@ -1,6 +1,6 @@
 <script lang="ts">
-	import ImagePopup from '@/components/ui/popups/ImagePopup.svelte';
-	import { closeModal, openModal } from '@/lib/modal.svelte';
+	import ImagePopup from '@/components/ui/popups/common/ImagePopup.svelte';
+	import { closeModal, openModal } from '@/lib/modal.svelte.js';
 	import Button from '@/components/ui/Button.svelte';
 	import Card from '@/components/ui/Card.svelte';
 	import * as m from "@/lib/paraglide/messages"

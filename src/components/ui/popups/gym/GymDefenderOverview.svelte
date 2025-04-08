@@ -1,19 +1,26 @@
 <script lang="ts">
-	import { getIconPokemon } from '@/lib/uicons.svelte';
+	import { getIconPokemon } from '@/lib/uicons.svelte.js';
 	import { pokemonName } from '@/lib/ingameLocale';
 	import Button from '@/components/ui/Button.svelte';
-	import ImagePopup from '@/components/ui/popups/ImagePopup.svelte';
+	import ImagePopup from '@/components/ui/popups/common/ImagePopup.svelte';
 	import type { GymDefender } from '@/lib/types/mapObjectData/gym';
 	import Countdown from '@/components/utils/Countdown.svelte';
 	import TextSeparator from '@/components/utils/TextSeparator.svelte';
 	import * as m from "@/lib/paraglide/messages"
-	import IconValue from '@/components/ui/popups/IconValue.svelte';
+	import IconValue from '@/components/ui/popups/common/IconValue.svelte';
 	import { Candy, Heart, HeartPulse, Shield, Swords } from 'lucide-svelte';
 	import { slide } from 'svelte/transition';
+	import { onMount } from 'svelte';
 
 	let { defenders }: { defenders: GymDefender[] } = $props()
 
 	let selectedDefender: GymDefender | undefined = $state(undefined)
+
+	$effect(() => {
+		if (!defenders.map(d => getDefenderId(d)).includes(getDefenderId(selectedDefender))) {
+			selectedDefender = undefined
+		}
+	})
 
 	function getDefenderId(defender: GymDefender | undefined) {
 		if (!defender) return "-"
@@ -46,7 +53,7 @@
 		>
 			<ImagePopup
 				src={getIconPokemon(defender)}
-				alt={pokemonName(defender.pokemon_id)}
+				alt={pokemonName(defender)}
 				class="w-5"
 			/>
 		</Button>
@@ -54,11 +61,11 @@
 
 	{#if selectedDefender}
 		<div
-			class="py-1 px-3 border-border border rounded-sm w-full bg-accent"
+			class="py-1 px-3 border-border border rounded-sm w-full"
 			transition:slide={{ duration: 90 }}
 		>
 			<div>
-				<b>{pokemonName(selectedDefender.pokemon_id)}</b>
+				<b>{pokemonName(selectedDefender)}</b>
 				<TextSeparator />
 				{m.pogo_cp({ cp: selectedDefender.cp_now + "/" + selectedDefender.cp_when_deployed })}
 

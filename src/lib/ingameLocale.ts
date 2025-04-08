@@ -1,6 +1,7 @@
 import type { MasterFile } from '@/lib/types/masterfile';
 import { getUserSettings } from '@/lib/userSettings.svelte';
 import * as m from "@/lib/paraglide/messages"
+import type { PokemonData } from '@/lib/types/mapObjectData/pokemon';
 
 const url = "https://raw.githubusercontent.com/WatWowMap/pogo-translations/refs/heads/master/static/locales/{}.json"
 
@@ -31,10 +32,19 @@ export function ingame(key: string): string {
 	return locale[key] ?? ""
 }
 
-export function pokemonName(pokemonId?: number, megaId?: number = undefined) {
-	if (!pokemonId) return m.unknown_pokemon()
+export function pokemonName(data: Partial<PokemonData>) {
+	if (!data.pokemon_id) return m.unknown_pokemon()
 
-	let key = "poke_" + pokemonId
-	if (megaId) key += "_e" + megaId
-	return (ingame(key) || m.unknown_pokemon())
+	let key = "poke_" + data.pokemon_id
+	if (data.temp_evolution_id) key += "_e" + data.temp_evolution_id
+
+	let name = ingame(key)
+	if (!name) return m.unknown_pokemon()
+
+	if (data.shiny) name += " ✨"
+
+	const formName = data.form ? ingame("form_" + data.form) : ""
+	if (formName && formName !== ingame("form_29")) name += " (" + formName + ")"
+
+	return name
 }

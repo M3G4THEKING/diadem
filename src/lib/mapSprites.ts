@@ -1,6 +1,6 @@
 import type { Feature } from 'geojson';
 import {
-	getCurrentUiconSetDetails,
+	getCurrentUiconSetDetails, getCurrentUiconSetDetailsAllTypes,
 	getIconForMap,
 	getIconGym,
 	getIconInvasion, getIconPokemon, getIconRaidEgg,
@@ -52,10 +52,21 @@ function getModifiers(iconSet: UiconSet | undefined, type: MapObjectType) {
 }
 
 export function getMapFeatures(mapObjects: MapObjectsStateType, currentSelected: MapData | null): Feature[] {
+	// TODO perf: only update if needed by storing a id: hash table
+	// TODO perf: when currentSelected is updated, only update what's needed and not the whole array
+
 	const features: Feature[] = []
 
+	const startTime = performance.now()
+
+	const showQuests = getUserSettings().filters.quest.type !== "none"
+	const showInvasions = getUserSettings().filters.invasion.type !== "none"
+
+	const iconSets = getCurrentUiconSetDetailsAllTypes()
+	const timestamp = currentTimestamp()
+
 	for (const obj of Object.values(mapObjects)) {
-		const userIconSet = getCurrentUiconSetDetails(obj.type)
+		const userIconSet = iconSets[obj.type]
 		let overwriteIcon: string | undefined = undefined
 		const modifiers = getModifiers(userIconSet, obj.type)
 		let selectedScale = 1
@@ -63,7 +74,7 @@ export function getMapFeatures(mapObjects: MapObjectsStateType, currentSelected:
 		if (obj.mapId === currentSelected?.mapId) selectedScale = 2
 
 		if (obj.type === "pokestop") {
-			if (getUserSettings().filters.quest.type !== "none") {
+			if (showQuests) {
 				const questSize = 0.13
 				const questOffsetX = -50
 				if (obj.alternative_quest_target && obj.alternative_quest_rewards) {
@@ -95,12 +106,12 @@ export function getMapFeatures(mapObjects: MapObjectsStateType, currentSelected:
 			}
 
 			let index = 0
-			if (getUserSettings().filters.invasion.type !== "none") {
+			if (showInvasions) {
 				for (const incident of obj.incident) {
 					if (
 						!incident.id
 						|| !isIncidentInvasion(incident)
-						|| incident.expiration < currentTimestamp()
+						|| incident.expiration < timestamp
 					) {
 						continue
 					}
@@ -118,11 +129,10 @@ export function getMapFeatures(mapObjects: MapObjectsStateType, currentSelected:
 				}
 			}
 		} else if (obj.type === "gym") {
-			// TODO: minor optimizatin: move as much out of the loop as possible
-			if (isFortOutdated(obj.updated)) {
+			if ((obj.updated ?? 0) < (timestamp - GYM_OUTDATED_SECONDS)) {
 				overwriteIcon = getIconGym({ team_id: 0 })
 			}
-			if ((obj.raid_end_timestamp ?? 0) > currentTimestamp()) {
+			if ((obj.raid_end_timestamp ?? 0) > timestamp) {
 				if (obj.raid_pokemon_id) {
 					features.push(getFeature(
 						obj.mapId + "-raidpokemon-" + obj.raid_pokemon_id,
@@ -162,6 +172,8 @@ export function getMapFeatures(mapObjects: MapObjectsStateType, currentSelected:
 		// 	imageSize: 0.1
 		// }))
 	}
+
+	console.debug("generating features took " + (performance.now() - startTime) + "ms | count: " + Object.values(mapObjects).length)
 
 	return features
 }

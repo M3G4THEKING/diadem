@@ -1,12 +1,12 @@
 <script lang="ts">
 	import type { StationData } from '@/lib/types/mapObjectData/station';
 	import BasePopup from '@/components/ui/popups/BasePopup.svelte';
-	import { getIconStation, getIconPokestop } from '@/lib/uicons.svelte';
-	import ImagePopup from '@/components/ui/popups/ImagePopup.svelte';
+	import { getIconStation, getIconPokestop } from '@/lib/uicons.svelte.js';
+	import ImagePopup from '@/components/ui/popups/common/ImagePopup.svelte';
 	import * as m from "@/lib/paraglide/messages"
-	import CommonFortImage from '@/components/ui/popups/CommonFortImage.svelte';
+	import FortImage from '@/components/ui/popups/common/FortImage.svelte';
 	import type { PokestopData } from '@/lib/types/mapObjectData/pokestop';
-	import { getCurrentSelectedData, getMapObjects } from '@/lib/mapObjects/mapObjects.svelte';
+	import { getCurrentSelectedData, getMapObjects } from '@/lib/mapObjects/mapObjects.svelte.js';
 	import type { GymData } from '@/lib/types/mapObjectData/gym';
 
 	let { mapId } : { mapId: string } = $props()

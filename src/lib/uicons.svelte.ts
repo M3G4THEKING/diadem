@@ -9,6 +9,7 @@ import type { StationData } from '@/lib/types/mapObjectData/station';
 import type { GymData } from '@/lib/types/mapObjectData/gym';
 import { currentTimestamp } from '@/lib/utils.svelte';
 import { GYM_SLOTS, hasFortActiveLure, isFortOutdated } from '@/lib/pogoUtils';
+import { allMapTypes } from '@/lib/mapObjects/mapObjects.svelte';
 
 export const DEFAULT_UICONS = "_internal_default"
 const DEFAULT_URL = "https://raw.githubusercontent.com/WatWowMap/wwm-uicons/main/"
@@ -37,6 +38,13 @@ export function getUiconSetDetails(id: string): UiconSet | undefined {
 
 export function getCurrentUiconSetDetails(type: MapObjectType): UiconSet | undefined {
 	return getUiconSetDetails(getUserSettings().uiconSet[type].id)
+}
+
+export function getCurrentUiconSetDetailsAllTypes(): {[key in MapObjectType]: UiconSet | undefined} {
+	return allMapTypes.reduce((obj, type) => {
+		obj[type] = getCurrentUiconSetDetails(type)
+		return obj
+	}, {})
 }
 
 export function getIconForMap(data: Partial<MapData>): string {
@@ -178,4 +186,12 @@ export function getIconItem(itemId: number, amount: number = 0) {
 
 export function getIconRaidEgg(level: number) {
 	return iconSets[DEFAULT_UICONS].raidEgg(level)
+}
+
+export function getIconType(type: number) {
+	return iconSets[DEFAULT_UICONS].type(type)
+}
+
+export function getIconContest() {
+	return iconSets[DEFAULT_UICONS].misc("showcase")
 }

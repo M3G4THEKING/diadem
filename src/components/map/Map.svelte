@@ -36,7 +36,6 @@
 		type: "FeatureCollection",
 		features: getMapFeatures(getMapObjects(), getCurrentSelectedData())
 	})
-	// TODO performance: when currentSelected is updated, only update what's needed and not the whole array
 
 	const sessionImageUrls: string[] = []
 	async function addMapImage(url: string) {
