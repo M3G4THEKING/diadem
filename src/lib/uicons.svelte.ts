@@ -117,7 +117,7 @@ export function getIconGym(data: Partial<GymData>, iconSet: string = getUserSett
 }
 
 export function getIconStation(data: Partial<StationData>, iconSet: string = getUserSettings().uiconSet.station.id) {
-	return iconSets[iconSet].station(!data.is_inactive)
+	return iconSets[iconSet].station(data.start_time < currentTimestamp())
 }
 
 export function getIconInvasion(data: Incident) {

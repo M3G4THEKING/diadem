@@ -49,8 +49,14 @@
 		if (focus.type === "pokemon") {
 			name = pokemonName({ pokemon_id: focus.pokemon_id, form: focus.pokemon_form })
 		} else if (focus.type === "type") {
-			name = ingame("poke_type_" + focus.pokemon_type_1)
-			if (focus.pokemon_type_2) name += " & " + ingame("poke_type_" + focus.pokemon_type_2)
+			if (focus.pokemon_type_2) {
+				name = m.connected_and({
+					1: ingame("poke_type_" + focus.pokemon_type_1),
+					2:  m.x_type({ type: ingame("poke_type_" + focus.pokemon_type_2) })
+				})
+			} else {
+				name = m.x_type({ type: ingame("poke_type_" + focus.pokemon_type_1) })
+			}
 		} else if (focus.type === "buddy") {
 			name = m.contest_buddy_min_level({ level: focus.min_level })
 		} else if (focus.type === "alignment") {

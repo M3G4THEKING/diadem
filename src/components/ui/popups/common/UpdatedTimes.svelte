@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { isFortOutdated } from '@/lib/pogoUtils.js';
-	import { Clock, ClockAlert, ClockArrowUp, Gift, ScanEye } from 'lucide-svelte';
+	import { Clock, ClockAlert, ClockArrowUp, Gift, ScanEye, Search } from 'lucide-svelte';
 	import { timestampToLocalTime } from '@/lib/utils.svelte.js';
 	import Countdown from '@/components/utils/Countdown.svelte';
 	import IconValue from '@/components/ui/popups/common/IconValue.svelte';
@@ -33,7 +33,7 @@
 {/if}
 
 {#if firstSeen}
-<IconValue Icon={Gift}>
+<IconValue Icon={Search}>
 	{m.first_seen()}: <b>{timestampToLocalTime(firstSeen, true)}</b>
 </IconValue>
 {/if}

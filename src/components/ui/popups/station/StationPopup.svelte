@@ -1,13 +1,17 @@
 <script lang="ts">
 	import type { StationData } from '@/lib/types/mapObjectData/station';
 	import BasePopup from '@/components/ui/popups/BasePopup.svelte';
-	import { getIconStation, getIconPokestop } from '@/lib/uicons.svelte.js';
+	import { getIconStation, getIconPokestop, getIconPokemon } from '@/lib/uicons.svelte.js';
 	import ImagePopup from '@/components/ui/popups/common/ImagePopup.svelte';
 	import * as m from "@/lib/paraglide/messages"
 	import FortImage from '@/components/ui/popups/common/FortImage.svelte';
 	import type { PokestopData } from '@/lib/types/mapObjectData/pokestop';
 	import { getCurrentSelectedData, getMapObjects } from '@/lib/mapObjects/mapObjects.svelte.js';
 	import type { GymData } from '@/lib/types/mapObjectData/gym';
+	import { timestampToLocalTime } from '@/lib/utils.svelte';
+	import { getRaidPokemon } from '@/lib/pogoUtils';
+	import { pokemonName } from '@/lib/ingameLocale';
+	import { getStationPokemon } from '@/lib/pogoUtils.js';
 
 	let { mapId } : { mapId: string } = $props()
 	let data: StationData = $derived(getMapObjects()[mapId] as StationData ?? getCurrentSelectedData() as StationData)
@@ -30,5 +34,26 @@
 				{data.name}
 			</span>
 		</div>
+	{/snippet}
+
+	{#snippet description()}
+		start: {timestampToLocalTime(data.start_time, true)} <br/>
+		end: {timestampToLocalTime(data.end_time, true)} <br/>
+
+		<div class="w-8 flex-shrink-0">
+			<ImagePopup
+				src={getIconPokemon(getStationPokemon(data))}
+				alt={pokemonName(getStationPokemon(data))}
+				class="w-8"
+			/>
+		</div>
+		<div>
+			{pokemonName(getStationPokemon(data))}
+		</div>
+
+		<div class="break-all">
+			{JSON.stringify(data)}
+		</div>
+
 	{/snippet}
 </BasePopup>

@@ -46,5 +46,11 @@ export function pokemonName(data: Partial<PokemonData>) {
 	const formName = data.form ? ingame("form_" + data.form) : ""
 	if (formName && formName !== ingame("form_29")) name += " (" + formName + ")"
 
+	if (data.bread_mode === 1) {
+		name = m.pogo_dynamax_pokemon({ pokemon: name })
+	} else if (data.bread_mode === 2) {
+		name = m.pogo_gigantamax_pokemon({ pokemon: name })
+	}
+
 	return name
 }

@@ -117,9 +117,7 @@
 						/>
 					</div>
 					<div>
-						<span class="mr-1">
-							{pokemonName({ pokemon_id: 352 })}
-						</span>
+						{pokemonName({ pokemon_id: 352 })}
 						<TimeWithCountdown
 							expireTime={incident.expiration}
 							showHours={false}

@@ -7,7 +7,7 @@ export async function POST({ request }) {
 		"SELECT * FROM station " +
 		"WHERE lat BETWEEN ? AND ? " +
 		"AND lon BETWEEN ? AND ? " +
-		"AND is_battle_available = 1 " +
+		"AND end_time > UNIX_TIMESTAMP() " +
 		"LIMIT 10000",
 		[reqBody.minLat, reqBody.maxLat, reqBody.minLon, reqBody.maxLon]
 	)

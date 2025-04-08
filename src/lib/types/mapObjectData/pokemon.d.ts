@@ -57,4 +57,5 @@ export type PokemonData = {
 	temp_evolution_id?: number;
 	alignment?: number;
 	bread_mode?: number;
+	strong: number | null
 };

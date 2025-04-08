@@ -4,6 +4,7 @@ import type { PokemonData } from '@/lib/types/mapObjectData/pokemon';
 import { currentTimestamp } from '@/lib/utils.svelte';
 import { GYM_OUTDATED_SECONDS } from '@/lib/constants';
 import { getIconGym } from '@/lib/uicons.svelte';
+import type { StationData } from '@/lib/types/mapObjectData/station';
 
 export const GYM_SLOTS = 6
 export const CONTEST_SLOTS = 200
@@ -31,6 +32,19 @@ export function getRaidPokemon(gym: GymData): Partial<PokemonData> {
 		alignment: gym.raid_pokemon_alignment,
 		move_1: gym.raid_pokemon_move_1,
 		move_2: gym.raid_pokemon_move_2,
+	}
+}
+
+export function getStationPokemon(data: StationData): Partial<PokemonData> {
+	return {
+		pokemon_id: data.battle_pokemon_id,
+		form: data.battle_pokemon_form,
+		costume: data.battle_pokemon_costume,
+		gender: data.battle_pokemon_gender,
+		alignment: data.battle_pokemon_alignment,
+		bread_mode: data.battle_pokemon_bread_mode,
+		move_1: data.battle_pokemon_move_1,
+		move_2: data.battle_pokemon_move_2
 	}
 }
 

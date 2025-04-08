@@ -17,3 +17,8 @@ export const AGGRESSIVE_UPDATE_TIME = 200
  * A gym is considered outdated if not updated within this timeframe (seconds)
  */
 export const GYM_OUTDATED_SECONDS = 24 * 60 * 60
+
+/**
+ * Always show PVP ranks > X in Pokemon Popups
+ */
+export const POKEMON_MIN_RANK = 15
