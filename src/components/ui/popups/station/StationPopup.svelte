@@ -41,7 +41,7 @@
 		start: {timestampToLocalTime(data.start_time, true)} <br/>
 		end: {timestampToLocalTime(data.end_time, true)} <br/>
 
-		<div class="w-8 flex-shrink-0">
+		<div class="w-8 shrink-0">
 			<ImagePopup
 				src={getIconPokemon(getStationPokemon(data))}
 				alt={pokemonName(getStationPokemon(data))}

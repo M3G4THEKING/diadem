@@ -59,7 +59,7 @@
 {#snippet lureSection()}
 	{#if hasFortActiveLure(data)}
 		<PokestopSection>
-			<div class="w-7 h-7 flex-shrink-0">
+			<div class="w-7 h-7 shrink-0">
 				<ImagePopup
 					src={getIconItem(data.lure_id)}
 					alt="TBD"
@@ -85,7 +85,7 @@
 		{#if incident.id && incident.expiration > currentTimestamp()}
 			{#if isIncidentInvasion(incident)}
 				<PokestopSection>
-					<div class="w-7 h-7 flex-shrink-0">
+					<div class="w-7 h-7 shrink-0">
 						<ImagePopup
 							src={getIconInvasion(incident)}
 							alt="TBD"
@@ -110,7 +110,7 @@
 				</PokestopSection>
 			{:else if isIncidentKecleon(incident)}
 				<PokestopSection>
-					<div class="w-7 h-7 flex-shrink-0">
+					<div class="w-7 h-7 shrink-0">
 						<ImagePopup
 							src={getIconPokemon({ pokemon_id: 352 })}
 							alt={pokemonName({ pokemon_id: 352 })}

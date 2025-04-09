@@ -38,8 +38,9 @@
 {/if}
 
 <div
-	class="fixed z-10 bottom-2 w-full flex flex-col pointer-events-none items-start"
+	class="fixed z-10 bottom-2 w-full flex flex-col pointer-events-none"
 	class:items-end={!getUserSettings().isLeftHanded}
+	class:items-start={getUserSettings().isLeftHanded}
 >
 	<div
 		class="mx-2 gap-2 mb-2 flex-col flex"

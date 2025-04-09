@@ -53,7 +53,7 @@
 		class="flex gap-2 items-center border-border border-b pb-2 mb-2"
 	>
 		{#if data.raid_pokemon_id}
-			<div class="w-8 flex-shrink-0">
+			<div class="w-8 shrink-0">
 				<ImagePopup
 					src={getIconPokemon(getRaidPokemon(data))}
 					alt={pokemonName(getRaidPokemon(data))}
@@ -61,7 +61,7 @@
 				/>
 			</div>
 		{:else}
-			<div class="w-6 mx-1 flex-shrink-0">
+			<div class="w-6 mx-1 shrink-0">
 				<ImagePopup
 					src={getIconRaidEgg(data.raid_level ?? 0)}
 					alt={ingame("raid_" + data.raid_level)}
