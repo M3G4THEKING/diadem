@@ -28,6 +28,7 @@
 	import * as m from "@/lib/paraglide/messages"
 	import {availableLanguageTags} from '@/lib/paraglide/runtime';
 	import SettingsSelect from '@/components/ui/settings/SettingsSelect.svelte';
+	import { deleteAllFeaturesOfType } from '@/lib/mapObjects/mapFeaturesGen.svelte';
 
 	$effect(() => {
 		getUserSettings()
@@ -70,6 +71,7 @@
 
 		getUserSettings().uiconSet[iconType].id = iconSet.id
 		getUserSettings().uiconSet[iconType].url = iconSet.url
+		deleteAllFeaturesOfType(iconType)
 	}
 
 	function getUiconSets(type: MapObjectType) {
@@ -100,6 +102,7 @@
 </svelte:head>
 
 {#snippet iconSelect(title, type, getIconFunc, getIconParams)}
+	{#if getUiconSets(type).length > 1}
 	<SettingsGeneric {title}>
 		<SelectGroup
 			childCount={getUiconSets(type).length}
@@ -119,6 +122,7 @@
 			{/each}
 		</SelectGroup>
 	</SettingsGeneric>
+	{/if}
 {/snippet}
 
 <div class="mt-2 mx-auto max-w-[30rem] space-y-4">

@@ -17,7 +17,7 @@ import { currentTimestamp } from '@/lib/utils.svelte.js';
 import { getUserSettings } from '@/lib/userSettings.svelte.js';
 import { GYM_OUTDATED_SECONDS, SELECTED_MAP_OBJECT_SCALE } from '@/lib/constants';
 import { getRaidPokemon, getStationPokemon, isFortOutdated, isIncidentInvasion } from '@/lib/pogoUtils';
-import type { UiconSet } from '@/lib/types/config';
+import type { UiconSet, UiconSetModifierType } from '@/lib/types/config';
 import type { MapData, MapObjectType } from '@/lib/types/mapObjectData/mapObjects';
 import type { Coordinates } from 'maplibre-gl';
 import { untrack } from 'svelte';
@@ -65,10 +65,11 @@ function getFeature(id: string, coordinates: number[], properties: IconPropertie
 	};
 }
 
-function getModifiers(iconSet: UiconSet | undefined, type: MapObjectType) {
+function getModifiers(iconSet: UiconSet | undefined, type: UiconSetModifierType) {
 	let scale: number = 0.25;
 	let offsetY: number = 0;
 	let offsetX: number = 0;
+	let spacing: number = 0;
 
 	if (iconSet) {
 		const modifier = iconSet[type];
@@ -77,10 +78,15 @@ function getModifiers(iconSet: UiconSet | undefined, type: MapObjectType) {
 			scale = modifier?.scale ?? baseModifier?.scale ?? scale;
 			offsetY = modifier?.offsetY ?? baseModifier?.offsetY ?? offsetY;
 			offsetX = modifier?.offsetX ?? baseModifier?.offsetX ?? offsetX;
+			spacing = modifier?.spacing ?? baseModifier?.spacing ?? spacing;
 		}
 	}
 
-	return { scale, offsetY, offsetX };
+	return { scale, offsetY, offsetX, spacing };
+}
+
+export function deleteAllFeaturesOfType(type: MapObjectType) {
+	features[type] = {}
 }
 
 export function updateSelected(currentSelected: MapData | null) {
@@ -147,8 +153,7 @@ export function updateFeatures(mapObjects: MapObjectsStateType) {
 
 		if (obj.type === 'pokestop') {
 			if (showQuests) {
-				const questSize = 0.13;
-				const questOffsetX = -50;
+				const questModifiers = getModifiers(userIconSet, "quest")
 				if (obj.alternative_quest_target && obj.alternative_quest_rewards) {
 					const reward = JSON.parse(obj.alternative_quest_rewards)[0];
 					const mapId = obj.mapId + '-altquest-' + obj.alternative_quest_timestamp;
@@ -156,9 +161,9 @@ export function updateFeatures(mapObjects: MapObjectsStateType) {
 					subFeatures.push(
 						getFeature(mapId, [obj.lon, obj.lat], {
 							imageUrl: getIconReward(reward),
-							imageSize: questSize,
+							imageSize: questModifiers.scale,
 							imageSelectedScale: selectedScale,
-							imageOffset: [questOffsetX, modifiers.offsetY + 35],
+							imageOffset: [modifiers.offsetX + questModifiers.offsetX, modifiers.offsetY + questModifiers.offsetY],
 							id: obj.mapId,
 							expires: obj.alternative_quest_expiry ?? null
 						})
@@ -171,9 +176,9 @@ export function updateFeatures(mapObjects: MapObjectsStateType) {
 					subFeatures.push(
 						getFeature(mapId, [obj.lon, obj.lat], {
 							imageUrl: getIconReward(reward),
-							imageSize: questSize,
+							imageSize: questModifiers.scale,
 							imageSelectedScale: selectedScale,
-							imageOffset: [questOffsetX, modifiers.offsetY + -85],
+							imageOffset: [modifiers.offsetX + questModifiers.offsetX, modifiers.offsetY + questModifiers.offsetY + questModifiers.spacing],
 							id: obj.mapId,
 							expires: obj.quest_expiry ?? null
 						})
@@ -189,13 +194,14 @@ export function updateFeatures(mapObjects: MapObjectsStateType) {
 					}
 
 					const mapId = obj.mapId + '-incident-' + incident.id;
+					const invasionModifiers = getModifiers(userIconSet, "invasion")
 
 					subFeatures.push(
 						getFeature(mapId, [obj.lon, obj.lat], {
 							imageUrl: getIconInvasion(incident),
-							imageSize: 0.11,
+							imageSize: invasionModifiers.scale,
 							imageSelectedScale: selectedScale,
-							imageOffset: [70, modifiers.offsetY + -85 + index * 130],
+							imageOffset: [modifiers.offsetX + invasionModifiers.offsetX, modifiers.offsetY + invasionModifiers.offsetY + index * invasionModifiers.spacing],
 							id: obj.mapId,
 							expires: incident.expiration
 						})
@@ -206,34 +212,45 @@ export function updateFeatures(mapObjects: MapObjectsStateType) {
 		} else if (obj.type === 'gym') {
 			if ((obj.updated ?? 0) < timestamp - GYM_OUTDATED_SECONDS) {
 				overwriteIcon = getIconGym({ team_id: 0 });
-			}
-			if ((obj.raid_end_timestamp ?? 0) > timestamp) {
-				if (obj.raid_pokemon_id) {
-					const mapId = obj.mapId + '-raidpokemon-' + obj.raid_spawn_timestamp;
+			} else {
+				if ((obj.raid_end_timestamp ?? 0) > timestamp) {
+					if (obj.raid_pokemon_id) {
+						const mapId = obj.mapId + '-raidpokemon-' + obj.raid_spawn_timestamp;
+						let raidModifiers = getModifiers(userIconSet, "raid_pokemon")
 
-					subFeatures.push(
-						getFeature(mapId, [obj.lon, obj.lat], {
-							imageUrl: getIconPokemon(getRaidPokemon(obj)),
-							imageSize: getModifiers(userIconSet, 'pokemon').scale * 0.8,
-							imageSelectedScale: selectedScale,
-							imageOffset: [-30, modifiers.offsetY - 30],
-							id: obj.mapId,
-							expires: obj.raid_end_timestamp ?? null
-						})
-					);
-				} else {
-					const mapId = obj.mapId + '-raidegg-' + obj.raid_spawn_timestamp;
+						if (obj.availble_slots === 0 && userIconSet?.raid_egg_6) {
+							raidModifiers = getModifiers(userIconSet, "raid_pokemon_6")
+						}
 
-					subFeatures.push(
-						getFeature(mapId, [obj.lon, obj.lat], {
-							imageUrl: getIconRaidEgg(obj.raid_level ?? 0),
-							imageSize: 0.12,
-							imageSelectedScale: selectedScale,
-							imageOffset: [-60, modifiers.offsetY - 80],
-							id: obj.mapId,
-							expires: obj.raid_battle_timestamp ?? null
-						})
-					);
+						subFeatures.push(
+							getFeature(mapId, [obj.lon, obj.lat], {
+								imageUrl: getIconPokemon(getRaidPokemon(obj)),
+								imageSize: getModifiers(userIconSet, 'pokemon').scale * raidModifiers.scale,
+								imageSelectedScale: selectedScale,
+								imageOffset: [modifiers.offsetX + raidModifiers.offsetX, modifiers.offsetY + raidModifiers.offsetY],
+								id: obj.mapId,
+								expires: obj.raid_end_timestamp ?? null
+							})
+						);
+					} else {
+						const mapId = obj.mapId + '-raidegg-' + obj.raid_spawn_timestamp;
+						let raidModifiers = getModifiers(userIconSet, "raid_egg")
+
+						if (obj.availble_slots === 0 && userIconSet?.raid_egg_6) {
+							raidModifiers = getModifiers(userIconSet, "raid_egg_6")
+						}
+
+						subFeatures.push(
+							getFeature(mapId, [obj.lon, obj.lat], {
+								imageUrl: getIconRaidEgg(obj.raid_level ?? 0),
+								imageSize: raidModifiers.scale,
+								imageSelectedScale: selectedScale,
+								imageOffset: [modifiers.offsetX + raidModifiers.offsetX, modifiers.offsetY + raidModifiers.offsetY],
+								id: obj.mapId,
+								expires: obj.raid_battle_timestamp ?? null
+							})
+						);
+					}
 				}
 			}
 		} else if (obj.type === "pokemon") {
@@ -257,13 +274,13 @@ export function updateFeatures(mapObjects: MapObjectsStateType) {
 			}
 		}
 
-		// subFeatures.push(getFeature("debug-red-dot", [obj.lon, obj.lat], {
-		// 	imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/02/Red_Circle%28small%29.svg/29px-Red_Circle%28small%29.svg.png",
-		// 	id: obj.mapId,
-		// 	imageSize: 0.05,
-		// 	expires: null,
-		// 	imageSelectedScale: 1
-		// }))
+		subFeatures.push(getFeature("debug-red-dot", [obj.lon, obj.lat], {
+			imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/02/Red_Circle%28small%29.svg/29px-Red_Circle%28small%29.svg.png",
+			id: obj.mapId,
+			imageSize: 0.05,
+			expires: null,
+			imageSelectedScale: 1
+		}))
 
 		subFeatures.push(
 			getFeature(obj.mapId, [obj.lon, obj.lat], {

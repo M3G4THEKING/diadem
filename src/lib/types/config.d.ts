@@ -6,7 +6,16 @@ type UiconSetModifiers = {
 	offsetX?: number,
 	offsetY?: number,
 	name?: string,
+	spacing?: number
 }
+
+export type UiconSetModifierType = MapObjectType
+	| "quest"
+	| "invasion"
+	| "raid_pokemon"
+	| "raid_pokemon_6"
+	| "raid_egg"
+	| "raid_egg_6"
 
 export type UiconSet = {
 	id: string
@@ -14,7 +23,7 @@ export type UiconSet = {
 	url: string
 	base: UiconSetModifiers | undefined
 } & {
-	[key in MapObjectType]: UiconSetModifiers | boolean | undefined
+	[key in UiconSetModifierType]: UiconSetModifiers | boolean | undefined
 }
 
 type General = {
