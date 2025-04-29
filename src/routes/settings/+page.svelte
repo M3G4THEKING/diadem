@@ -28,7 +28,7 @@
 	import * as m from "@/lib/paraglide/messages"
 	import {availableLanguageTags} from '@/lib/paraglide/runtime';
 	import SettingsSelect from '@/components/ui/settings/SettingsSelect.svelte';
-	import { deleteAllFeaturesOfType } from '@/lib/mapObjects/mapFeaturesGen.svelte';
+	import { deleteAllFeaturesOfType } from '@/lib/map/featuresGen.svelte.js';
 
 	$effect(() => {
 		getUserSettings()

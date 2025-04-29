@@ -6,12 +6,7 @@
 	import { tick } from 'svelte';
 	import { setIsContextMenuOpen } from '@/components/ui/contextmenu/utils.svelte';
 	import * as m from "@/lib/paraglide/messages"
-
-	let {
-		map
-	}: {
-		map: maplibre.Map | undefined
-	} = $props()
+	import { getMap } from '@/lib/map/map.svelte';
 
 	const errorReasonSupport = m.locate_error_support()
 	const errorReasonPerms = m.locate_error_perms()
@@ -82,6 +77,7 @@
 
 	$effect(() => {
 		updateGeolocationEnabled().then()
+		let map = getMap()
 		if (map) geolocate.onAdd(map)
 	})
 

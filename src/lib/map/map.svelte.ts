@@ -1,0 +1,22 @@
+import maplibre from 'maplibre-gl';
+import { closePopup } from '@/lib/mapObjects/interact';
+import { closeModal } from '@/lib/modal.svelte';
+
+let map: maplibre.Map | undefined = $state(undefined);
+
+export function getMap() {
+	return map;
+}
+
+export function setMap(newMap: maplibre.Map) {
+	map = newMap;
+}
+
+export function resetMap() {
+	closePopup();
+	closeModal();
+	map?.easeTo({
+		bearing: 0,
+		pitch: 0
+	});
+}

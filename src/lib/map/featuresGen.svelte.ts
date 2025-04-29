@@ -21,7 +21,8 @@ import type { UiconSet, UiconSetModifierType } from '@/lib/types/config';
 import type { MapData, MapObjectType } from '@/lib/types/mapObjectData/mapObjects';
 import type { Coordinates } from 'maplibre-gl';
 import { untrack } from 'svelte';
-import { getCurrentSelectedMapId } from '@/lib/mapObjects/currentSelectedState.svelte';
+import { getCurrentSelectedMapId } from '@/lib/mapObjects/currentSelectedState.svelte.js';
+import { updateMapObjectsGeoJson } from '@/lib/map/featuresManage.svelte';
 
 export type IconProperties = {
 	imageUrl: string;
@@ -47,7 +48,7 @@ let features: {
 
 let selectedFeatures: Feature[] = [];
 
-export function getFlattenedFeatures(): Feature[] {
+function getFlattenedFeatures(): Feature[] {
 	return Object.values(features)
 		.map((f) => Object.values(f))
 		.flat(2);
@@ -90,19 +91,19 @@ export function deleteAllFeaturesOfType(type: MapObjectType) {
 }
 
 export function updateSelected(currentSelected: MapData | null) {
-	untrack(() => {
-		// TODO base the scale on original modifiers, not the current size
-		if (selectedFeatures) {
-			selectedFeatures.forEach((f) => (f.properties.imageSelectedScale = 1));
-			selectedFeatures = [];
-		}
+	// TODO base the scale on original modifiers, not the current size
+	if (selectedFeatures) {
+		selectedFeatures.forEach((f) => (f.properties.imageSelectedScale = 1));
+		selectedFeatures = [];
+	}
 
-		if (currentSelected) {
-			const thisFeatures = features[currentSelected.type][currentSelected.mapId] ?? [];
-			thisFeatures.forEach((f) => (f.properties.imageSelectedScale = SELECTED_MAP_OBJECT_SCALE));
-			selectedFeatures = thisFeatures;
-		}
-	});
+	if (currentSelected) {
+		const thisFeatures = features[currentSelected.type][currentSelected.mapId] ?? [];
+		thisFeatures.forEach((f) => (f.properties.imageSelectedScale = SELECTED_MAP_OBJECT_SCALE));
+		selectedFeatures = thisFeatures;
+	}
+
+	updateMapObjectsGeoJson(getFlattenedFeatures())
 }
 
 export function updateFeatures(mapObjects: MapObjectsStateType) {
@@ -119,7 +120,7 @@ export function updateFeatures(mapObjects: MapObjectsStateType) {
 	const iconSets = getCurrentUiconSetDetailsAllTypes();
 	const timestamp = currentTimestamp();
 
-	const selectedMapId = untrack(() => getCurrentSelectedMapId())
+	const selectedMapId = getCurrentSelectedMapId()
 
 	const allCurrentMapIds = Object.keys(mapObjects);
 	// const allFeatureMapIds = flattenFeatures().map(f => f.properties.id)
@@ -305,4 +306,6 @@ export function updateFeatures(mapObjects: MapObjectsStateType) {
 			'ms | count: ' +
 			Object.values(mapObjects).length
 	);
+	updateMapObjectsGeoJson(getFlattenedFeatures())
+
 }

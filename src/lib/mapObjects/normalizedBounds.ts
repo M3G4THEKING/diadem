@@ -1,5 +1,6 @@
 import type { Map, LngLatBounds, LngLatLike } from 'maplibre-gl';
 import { getUserSettings } from '@/lib/userSettings.svelte';
+import { getMap } from '@/lib/map/map.svelte';
 
 function applyPadding(map: Map, coordinates: LngLatLike, method: "sub"|"add") {
 	let point = map.project(coordinates)
@@ -19,11 +20,23 @@ function applyPadding(map: Map, coordinates: LngLatLike, method: "sub"|"add") {
 	return map.unproject([x, y])
 }
 
-export function getNormalizedBounds(map: Map) {
+export function getNormalizedBounds() {
+	const map = getMap()
+
+	if (!map) {
+		return {
+			minLat: 0,
+			minLon: 0,
+			maxLat: 0,
+			maxLon: 0
+		}
+	}
+
 	const bounds = map.getBounds()
 
 	const minCoords = applyPadding(map, bounds.getSouthWest(), "sub")
 	const maxCoords = applyPadding(map, bounds.getNorthEast(), "add")
+
 
 	return {
 		minLat: minCoords.lat,

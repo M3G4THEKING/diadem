@@ -13,6 +13,9 @@ import { getDirectLinkObject, setDirectLinkObject } from '@/lib/directLinks.svel
 import { openPopup } from '@/lib/mapObjects/interact';
 import { openToast } from '@/components/ui/toast/toastUtils.svelte';
 import * as m from '@/lib/paraglide/messages';
+import { getMap } from '@/lib/map/map.svelte';
+import { updateFeatures } from '@/lib/map/featuresGen.svelte';
+import { updateMapObjectsGeoJson } from '@/lib/map/featuresManage.svelte';
 
 export function makeMapObject(data: MapData, type: MapObjectType) {
 	data.type = type;
@@ -37,7 +40,6 @@ export async function getOneMapObject(type: MapObjectType, id: string): Promise<
 }
 
 export async function updateMapObject(
-	map: maplibre.Map,
 	type: MapObjectType,
 	removeOld: boolean = true
 ) {
@@ -60,7 +62,7 @@ export async function updateMapObject(
 	}
 
 	const body = {
-		...getNormalizedBounds(map),
+		...getNormalizedBounds(),
 		filter
 	};
 	const fetchStart = performance.now();
@@ -114,12 +116,13 @@ export async function updateMapObject(
 	console.debug(
 		'updateMapObject | type ' + type + ' took ' + (performance.now() - startTime) + 'ms'
 	);
+	updateFeatures(getMapObjects())
 }
 
-export async function updateAllMapObjects(map: maplibre.Map, removeOld: boolean = true) {
+export async function updateAllMapObjects(removeOld: boolean = true) {
 	await Promise.all(
 		allMapTypes.map((type) => {
-			updateMapObject(map, type, removeOld);
+			updateMapObject(type, removeOld);
 		})
 	);
 

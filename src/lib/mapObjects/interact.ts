@@ -2,7 +2,7 @@ import { getConfig } from '@/lib/config';
 import type { MapMouseEvent } from 'maplibre-gl';
 import { setIsContextMenuOpen } from '@/components/ui/contextmenu/utils.svelte';
 import type { LayerClickInfo } from 'svelte-maplibre';
-import type { Feature } from '@/lib/mapObjects/mapFeaturesGen.svelte.js';
+import type { Feature } from '@/lib/map/featuresGen.svelte.js';
 import type { MapData } from '@/lib/types/mapObjectData/mapObjects';
 import { getMapObjects } from '@/lib/mapObjects/mapObjectsState.svelte.js';
 import { getCurrentSelectedData, setCurrentSelectedData } from '@/lib/mapObjects/currentSelectedState.svelte';

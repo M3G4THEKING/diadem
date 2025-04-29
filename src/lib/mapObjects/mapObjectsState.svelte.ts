@@ -1,4 +1,5 @@
 import type { MapData, MapObjectType } from '@/lib/types/mapObjectData/mapObjects';
+import { updateFeatures } from '@/lib/map/featuresGen.svelte';
 
 export type MapObjectsStateType = {
 	[key: string]: MapData;

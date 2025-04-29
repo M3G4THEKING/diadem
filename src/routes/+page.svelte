@@ -5,7 +5,6 @@
 	import SearchFab from '@/components/ui/fab/SearchFab.svelte';
 	import LocateFab from '@/components/ui/fab/LocateFab.svelte';
 	import BottomNav from '@/components/ui/nav/BottomNav.svelte';
-	import { closeModal } from '@/lib/modal.svelte';
 	import { getUserSettings } from '@/lib/userSettings.svelte';
 	import Map from '@/components/map/Map.svelte';
 	import maplibre from 'maplibre-gl';
@@ -15,19 +14,8 @@
 	import GymPopup from '@/components/ui/popups/gym/GymPopup.svelte';
 	import StationPopup from '@/components/ui/popups/station/StationPopup.svelte';
 	import { getCurrentSelectedData, getCurrentSelectedMapId } from '@/lib/mapObjects/currentSelectedState.svelte';
-	import { closePopup } from '@/lib/mapObjects/interact';
-
-	let map: maplibre.Map | undefined = $state()
-
-	function resetMap() {
-		closePopup()
-		closeModal()
-		map?.easeTo({
-			bearing: 0,
-			pitch: 0
-		})
-	}
-</script>
+	import { resetMap, getMap } from '@/lib/map/map.svelte';
+	</script>
 
 <svelte:head>
 	<title>{getConfig().general.mapName}</title>
@@ -42,13 +30,15 @@
 	class:items-end={!getUserSettings().isLeftHanded}
 	class:items-start={getUserSettings().isLeftHanded}
 >
-	<div
-		class="mx-2 gap-2 mb-2 flex-col flex"
-	>
-		<SearchFab {map} />
-		<LocateFab {map} />
+	{#if getMap()}
+		<div
+			class="mx-2 gap-2 mb-2 flex-col flex"
+		>
+			<SearchFab />
+			<LocateFab />
 
-	</div>
+		</div>
+	{/if}
 
 	{#if getCurrentSelectedData()}
 		<div
@@ -71,5 +61,5 @@
 	<BottomNav page="/" onmapclick={resetMap} />
 </div>
 
-<Map bind:map />
+<Map />
 
