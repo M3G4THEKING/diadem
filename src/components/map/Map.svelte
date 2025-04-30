@@ -16,6 +16,7 @@
 	import { loadMapObjectInterval } from '@/lib/map/loadMapObjects';
 	import { onMapMoveEnd, onMapMoveStart, onTouchStart, onWindowFocus } from '@/lib/map/events';
 	import maplibre from 'maplibre-gl';
+	import FrameRateControl from '@/components/map/framerate';
 
 	let map: maplibre.Map | undefined = $state(undefined)
 	const initialMapPosition = JSON.parse(JSON.stringify(getUserSettings().mapPosition))
@@ -23,6 +24,7 @@
 	async function onMapLoad() {
 		if (map) {
 			setMap(map)
+			map.addControl(new FrameRateControl())
 
 			map.on("touchstart", onTouchStart)
 			map.on("touchend", clearPressTimer)
