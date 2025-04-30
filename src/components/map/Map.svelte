@@ -22,6 +22,7 @@
 	import { updateAllMapObjects } from '@/lib/mapObjects/updateMapObject';
 	import Card from '@/components/ui/Card.svelte';
 	import * as m from "@/lib/paraglide/messages"
+	import FrameRateControl from '@/components/map/framerate';
 
 	let {
 		map = $bindable(),
@@ -108,6 +109,7 @@
 
 	async function onMapLoad() {
 		if (map) {
+			map.addControl(new FrameRateControl())
 			map.on("touchstart", onTouchStart)
 			map.on("touchend", clearPressTimer)
 			map.on("touchmove", clearPressTimer)
