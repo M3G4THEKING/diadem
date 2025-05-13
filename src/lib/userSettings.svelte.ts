@@ -124,7 +124,11 @@ export function updateUserSettings() {
 function deepMerge(defaultObj: {[key: string]: any}, newObj: {[key: string]: any}) {
 	const result = { ...defaultObj };
 	for (const key in newObj) {
-		if (newObj[key] instanceof Object && key in defaultObj) {
+		if (
+			newObj[key] instanceof Object
+			&& !(newObj[key] instanceof Array)
+			&& key in defaultObj
+		) {
 			result[key] = deepMerge(defaultObj[key], newObj[key]);
 		} else {
 			result[key] = newObj[key]
