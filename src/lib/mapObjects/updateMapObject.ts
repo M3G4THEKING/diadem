@@ -71,6 +71,7 @@ export async function updateMapObject(
 
 	if ((!filter || filter.type === 'none') && type !== "s2cell") {
 		clearMapObjects(type);
+		updateFeatures(getMapObjects());
 		return;
 	}
 
