@@ -1,11 +1,9 @@
 <script lang="ts">
 	import { ingame } from '@/lib/ingameLocale.js';
-	import { getCurrentWeather, updateCurrentWeatherFeatures } from '@/lib/mapObjects/weather.svelte.js';
+	import { getCurrentWeather, updateCurrentWeatherFeatures, updateWeather } from '@/lib/mapObjects/weather.svelte.js';
 	import Button from '@/components/ui/Button.svelte';
 	import { getMap } from '@/lib/map/map.svelte';
-	import { flyTo } from '@/lib/map/utils';
 	import { untrack } from 'svelte';
-	import TimeWithCountdown from '@/components/ui/popups/common/TimeWithCountdown.svelte';
 	import { ArrowBigUpDash, Clock } from 'lucide-svelte';
 	import IconValue from '@/components/ui/popups/common/IconValue.svelte';
 	import * as m from '@/lib/paraglide/messages';
@@ -14,24 +12,32 @@
 	import { closeModal } from '@/lib/modal.svelte';
 	import { slide } from 'svelte/transition';
 	import { WEATHER_OUTDATED_SECONDS } from '@/lib/constants';
-	import type { MasterWeather } from '@/lib/types/masterfile';
 	import { getMasterWeather } from '@/lib/masterfile';
 	import ImagePopup from '@/components/ui/popups/common/ImagePopup.svelte';
 	import { getIconType } from '@/lib/uicons.svelte';
+	import { watch } from 'runed';
 
+	let ignoreWatch = false
 	let isClicked: boolean = $state(false)
 	let boostedTypes: number[] = $derived(getMasterWeather(getCurrentWeather()?.gameplay_condition)?.types ?? [])
 
-	$effect(() => {
-		getCurrentWeather()
-		untrack(() => {
+	watch(
+		() => getCurrentWeather(),
+		() => {
+			if (ignoreWatch) return
 			isClicked = false
 			updateCurrentWeatherFeatures(false)
-		})
-	})
+		}
+	)
 
-	function onClick() {
+	async function onClick() {
 		isClicked = !isClicked
+
+		if (isClicked && getMap()?.isMoving()) {
+			ignoreWatch = true
+			await updateWeather()
+			ignoreWatch = false
+		}
 
 		const weather = getCurrentWeather()
 
