@@ -16,6 +16,7 @@
 	import ImagePopup from '@/components/ui/popups/common/ImagePopup.svelte';
 	import { getIconType } from '@/lib/uicons.svelte';
 	import { watch } from 'runed';
+	import type { WeatherData } from '@/lib/types/mapObjectData/weather';
 
 	let ignoreWatch = false
 	let isClicked: boolean = $state(false)
@@ -41,7 +42,7 @@
 
 		const weather = getCurrentWeather()
 
-		if (isClicked && weather) {
+		if (isClicked && weather && isWeatherUpdated(weather)) {
 			closePopup()
 			closeModal()
 			getMap()?.flyTo({
@@ -59,9 +60,13 @@
 			updateCurrentWeatherFeatures(false)
 		}
 	}
+
+	function isWeatherUpdated(weather: WeatherData | undefined) {
+		return (weather?.updated ?? 0) > currentTimestamp() - WEATHER_OUTDATED_SECONDS
+	}
 </script>
 
-{#if getCurrentWeather() && getCurrentWeather().updated > currentTimestamp() - WEATHER_OUTDATED_SECONDS}
+{#if getCurrentWeather() && isWeatherUpdated(getCurrentWeather())}
 	<Button
 		variant="ghost"
 		size=""
@@ -80,7 +85,7 @@
 					{m.boosted()}:
 				</IconValue>
 				{#each boostedTypes as typeId}
-					<div class="flex gap-2 mt-1">
+					<div class="flex gap-2 mt-1 items-center">
 						<div class="w-4 h-4 shrink-0">
 							<ImagePopup
 								alt={ingame("poke_type_" + typeId)}

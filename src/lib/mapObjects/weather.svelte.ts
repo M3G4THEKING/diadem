@@ -9,7 +9,7 @@ import type { FeatureCollection, Polygon } from 'geojson';
 
 const WEATHER_CELL_LEVEL = 10;
 const UPDATE_INTERVAL = 5 * 60 * 1000
-const MIN_ZOOM = 10.5
+const MIN_ZOOM = 10
 const CELL_COLOR = '#b8e6fe'
 
 const weatherCache: TTLCache<string, WeatherData> = new TTLCache({ max: 1000, ttl: UPDATE_INTERVAL })
