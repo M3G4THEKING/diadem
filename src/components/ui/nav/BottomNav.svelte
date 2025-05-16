@@ -1,6 +1,6 @@
 <script lang="ts">
 	import {Map, Settings2, Settings} from 'lucide-svelte';
-	import Button from '@/components/ui/Button.svelte';
+	import Button from '@/components/ui/basic/Button.svelte';
 	import * as m from "@/lib/paraglide/messages"
 
 	let {

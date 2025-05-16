@@ -1,12 +1,8 @@
 <script lang="ts">
 	import BottomNavWrapper from '@/components/ui/nav/BottomNavWrapper.svelte';
 	import BottomNavSpacing from '@/components/ui/nav/BottomNavSpacing.svelte';
-	import Button from '@/components/ui/Button.svelte';
 	import { getDefaultIconSet, getUserSettings, updateUserSettings } from '@/lib/userSettings.svelte';
-	import { Cloud, Moon, Paintbrush, Sun, Image, Code } from 'lucide-svelte';
-	import Switch from '@/components/ui/settings/Switch.svelte';
-	import SelectGroup from '@/components/ui/settings/SelectGroup.svelte';
-	import SelectGroupItem from '@/components/ui/settings/SelectGroupItem.svelte';
+	import { Cloud, Code, Image, Moon, Paintbrush, Sun } from 'lucide-svelte';
 	import SettingsCard from '@/components/ui/settings/SettingsCard.svelte';
 	import {
 		getIconGym,
@@ -15,20 +11,17 @@
 		getIconStation,
 		getUiconSetDetails
 	} from '@/lib/uicons.svelte';
-	import {getConfig} from '@/lib/config';
-	import { isModalOpen } from '@/lib/modal.svelte';
+	import { getConfig } from '@/lib/config';
 	import { MapLibre } from 'svelte-maplibre';
-	import maplibre from 'maplibre-gl';
 	import type { MapObjectType } from '@/lib/types/mapObjectData/mapObjects';
-	import Input from '@/components/ui/settings/Input.svelte';
 	import SettingsToggle from '@/components/ui/settings/SettingsToggle.svelte';
 	import SettingsNumber from '@/components/ui/settings/SettingsNumber.svelte';
-	import SettingsSettingTitle from '@/components/ui/settings/SettingsSettingTitle.svelte';
 	import SettingsGeneric from '@/components/ui/settings/SettingsGeneric.svelte';
-	import * as m from "@/lib/paraglide/messages"
-	import {availableLanguageTags} from '@/lib/paraglide/runtime';
+	import * as m from '@/lib/paraglide/messages';
 	import SettingsSelect from '@/components/ui/settings/SettingsSelect.svelte';
 	import { deleteAllFeaturesOfType } from '@/lib/map/featuresGen.svelte.js';
+	import RadioGroup from '@/components/ui/basic/RadioGroup.svelte';
+	import SettingsRadioGroupItem from '@/components/ui/settings/SettingsRadioGroupItem.svelte';
 
 	$effect(() => {
 		getUserSettings()
@@ -104,23 +97,23 @@
 {#snippet iconSelect(title, type, getIconFunc, getIconParams)}
 	{#if getUiconSets(type).length > 1}
 	<SettingsGeneric {title}>
-		<SelectGroup
+		<RadioGroup
 			childCount={getUiconSets(type).length}
 			value={getUserSettings().uiconSet[type].id}
 			onValueChange={(value) => onIconChange(value, type)}
 			evenColumns={false}
 		>
 			{#each getUiconSets(type) as iconSet (iconSet.value)}
-				<SelectGroupItem class="p-4" value={iconSet.value}>
+				<SettingsRadioGroupItem class="p-4" value={iconSet.value}>
 					<img
 						class="w-5"
 						src={getIconFunc(getIconParams, iconSet.value)}
 						alt="{title} (Style: {iconSet.label})"
 					>
 					{iconSet.label}
-				</SelectGroupItem>
+				</SettingsRadioGroupItem>
 			{/each}
-		</SelectGroup>
+		</RadioGroup>
 	</SettingsGeneric>
 	{/if}
 {/snippet}
@@ -148,35 +141,35 @@
 		/>
 
 		<SettingsGeneric title={m.settings_theme()}>
-			<SelectGroup
+			<RadioGroup
 				value={"" + getUserSettings().isDarkMode}
 				onValueChange={onThemeChange}
 				class="self-center"
 			>
-				<SelectGroupItem class="p-4" value="false">
+				<SettingsRadioGroupItem class="p-4" value="false">
 					<Sun size="20" />
 					{m.theme_light()}
-				</SelectGroupItem>
-				<SelectGroupItem class="p-4" value="null">
+				</SettingsRadioGroupItem>
+				<SettingsRadioGroupItem class="p-4" value="null">
 					<Cloud size="20" />
 					{m.theme_system()}
-				</SelectGroupItem>
-				<SelectGroupItem class="p-4" value="true">
+				</SettingsRadioGroupItem>
+				<SettingsRadioGroupItem class="p-4" value="true">
 					<Moon size="20" />
 					{m.theme_dark()}
-				</SelectGroupItem>
-			</SelectGroup>
+				</SettingsRadioGroupItem>
+			</RadioGroup>
 		</SettingsGeneric>
 
 		<SettingsGeneric title={m.settings_map_style()}>
-			<SelectGroup
+			<RadioGroup
 				childCount={getConfig().mapStyles.length}
 				value={getUserSettings().mapStyle.id}
 				onValueChange={onMapStyleChange}
 				class="self-center"
 			>
 				{#each getConfig().mapStyles as mapStyle (mapStyle.id)}
-					<SelectGroupItem class="overflow-hidden" value={mapStyle.id}>
+					<SettingsRadioGroupItem class="overflow-hidden" value={mapStyle.id}>
 						<MapLibre
 							center={[9.979, 53.563]}
 							zoom={12}
@@ -190,9 +183,9 @@
 							{mapStyle.name}
 						</span>
 
-					</SelectGroupItem>
+					</SettingsRadioGroupItem>
 				{/each}
-			</SelectGroup>
+			</RadioGroup>
 		</SettingsGeneric>
 	</SettingsCard>
 

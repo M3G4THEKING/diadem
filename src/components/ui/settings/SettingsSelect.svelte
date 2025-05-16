@@ -1,8 +1,8 @@
 <script lang="ts">
-	import Button from '@/components/ui/Button.svelte';
+	import Button from '@/components/ui/basic/Button.svelte';
 	import SettingsSettingTitle from '@/components/ui/settings/SettingsSettingTitle.svelte';
 	import { closeModal, openModal } from '@/lib/modal.svelte';
-	import Card from '@/components/ui/Card.svelte';
+	import Card from '@/components/ui/basic/Card.svelte';
 	import ContextMenuItem from '@/components/ui/contextmenu/ContextMenuItem.svelte';
 
 	let {

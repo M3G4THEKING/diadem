@@ -1,11 +1,11 @@
 <script lang="ts">
 	import BottomNavWrapper from '@/components/ui/nav/BottomNavWrapper.svelte';
 	import BottomNavSpacing from '@/components/ui/nav/BottomNavSpacing.svelte';
-	import Button from '@/components/ui/Button.svelte';
+	import Button from '@/components/ui/basic/Button.svelte';
 	import { Code, Image, Paintbrush } from 'lucide-svelte';
 	import { getConfig } from '@/lib/config';
 	import * as m from '@/lib/paraglide/messages';
-	import Card from '@/components/ui/Card.svelte';
+	import Card from '@/components/ui/basic/Card.svelte';
 </script>
 
 <svelte:head>

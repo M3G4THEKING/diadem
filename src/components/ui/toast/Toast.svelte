@@ -1,7 +1,7 @@
 <script lang="ts">
 	import {getToastText, closeToast} from '@/components/ui/toast/toastUtils.svelte';
 	import {slide} from 'svelte/transition';
-	import Button from '@/components/ui/Button.svelte';
+	import Button from '@/components/ui/basic/Button.svelte';
 	import { X } from 'lucide-svelte';
 </script>
 

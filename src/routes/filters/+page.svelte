@@ -3,19 +3,16 @@
 	import BottomNavSpacing from '@/components/ui/nav/BottomNavSpacing.svelte';
 	import { getConfig } from '@/lib/config';
 	import * as m from '@/lib/paraglide/messages';
-	import Card from '@/components/ui/Card.svelte';
+	import Card from '@/components/ui/basic/Card.svelte';
 	import { getUserSettings, updateUserSettings } from '@/lib/userSettings.svelte';
-	import { ChevronDown, ChevronUp, Cloud, Eye, EyeOff, Filter, Moon, Pen, Pencil, Plus, Sun, X } from 'lucide-svelte';
-	import SelectGroupItem from '@/components/ui/settings/SelectGroupItem.svelte';
-	import SelectGroup from '@/components/ui/settings/SelectGroup.svelte';
+	import { ChevronDown, ChevronUp, Eye, EyeOff, Filter, Plus } from 'lucide-svelte';
 	import SettingsGeneric from '@/components/ui/settings/SettingsGeneric.svelte';
-	import Button from '@/components/ui/Button.svelte';
+	import Button from '@/components/ui/basic/Button.svelte';
 	import { getIconPokemon } from '@/lib/uicons.svelte';
 	import Switch from '@/components/ui/settings/Switch.svelte';
-	import Map from '@/components/map/Map.svelte';
 	import FilterTypeSelect from '@/components/ui/filters/FilterTypeSelect.svelte';
 
-	import { slide, fly } from 'svelte/transition';
+	import { slide } from 'svelte/transition';
 	import SettingsSelect from '@/components/ui/settings/SettingsSelect.svelte';
 
 	let test: boolean = $state(false)

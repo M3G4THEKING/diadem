@@ -6,7 +6,7 @@
 	import { getDirectLinkCoordinates, setDirectLinkCoordinates } from '@/lib/directLinks.svelte';
 	import { clickFeatureHandler, clickMapHandler, updateCurrentPath } from '@/lib/mapObjects/interact';
 	import { updateAllMapObjects } from '@/lib/mapObjects/updateMapObject';
-	import Card from '@/components/ui/Card.svelte';
+	import Card from '@/components/ui/basic/Card.svelte';
 	import * as m from '@/lib/paraglide/messages';
 	import { isWebglSupported } from '@/lib/map/utils';
 	import { clearUpdateMapObjectsInterval, resetUpdateMapObjectsInterval } from '@/lib/map/mapObjectsInterval';

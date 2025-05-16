@@ -1,33 +1,33 @@
 <script lang="ts">
-	import { ToggleGroup as ToggleGroupPrimitive } from 'bits-ui';
-	import FilterTypeSelectItem from './FilterTypeSelectItem.svelte';
-	import { Eye, EyeOff, Filter } from 'lucide-svelte';
-	import type { FilterCategory } from '@/lib/filters/filters';
+	import { Eye, EyeOff, Funnel } from 'lucide-svelte';
+	import type { FilterCategory, FilterType } from '@/lib/filters/filters';
 	import { getUserSettings, updateUserSettings } from '@/lib/userSettings.svelte';
+	import RadioGroup from '@/components/ui/basic/RadioGroup.svelte';
+	import RadioGroupItem from '@/components/ui/basic/RadioGroupItem.svelte';
 
 	let { category }: { category: FilterCategory } = $props()
 
 	function onValueChange(newType: string) {
-		getUserSettings().filters[category].type = newType
+		getUserSettings().filters[category].type = newType as FilterType
 		updateUserSettings()
 	}
 </script>
 
-<ToggleGroupPrimitive.Root
+<RadioGroup
+	class="gap-3! w-full"
 	value={getUserSettings().filters[category].type}
-	class="grid grid-cols-3 gap-3"
 	{onValueChange}
 >
-	<FilterTypeSelectItem value="all">
+	<RadioGroupItem value="all" class="py-2">
 		<Eye size="16" />
 		<span>All</span>
-	</FilterTypeSelectItem>
-	<FilterTypeSelectItem value="none">
+	</RadioGroupItem>
+	<RadioGroupItem value="none" class="py-2">
 		<EyeOff size="16" />
 		<span>None</span>
-	</FilterTypeSelectItem>
-	<FilterTypeSelectItem value="filtered">
-		<Filter size="16" />
+	</RadioGroupItem>
+	<RadioGroupItem value="filtered" class="py-2">
+		<Funnel size="16" />
 		<span>Filtered</span>
-	</FilterTypeSelectItem>
-</ToggleGroupPrimitive.Root>
+	</RadioGroupItem>
+</RadioGroup>

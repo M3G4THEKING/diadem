@@ -4,7 +4,7 @@
 	import maplibre from 'maplibre-gl';
 	import { onMount } from 'svelte';
 	import { Binoculars, Clipboard, Navigation } from 'lucide-svelte';
-	import Button from '@/components/ui/Button.svelte';
+	import Button from '@/components/ui/basic/Button.svelte';
 	import ContextMenuItem from '@/components/ui/contextmenu/ContextMenuItem.svelte';
 	import { canNativeShare, copyToClipboard, getMapsUrl, hasClipboardWrite } from '@/lib/utils.svelte';
 	import { openToast } from '@/components/ui/toast/toastUtils.svelte';

@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { getIconPokemon } from '@/lib/uicons.svelte.js';
 	import { pokemonName } from '@/lib/ingameLocale';
-	import Button from '@/components/ui/Button.svelte';
+	import Button from '@/components/ui/basic/Button.svelte';
 	import ImagePopup from '@/components/ui/popups/common/ImagePopup.svelte';
 	import type { GymDefender } from '@/lib/types/mapObjectData/gym';
 	import Countdown from '@/components/utils/Countdown.svelte';

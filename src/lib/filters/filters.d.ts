@@ -25,7 +25,7 @@ export type AllFilters = FilterPokemon
 	| FilterS2Cell
 
 export type FilterTypeBool = "all" | "none"
-export type FilerType = "all" | "none" | "filtered"
+export type FilterType = "all" | "none" | "filtered"
 
 type minMax = {
 	min?: number
@@ -67,7 +67,7 @@ export type FilterPokestopPlain = {
 
 export type FilterQuest = {
 	category: "quest"
-	type: FilerType
+	type: FilterType
 	filters?: {
 
 	}
@@ -75,7 +75,7 @@ export type FilterQuest = {
 
 export type FilterInvasion = {
 	category: "invasion"
-	type: FilerType
+	type: FilterType
 	filters?: {
 
 	}
@@ -83,7 +83,7 @@ export type FilterInvasion = {
 
 export type FilterContest = {
 	category: "contest"
-	type: FilerType
+	type: FilterType
 	filters?: {
 
 	}
@@ -91,7 +91,7 @@ export type FilterContest = {
 
 export type FilterLure = {
 	category: "lure"
-	type: FilerType
+	type: FilterType
 	filters?: {
 
 	}
