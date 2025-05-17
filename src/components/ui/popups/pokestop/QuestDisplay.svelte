@@ -1,11 +1,13 @@
 <script lang="ts">
 	import ImagePopup from '@/components/ui/popups/common/ImagePopup.svelte';
-	import { ingame } from '@/lib/ingameLocale';
+	import { ingame, pokemonName } from '@/lib/ingameLocale';
 	import type { QuestReward } from '@/lib/types/mapObjectData/pokestop';
-	import { getIconReward } from '@/lib/uicons.svelte';
+	import { getIconPokemon, getIconReward } from '@/lib/uicons.svelte';
 	import * as m from '@/lib/paraglide/messages';
 	import { timestampToLocalTime } from '@/lib/utils.svelte';
 	import PokestopSection from '@/components/ui/popups/pokestop/PokestopSection.svelte';
+	import IconValue from '@/components/ui/popups/common/IconValue.svelte';
+	import { CircleAlert, Clock, Gift, TriangleAlert } from 'lucide-svelte';
 
 	let {
 		expanded,
@@ -23,7 +25,51 @@
 		questTimestamp?: number
 	} = $props()
 
-	let reward: QuestReward = $derived(JSON.parse(questRewards ?? "[]")[0] as QuestReward)
+	let reward: QuestReward | undefined = $derived(JSON.parse(questRewards ?? "[]")[0] as QuestReward)
+	let taskText: string = $derived(ingame("quest_title_" + questTitle).replaceAll("%{amount_0}", "" + (questTarget ?? "")))
+	let rewardText: string = $derived.by(() => {
+		if (!reward) return ""
+
+		switch (reward.type) {
+			case 1:
+				return m.quest_xp({ count: reward.info.amount })
+			case 2:
+				return m.quest_item({ count: reward.info.amount, item: ingame("item_" + reward.info.item_id) })
+			case 3:
+				return m.quest_stardust({ count: reward.info.amount })
+			case 4:
+				return m.quest_candy({ count: reward.info.amount, pokemon: ingame("poke_" + reward.info.pokemon_id) })
+			case 5:
+				return "Avatar Clothing"
+			case 6:
+				return "Quest"
+			case 7:
+				return pokemonName(reward.info)
+			case 8:
+				return "Pokecoins"
+			case 9:
+				return m.quest_xl_candy({
+					count: reward.info.amount,
+					pokemon: ingame("poke_" + reward.info.pokemon_id)
+				})
+			case 10:
+				return "Level Cap"
+			case 11:
+				return "Sticker"
+			case 12:
+				return m.quest_mega_resource({
+					count: reward.info.amount,
+					pokemon: ingame("poke_" + reward.info.pokemon_id)
+				})
+				break
+			case 13:
+				return "Incdent"
+			case 14:
+				return "Player Attribute"
+			default:
+				return ""
+		}
+	})
 </script>
 
 {#if questTarget}
@@ -32,12 +78,13 @@
 		{#if reward}
 			<ImagePopup
 				src={getIconReward(reward)}
-				alt="TBD"
+				alt={rewardText}
 				class="w-7 h-7"
 			/>
 		{/if}
 	</div>
 	<div>
+		{#if !expanded}
 			<span class="text-sm font-semibold border-border border rounded-full px-3 mr-1 py-1 whitespace-nowrap">
 				{#if isAr}
 					{m.quest_ar_tag()}
@@ -45,13 +92,23 @@
 					{m.quest_noar_tag()}
 				{/if}
 			</span>
-		<span>
-				{ingame("quest_title_" + questTitle).replaceAll("%{amount_0}", "" + (questTarget ?? ""))}
+			<span>
+				{taskText}
 			</span>
-		{#if expanded}
-			<div>
-				Found <b>{timestampToLocalTime(questTimestamp, true)}</b>
-			</div>
+		{:else}
+			<span>
+				<b>{rewardText}</b> · {taskText}
+			</span>
+			<IconValue Icon={Clock}>
+				{m.popup_found()} <b>{timestampToLocalTime(questTimestamp, true)}</b>
+			</IconValue>
+			<IconValue Icon={CircleAlert}>
+				{#if isAr}
+					{m.quest_ar_notice()}
+				{:else}
+					{m.quest_noar_notice()}
+				{/if}
+			</IconValue>
 		{/if}
 	</div>
 </PokestopSection>

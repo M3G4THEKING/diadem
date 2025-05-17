@@ -125,5 +125,13 @@
 	"search_area_title": "Areas",
 	"search_place_title": "Places",
 	"search_placeholder": "Search...",
-	"rsvp_entry": "{going} going · {maybe} maybe"
+	"rsvp_entry": "{going} going · {maybe} maybe",
+	"quest_xp": "{count} XP",
+	"quest_item": "{count}x {item}",
+	"quest_stardust": "{count} Stardust",
+	"quest_candy": "{count} {pokemon} Candy",
+	"quest_xl_candy": "{count} {pokemon} Candy XL",
+	"quest_mega_resource": "{count} {pokemon} Mega Energy",
+	"quest_ar_notice": "You must hold an AR-Scan task while spinning",
+	"quest_noar_notice": "You can't hold an AR-Scan task while spinning"
 }
