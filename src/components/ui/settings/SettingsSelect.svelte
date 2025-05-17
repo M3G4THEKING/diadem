@@ -51,7 +51,7 @@
 	<SettingsSettingTitle {title} {description} />
 
 	<span
-		class="border-border dark:group-hover:border-card ring-offset-background rounded-md border px-6 py-2 text-sm"
+		class="border-border dark:group-hover:border-card dark:group-active:border-card ring-offset-background rounded-md border px-6 py-2 text-sm"
 	>
 		{options.find(o => o.value === value)?.label}
 	</span>

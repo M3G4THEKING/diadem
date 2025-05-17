@@ -70,7 +70,7 @@
 			src={fortUrl}
 			class="absolute transition-all top-0 object-cover h-14 w-14 rounded-full ring-border ring-2 ring-offset-card ring-offset-2"
 		/>
-		<span class="opacity-0 group-hover:opacity-100 transition-opacity absolute left-0 top-0 w-14 h-14 rounded-full backdrop-brightness-75"></span>
+		<span class="opacity-0 group-hover:opacity-100 group-active:opacity-100 transition-opacity absolute left-0 top-0 w-14 h-14 rounded-full backdrop-brightness-75"></span>
 	</button>
 
 {:else}

@@ -76,7 +76,7 @@
 		<Button
 			variant="ghost"
 			size=""
-			class="pointer-events-auto px-4 py-3 text-sm bg-card flex-col! items-start! border rounded-lg shadow-lg hover:bg-accent hover:text-accent-foreground pointer-events-auto disabled:pointer-events-none"
+			class="pointer-events-auto px-4 py-3 text-sm bg-card flex-col! items-start! border rounded-lg shadow-lg hover:bg-accent hover:text-accent-foreground active:bg-accent active:text-accent-foreground pointer-events-auto disabled:pointer-events-none"
 			onclick={onClick}
 		>
 			<div>

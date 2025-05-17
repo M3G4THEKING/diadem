@@ -47,7 +47,7 @@
 			tag={btn.onclick ? "button" : "a"}
 			variant="ghost"
 			size=""
-			class="flex px-2 justify-center items-center flex-col text-sm bg-background hover:bg-accent hover:text-accent-foreground first:rounded-l-lg last:rounded-r-lg"
+			class="flex px-2 justify-center items-center flex-col text-sm bg-background hover:bg-accent hover:text-accent-foreground active:bg-accent active:text-accent-foreground first:rounded-l-lg last:rounded-r-lg"
 			href={btn.href}
 			onclick={btn.onclick}
 		>

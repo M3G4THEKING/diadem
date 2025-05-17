@@ -21,7 +21,7 @@
 <div class="flex gap-1 flex-wrap mb-3">
 	{#each parsedStationed as data}
 		<div class="rounded-sm border border-border p-2 relative group">
-			<div class="absolute hidden group-hover:block whitespace-nowrap">
+			<div class="absolute hidden group-hover:block group-active:block whitespace-nowrap">
 				{pokemonName(data)}
 			</div>
 			<ImagePopup
