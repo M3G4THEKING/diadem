@@ -1,9 +1,9 @@
 <script lang="ts">
-	import type { GymData } from '@/lib/types/mapObjectData/gym';
+	import type { GymData, GymDefender, Rsvp } from '@/lib/types/mapObjectData/gym';
 	import BasePopup from '@/components/ui/popups/BasePopup.svelte';
 	import { getIconGym, getIconPokemon, getIconRaidEgg } from '@/lib/uicons.svelte.js';
 	import ImagePopup from '@/components/ui/popups/common/ImagePopup.svelte';
-	import * as m from "@/lib/paraglide/messages"
+	import * as m from '@/lib/paraglide/messages';
 	import FortImage from '@/components/ui/popups/common/FortImage.svelte';
 	import { currentTimestamp, timestampToLocalTime } from '@/lib/utils.svelte.js';
 	import { ingame, pokemonName } from '@/lib/ingameLocale';
@@ -18,7 +18,7 @@
 		ClockArrowUp,
 		ScanEye,
 		Smartphone,
-		Trees,
+		Trees, UserRoundCheck,
 		UsersRound
 	} from 'lucide-svelte';
 	import IconValue from '@/components/ui/popups/common/IconValue.svelte';
@@ -29,17 +29,19 @@
 	import GymDefenderOverview from '@/components/ui/popups/gym/GymDefenderOverview.svelte';
 	import { getCurrentSelectedData } from '@/lib/mapObjects/currentSelectedState.svelte';
 
-	let { mapId } : { mapId: string } = $props()
-	let data: GymData = $derived(getMapObjects()[mapId] as GymData ?? getCurrentSelectedData() as GymData)
+	let { mapId }: { mapId: string } = $props();
+	let data: GymData = $derived(getMapObjects()[mapId] as GymData ?? getCurrentSelectedData() as GymData);
+	let defenders: GymDefender[] = $derived(JSON.parse(data.defenders ?? '[]'));
+	let rsvps: Rsvp[] = $derived(JSON.parse(data.rsvps ?? '[{"timeslot":1747387840273,"going_count":7,"maybe_count":2},{"timeslot":1747387841273,"going_count":1,"maybe_count":1}]'));
 
 	function getTitle() {
-		let title = getConfig().general.mapName
+		let title = getConfig().general.mapName;
 		if (data.name) {
-			title += " | " + data.name
+			title += ' | ' + data.name;
 		} else {
-			title += " | " + m.pogo_gym()
+			title += ' | ' + m.pogo_gym();
 		}
-		return title
+		return title;
 	}
 </script>
 
@@ -48,31 +50,31 @@
 </svelte:head>
 
 {#snippet raidDisplay(expanded: boolean)}
-{#if (data.raid_end_timestamp ?? 0) > currentTimestamp()}
-	<div
-		class="flex gap-2 items-center border-border border-b pb-2 mb-2"
-	>
-		{#if data.raid_pokemon_id}
-			<div class="w-8 shrink-0">
-				<ImagePopup
-					src={getIconPokemon(getRaidPokemon(data))}
-					alt={pokemonName(getRaidPokemon(data))}
-					class="w-8"
-				/>
-			</div>
-		{:else}
-			<div class="w-6 mx-1 shrink-0">
-				<ImagePopup
-					src={getIconRaidEgg(data.raid_level ?? 0)}
-					alt={ingame("raid_" + data.raid_level)}
-					class="w-6"
-				/>
-			</div>
-		{/if}
+	{#if (data.raid_end_timestamp ?? 0) > currentTimestamp()}
+		<div
+			class="flex gap-2 items-center border-border border-b pb-2 mb-2"
+		>
+			{#if data.raid_pokemon_id}
+				<div class="w-8 shrink-0">
+					<ImagePopup
+						src={getIconPokemon(getRaidPokemon(data))}
+						alt={pokemonName(getRaidPokemon(data))}
+						class="w-8"
+					/>
+				</div>
+			{:else}
+				<div class="w-6 mx-1 shrink-0">
+					<ImagePopup
+						src={getIconRaidEgg(data.raid_level ?? 0)}
+						alt={ingame("raid_" + data.raid_level)}
+						class="w-6"
+					/>
+				</div>
+			{/if}
 
 
-		<div>
-			<div class="flex gap-1 items-center">
+			<div>
+				<div class="flex gap-1 items-center">
 				<span
 					class="font-semibold whitespace-nowrap"
 					class:font-semibold={!data.raid_pokemon_id}
@@ -80,46 +82,57 @@
 					{ingame("raid_" + data.raid_level) || "Raid"}
 				</span>
 
-				{#if data.raid_pokemon_id}
-					<b class="whitespace-nowrap">
-						· {pokemonName(getRaidPokemon(data))}
-					</b>
-				{/if}
-			</div>
-
-			<div>
-			<span class="whitespace-nowrap">
-				{#if (data.raid_battle_timestamp ?? 0) < currentTimestamp()}
-					{m.raid_ends()}
-					<span class="font-semibold">
-						<Countdown expireTime={data.raid_end_timestamp} />
-					</span>
-				{:else}
-					{m.raid_starts()}
-					<span class="font-semibold">
-						<Countdown expireTime={data.raid_battle_timestamp} />
-					</span>
-				{/if}
-			</span>
-
-				<span class="whitespace-nowrap">
-				({timestampToLocalTime(data.raid_battle_timestamp)} –
-					{timestampToLocalTime(data.raid_end_timestamp)})
-			</span>
-			</div>
-
-			{#if expanded && data.raid_pokemon_id}
-				<div>
-					{m.pogo_cp({ cp: data.raid_pokemon_cp })}
-					({ingame("move_" + data.raid_pokemon_move_1)}
-					/
-					{ingame("move_" + data.raid_pokemon_move_2)})
+					{#if data.raid_pokemon_id}
+						<b class="whitespace-nowrap">
+							· {pokemonName(getRaidPokemon(data))}
+						</b>
+					{/if}
 				</div>
-			{/if}
-		</div>
 
-	</div>
-{/if}
+				<div>
+					<span class="whitespace-nowrap">
+						{#if (data.raid_battle_timestamp ?? 0) < currentTimestamp()}
+							{m.raid_ends()}
+							<span class="font-semibold">
+								<Countdown expireTime={data.raid_end_timestamp} />
+							</span>
+						{:else}
+							{m.raid_starts()}
+							<span class="font-semibold">
+								<Countdown expireTime={data.raid_battle_timestamp} />
+							</span>
+						{/if}
+					</span>
+
+					<span class="whitespace-nowrap">
+						({timestampToLocalTime(data.raid_battle_timestamp)} –
+						{timestampToLocalTime(data.raid_end_timestamp)})
+					</span>
+				</div>
+
+				{#if expanded && data.raid_pokemon_id}
+					<div>
+						{m.pogo_cp({ cp: data.raid_pokemon_cp })}
+						({ingame("move_" + data.raid_pokemon_move_1)}
+						/
+						{ingame("move_" + data.raid_pokemon_move_2)})
+					</div>
+				{/if}
+
+				{#if rsvps}
+					<div class="grid items-center w-full justify-start mt-1.5" style="grid-template-columns: repeat(3, auto)">
+						{#each rsvps as rsvp (rsvp.timeslot)}
+							<UserRoundCheck size="16" class="mr-1.5" />
+							<b class="mr-1.5">{timestampToLocalTime(rsvp.timeslot)}</b>
+							<span>
+								{m.rsvp_entry({going: rsvp.going_count, maybe: rsvp.maybe_count})}
+							</span>
+						{/each}
+					</div>
+				{/if}
+			</div>
+		</div>
+	{/if}
 {/snippet}
 
 {#snippet memberOverview()}
@@ -127,7 +140,7 @@
 		<IconValue Icon={UsersRound}>
 			{m.gym_members()}:
 			<b>{GYM_SLOTS - (data.availble_slots ?? 0)}/{GYM_SLOTS}</b>
-<!--			({m.gym_power()}: {data.total_cp})-->
+			<!--			({m.gym_power()}: {data.total_cp})-->
 		</IconValue>
 	{/if}
 {/snippet}
@@ -170,8 +183,8 @@
 		<div class="[&>*:last-child]:mb-3">
 			{@render raidDisplay(true)}
 			{@render memberOverview()}
-			{#if !isFortOutdated(data.updated)}
-				<GymDefenderOverview defenders={JSON.parse(data.defenders)} />
+			{#if !isFortOutdated(data.updated) && defenders}
+				<GymDefenderOverview defenders={defenders} />
 			{/if}
 
 			{#if data.ar_scan_eligible}

@@ -124,5 +124,6 @@
 	"search_area_no_areas_found": "No areas found",
 	"search_area_title": "Areas",
 	"search_place_title": "Places",
-	"search_placeholder": "Search..."
+	"search_placeholder": "Search...",
+	"rsvp_entry": "{going} going · {maybe} maybe"
 }

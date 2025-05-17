@@ -41,6 +41,7 @@ export type GymData = {
 	description?: string
 	raid_pokemon_alignment?: number
 	defenders?: string
+	rsvps?: string
 }
 
 export type GymDefender = {
@@ -56,4 +57,10 @@ export type GymDefender = {
 	motivation_now: number
 	cp_now: number
 	cp_when_deployed: number
+}
+
+export type Rsvp = {
+	timeslot: number
+	going_count: number
+	maybe_count: number
 }
