@@ -7,11 +7,13 @@
 	import { isSupportedFeature } from '@/lib/enabledFeatures';
 	import { redirect } from '@sveltejs/kit';
 	import { goto } from '$app/navigation';
+	import { clearMap } from '@/lib/mapObjects/updateMapObject';
 
 	let details = $derived(getUserDetails().details);
 
 	async function logout() {
 		await fetch('/logout');
+		clearMap()
 
 		if (isSupportedFeature("authRequired")) {
 			goto(getLoginLink())

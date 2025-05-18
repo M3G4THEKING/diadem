@@ -54,6 +54,10 @@ export function cellToFeature(cellId: CellID, strokeColor: string, fillColor: st
 	} as S2CellFeature;
 }
 
+export function clearS2Cells() {
+	s2CellGeojson.features = []
+}
+
 export function updateS2CellGeojson(data: { filter: FilterS2Cell } & Bounds) {
 	let levels: number[] = [];
 	if (data.filter.type === 'all') {

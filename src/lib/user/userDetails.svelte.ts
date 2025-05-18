@@ -22,5 +22,4 @@ export async function updateUserPermissions() {
 	const response = await fetch('/api/user/permissions');
 	const data = await response.json()
 	userDetails.permissions = data.permissions
-	console.log(userDetails)
 }

@@ -1,4 +1,4 @@
-import type { User } from '@/lib/server/auth/db/schema';
+import { session, type User } from '@/lib/server/auth/db/schema';
 import { setPermissions } from '@/lib/server/auth/auth';
 import { type DiscordGuildData, getGuildMemberInfo } from '@/lib/server/auth/discordDetails';
 import { getServerConfig } from '@/lib/config/config.server';
@@ -32,12 +32,12 @@ export function getEveryonePerms() {
 	return everyonePerms;
 }
 
-export async function updatePermissions(user: User) {
+export async function updatePermissions(user: User, accessToken: string) {
 	const guildCache: { [key: string]: DiscordGuildData } = {};
 	const authConfig = getServerConfig().auth;
 	const permConfig = getServerConfig().permissions;
 
-	user.permissions = getEveryonePerms();
+	const permissions: Perms = JSON.parse(JSON.stringify(getEveryonePerms()));
 
 	if (permConfig && authConfig.enabled) {
 		for (const rule of permConfig) {
@@ -46,7 +46,7 @@ export async function updatePermissions(user: User) {
 			if (!ruleApplies && rule.guildId) {
 				let guild = guildCache[rule.guildId];
 				if (!guild) {
-					guild = await getGuildMemberInfo(rule.guildId, user.discordToken);
+					guild = await getGuildMemberInfo(rule.guildId, accessToken);
 					guildCache[rule.guildId] = guild;
 				}
 
@@ -57,11 +57,12 @@ export async function updatePermissions(user: User) {
 			}
 
 			if (ruleApplies) {
-				if (rule.areas !== undefined) addPerm(user.permissions, 'areas', rule.areas);
-				if (rule.features !== undefined) addPerm(user.permissions, 'features', rule.features);
+				if (rule.areas !== undefined) addPerm(permissions, 'areas', rule.areas);
+				if (rule.features !== undefined) addPerm(permissions, 'features', rule.features);
 			}
 		}
 	}
 
-	await setPermissions(user.id, user.permissions as Perms);
+	await setPermissions(user.id, permissions);
+	return permissions
 }

@@ -38,7 +38,11 @@ export function updateCurrentWeatherFeatures(push: boolean) {
 }
 
 export async function updateWeather() {
-	if (!checkPermsFeatures(getUserDetails().permissions, "weather")) return
+	if (!checkPermsFeatures(getUserDetails().permissions, "weather")) {
+		currentWeather = false
+		updateCurrentWeatherFeatures(false)
+		return
+	}
 
 	// TODO: update more often after full hour
 	const map = getMap();

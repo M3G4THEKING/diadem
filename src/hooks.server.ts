@@ -44,7 +44,7 @@ const handleAuth: Handle = async ({ event, resolve }) => {
 	}
 
 	if (user && !permissionCache.has(user.id)) {
-		await updatePermissions(user as User)
+		user.permissions = await updatePermissions(user as User, session.discordToken)
 		permissionCache.set(user.id, undefined)
 	}
 

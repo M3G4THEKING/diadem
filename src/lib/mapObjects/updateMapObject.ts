@@ -2,7 +2,7 @@ import {
 	addMapObject,
 	addMapObjects,
 	allMapTypes,
-	allMinorMapTypes,
+	allMinorMapTypes, clearAllMapObjects,
 	clearMapObjects,
 	getMapObjects
 } from '@/lib/mapObjects/mapObjectsState.svelte.js';
@@ -22,7 +22,7 @@ import * as m from '@/lib/paraglide/messages';
 import { getMap } from '@/lib/map/map.svelte';
 import { updateFeatures } from '@/lib/map/featuresGen.svelte';
 import { updateMapObjectsGeoJson } from '@/lib/map/featuresManage.svelte';
-import { updateS2CellGeojson } from '@/lib/mapObjects/s2cells.svelte.js';
+import { clearS2Cells, updateS2CellGeojson } from '@/lib/mapObjects/s2cells.svelte.js';
 import { updateWeather } from '@/lib/mapObjects/weather.svelte';
 import { checkPermsFeatures } from '@/lib/user/checkPerm';
 import { getUserDetails } from '@/lib/user/userDetails.svelte';
@@ -50,6 +50,13 @@ export async function getOneMapObject(
 		return;
 	}
 	return data.result[0];
+}
+
+export function clearMap() {
+	// TODO: Also do this on login
+	clearAllMapObjects()
+	clearS2Cells()
+	updateFeatures(getMapObjects());
 }
 
 export async function updateMapObject(

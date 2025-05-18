@@ -38,3 +38,7 @@ export function clearMapObjects(type: MapObjectType) {
 		}
 	}
 }
+
+export function clearAllMapObjects() {
+	mapObjectsState = {}
+}

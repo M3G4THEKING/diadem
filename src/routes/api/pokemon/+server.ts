@@ -5,7 +5,6 @@ import type { AllFilters } from '@/lib/filters/filters';
 import { checkPermsFeatures, noPermResult } from '@/lib/user/checkPerm';
 
 export async function POST({ request, locals }) {
-	console.log(locals.perms)
 	if (!checkPermsFeatures(locals.perms, "pokemon")) return json(noPermResult)
 
 	const reqBody = await request.json()
