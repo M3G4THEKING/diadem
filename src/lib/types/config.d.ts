@@ -30,6 +30,14 @@ type General = {
 	mapName: string
 }
 
+export type DbCreds = {
+	host: string
+	port: number
+	database: string
+	user: string
+	password: string
+}
+
 export type ClientConfig = {
 	mapStyles: {
 		id: string
@@ -45,13 +53,7 @@ export type ServerConfig = {
 		url: string
 		auth: string
 	}
-	db?: {
-		host: string
-		port: number
-		database: string
-		user: string
-		password: string
-	}
+	db: DbCreds
 	koji?: {
 		url: string
 		secret: string
@@ -61,6 +63,7 @@ export type ServerConfig = {
 		url: string
 		basicAuth?: string
 	}
+	internalDb: DbCreds
 }
 
 export type Config = {

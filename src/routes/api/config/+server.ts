@@ -1,8 +1,6 @@
 import { json } from '@sveltejs/kit';
-import { readConfig } from '@/lib/config.server';
-import {env} from '$env/dynamic/private';
+import { getClientConfig } from '@/lib/config.server';
 
 export async function GET() {
-	const clientConfig = await readConfig();
-	return json(clientConfig);
+	return json(getClientConfig());
 }
