@@ -7,6 +7,7 @@ import type {
 	FilterPokemon,
 	FilterPokestopMajor, FilterPokestopPlain, FilterQuest, FilterRaid, FilterS2Cell, FilterStationMajor
 } from '@/lib/filters/filters';
+import { getUserDetails } from '@/lib/user/userDetails.svelte';
 
 type UiconSetUS = {
 	id: string
@@ -88,6 +89,7 @@ export function getDefaultUserSettings(): UserSettings {
 		loadMapObjectsWhileMoving: false,
 		loadMapObjectsPadding: 20,
 		languageTag: "auto",
+		showDebugMenu: false,
 		filters: {
 			pokemonMajor: { category: "pokemonMajor", type: "all" },
 			pokestopMajor: { category: "pokestopMajor", type: "all" },
@@ -108,10 +110,22 @@ export function getDefaultUserSettings(): UserSettings {
 // @ts-ignore
 let userSettings: UserSettings = $state({})
 
+export async function getUserSettingsFromServer() {
+	const response = await fetch("/api/user/settings")
+	const dbUserSettings: { error?: string, result: UserSettings } = await response.json()
+
+	if (!dbUserSettings.error && Object.keys(dbUserSettings.result).length > 0) {
+		setUserSettings(dbUserSettings.result)
+		updateUserSettings()
+		return true
+	}
+
+	return false
+}
+
 export function setUserSettings(newUserSettings: UserSettings) {
 	// @ts-ignore
 	userSettings = deepMerge(getDefaultUserSettings(), newUserSettings)
-	console.log(userSettings)
 }
 
 export function getUserSettings() {
@@ -119,7 +133,12 @@ export function getUserSettings() {
 }
 
 export function updateUserSettings() {
-	localStorage.setItem("userSettings", JSON.stringify(userSettings))
+	const serializedUserSettings = JSON.stringify(userSettings)
+	localStorage.setItem("userSettings", serializedUserSettings)
+
+	if (getUserDetails().details) {
+		fetch("/api/user/settings", { method: "POST", body: serializedUserSettings }).then()
+	}
 }
 
 function deepMerge(defaultObj: {[key: string]: any}, newObj: {[key: string]: any}) {

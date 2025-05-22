@@ -2,7 +2,7 @@ import { initAllIconSets } from '@/lib/uicons.svelte';
 import { loadMasterFile } from '@/lib/masterfile';
 import {
 	getDefaultUserSettings,
-	getUserSettings,
+	getUserSettings, getUserSettingsFromServer,
 	setUserSettings,
 	updateUserSettings
 } from '@/lib/userSettings.svelte';
@@ -12,7 +12,7 @@ import { loadKojiGeofences } from '@/lib/koji';
 import { loadRemoteLocale } from '@/lib/ingameLocale';
 import { resolveLanguageTag } from '@/lib/i18n';
 import { updateSupportedFeatures } from '@/lib/enabledFeatures';
-import { updateUserDetails } from '@/lib/user/userDetails.svelte';
+import { getUserDetails, updateUserDetails } from '@/lib/user/userDetails.svelte';
 
 export const ssr = false;
 
@@ -29,12 +29,21 @@ export const load = async ({ fetch }) => {
 	]);
 
 	if (browser) {
-		const rawUserSettings = localStorage.getItem('userSettings');
+		let hasServerUserSettings = false
 
-		if (rawUserSettings) {
-			setUserSettings(JSON.parse(rawUserSettings));
-		} else {
-			setUserSettings(getDefaultUserSettings());
+		if (getUserDetails().details) {
+			hasServerUserSettings = await getUserSettingsFromServer()
+		}
+
+		if (!hasServerUserSettings) {
+			const rawUserSettings = localStorage.getItem('userSettings');
+
+			if (rawUserSettings) {
+				setUserSettings(JSON.parse(rawUserSettings));
+			} else {
+				setUserSettings(getDefaultUserSettings());
+			}
+
 			updateUserSettings();
 		}
 

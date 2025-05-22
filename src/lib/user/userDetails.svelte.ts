@@ -1,10 +1,12 @@
 import type { DiscordUser } from '@/lib/server/auth/discordDetails';
 import type { Perms } from '@/lib/server/auth/permissions';
 
-let userDetails: {
+export type UserData = {
 	details?: DiscordUser;
 	permissions: Perms;
-} = $state({
+}
+
+let userDetails: UserData = $state({
 	permissions: {}
 });
 

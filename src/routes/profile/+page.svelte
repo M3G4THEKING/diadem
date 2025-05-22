@@ -27,10 +27,11 @@
 	import ProfileCard from '@/components/ui/user/ProfileCard.svelte';
 	import { isSupportedFeature } from '@/lib/enabledFeatures';
 
-	$effect(() => {
-		getUserSettings()
-		updateUserSettings()
-	})
+	// $effect(() => {
+	// 	getUserSettings()
+	// 	updateUserSettings()
+	// })
+	// TODO: explicit updateUserSettings everywhere
 
 	type Language = {
 		label: string
@@ -60,6 +61,7 @@
 		} else {
 			getUserSettings().isDarkMode = null
 		}
+		updateUserSettings()
 	}
 
 	function onIconChange(iconSetId: string, iconType: MapObjectType) {

@@ -5,6 +5,7 @@ export const user = mysqlTable('user', {
 	id: varchar('id', { length: 255 }).primaryKey(),
 	discordId: varchar('discord_id', { length: 255 }).notNull().unique(),
 	permissions: json('permissions').notNull(),
+	userSettings: json('user_settings').notNull(),
 });
 
 export const session = mysqlTable('session', {

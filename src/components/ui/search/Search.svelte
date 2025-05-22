@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Command } from "bits-ui";
+	import { Command } from 'bits-ui';
 	import { onMount } from 'svelte';
 	import { Search, X } from 'lucide-svelte';
 	import GroupArea from '@/components/ui/search/GroupArea.svelte';
@@ -11,12 +11,12 @@
 	import { closeModal } from '@/lib/modal.svelte';
 	import Button from '@/components/ui/basic/Button.svelte';
 
-	let input: HTMLInputElement | undefined = $state()
-	let searchQuery: string = $state("")
+	let input: HTMLInputElement | undefined = $state();
+	let searchQuery: string = $state('');
 
 	onMount(() => {
-		input?.focus()
-	})
+		input?.focus();
+	});
 </script>
 
 <Command.Root
