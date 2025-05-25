@@ -19,7 +19,7 @@
 	import BaseFab from '@/components/ui/fab/BaseFab.svelte';
 	import { isSupportedFeature } from '@/lib/enabledFeatures';
 	import { getUserDetails } from '@/lib/user/userDetails.svelte.js';
-	import SignInButton from '@/lib/user/SignInButton.svelte';
+	import SignInButton from '@/components/ui/user/SignInButton.svelte';
 
 	function handleKeydown(e: KeyboardEvent) {
 		if (e.key === "k" && (e.metaKey || e.ctrlKey)) {

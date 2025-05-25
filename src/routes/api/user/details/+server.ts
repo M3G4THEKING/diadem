@@ -5,11 +5,15 @@ import { DISCORD_REFRESH_INTERVAL } from '@/lib/constants';
 import { invalidateSession, makeNewSession } from '@/lib/server/auth/auth';
 import { getDiscordAuth } from '@/lib/server/auth/discord';
 import { getClientConfig, getServerConfig } from '@/lib/config/config.server';
+import { getEveryonePerms } from '@/lib/server/auth/permissions';
 
 export async function GET(event) {
 	const user = event.locals.user
 	const session = event.locals.session
-	if (!user) return json({});
+
+	if (!user) return json({
+		permissions: getEveryonePerms(),
+	} as UserData);
 
 	const data = await getUserInfo(session.discordToken);
 	const isMember = await isGuildMember(getClientConfig().discord.serverId, session.discordToken)

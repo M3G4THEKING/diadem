@@ -138,5 +138,8 @@
 	"signin_toast_success": "Signed in as {name}",
 	"signin": "Link",
 	"signout": "Unlink Discord",
-	"nav_profile": "Profile"
+	"nav_profile": "Profile",
+	"signin_prompt_part_1": "To unlock more features,",
+	"signin_prompt_bold": "link your Discord account",
+	"signin_prompt_part_2": ""
 }

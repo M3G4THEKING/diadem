@@ -16,7 +16,7 @@
 	import { loadMapObjectInterval } from '@/lib/map/loadMapObjects';
 	import { onMapMoveEnd, onMapMoveStart, onTouchStart, onWindowFocus } from '@/lib/map/events';
 	import maplibre from 'maplibre-gl';
-	import FrameRateControl from '@/components/map/framerate';
+	import FrameRateControl from '@/lib/map/framerate';
 	import { getS2CellGeojson } from '@/lib/mapObjects/s2cells.svelte.js';
 	import S2CellLayer from '@/components/map/S2CellLayer.svelte';
 	import { getSelectedWeatherS2Cells } from '@/lib/mapObjects/weather.svelte';

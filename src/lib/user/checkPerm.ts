@@ -5,7 +5,9 @@ export const noPermResult = {
 	result: []
 };
 
-function isFeatureInFeatureList(featureList: FeaturesKey[], feature: FeaturesKey) {
+function isFeatureInFeatureList(featureList: FeaturesKey[] | undefined, feature: FeaturesKey) {
+	if (featureList === undefined) return false
+
 	return featureList.includes("*") || featureList.includes(feature)
 }
 
