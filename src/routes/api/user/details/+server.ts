@@ -12,7 +12,7 @@ export async function GET(event) {
 	const session = event.locals.session
 
 	if (!user) return json({
-		permissions: getEveryonePerms(),
+		permissions: await getEveryonePerms(event.fetch),
 	} as UserData);
 
 	const data = await getUserInfo(session.discordToken);

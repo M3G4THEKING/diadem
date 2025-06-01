@@ -5,8 +5,8 @@ type KojiProperties = {
 	lucideIcon?: string
 	group?: string
 }
-
-let geofences: Feature<Polygon, KojiProperties>[] = []
+export type KojiFeatures = Feature<Polygon, KojiProperties>[]
+let geofences: KojiFeatures = []
 
 export async function loadKojiGeofences() {
 	const result = await fetch("/api/koji")

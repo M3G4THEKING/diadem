@@ -18,7 +18,7 @@ const permissionCache: TTLCache<string, undefined> = new TTLCache({ ttl: 5 * 60 
 const handleAuth: Handle = async ({ event, resolve }) => {
 	const sessionToken = event.cookies.get(sessionCookieName);
 
-	event.locals.perms = getEveryonePerms()
+	event.locals.perms = await getEveryonePerms(event.fetch)
 
 	if (!sessionToken) {
 		event.locals.user = null;
@@ -47,7 +47,7 @@ const handleAuth: Handle = async ({ event, resolve }) => {
 	}
 
 	if (user && !permissionCache.has(user.id)) {
-		user.permissions = await updatePermissions(user as User, session.discordToken)
+		user.permissions = await updatePermissions(user as User, session.discordToken, event.fetch)
 		permissionCache.set(user.id, undefined)
 	}
 

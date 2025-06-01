@@ -1,18 +1,18 @@
-import { session, type User } from "@/lib/server/auth/db/schema";
+import { type User } from "@/lib/server/auth/db/schema";
 import { setPermissions } from "@/lib/server/auth/auth";
 import { type DiscordGuildData, getGuildMemberInfo } from "@/lib/server/auth/discordDetails";
 import { getServerConfig } from "@/lib/config/config.server";
 import type { Permissions as ConfigRule } from "@/lib/config/config.d";
+import type { Bounds } from "@/lib/mapObjects/mapBounds";
+import { type KojiFeatures } from "@/lib/koji";
+import { fetchKojiGeofences } from "@/lib/koji.server";
 
-export type FeaturesKey =
-	| "*"
-	| "pokemon"
-	| "gym"
-	| "pokestop"
-	| "station"
-	| "weather"
-	| "s2cell"
-type PermArea = { name: string; features: FeaturesKey[] };
+export type FeaturesKey = "*" | "pokemon" | "gym" | "pokestop" | "station" | "weather" | "s2cell";
+type PermArea = {
+	name: string;
+	features: FeaturesKey[];
+	bounds: Bounds;
+};
 export type Perms = {
 	everywhere: FeaturesKey[];
 	areas: PermArea[];
@@ -20,11 +20,6 @@ export type Perms = {
 
 let initializedEveryonePerms: boolean = false;
 let everyonePerms: Perms = { everywhere: [], areas: [] };
-
-function addPerm(set: Perms, type: "areas" | "features", perms: string[] | FeaturesKey[]) {
-	// @ts-ignore
-	set[type] = [...(set[type] ?? []), ...perms];
-}
 
 function addFeatures(featureArray: FeaturesKey[], features: FeaturesKey[] | undefined) {
 	if (!features) return;
@@ -36,29 +31,57 @@ function addFeatures(featureArray: FeaturesKey[], features: FeaturesKey[] | unde
 	});
 }
 
-function handleRule(rule: ConfigRule, perms: Perms) {
+function handleRule(rule: ConfigRule, perms: Perms, geofences: KojiFeatures | undefined) {
+	if (rule.areas && !geofences) return;
+
 	if (rule.areas) {
 		for (const ruleArea of rule.areas) {
 			let area: PermArea | undefined = perms.areas.find((a) => ruleArea === a.name);
 			if (!area) {
-				area = { name: ruleArea, features: [] };
+				const kojiFeature = geofences!.find((f) => f.properties.name.toLowerCase() === ruleArea.toLowerCase());
+				if (!kojiFeature) {
+					console.error(
+						`You configured area ${ruleArea} in your config permissions, but there's no Koji area with that name. Permissions for this area are ignored`
+					);
+					continue;
+				}
+
+				const bounds: Bounds = {
+					minLon: kojiFeature!.bbox![0],
+					minLat: kojiFeature!.bbox![1],
+					maxLon: kojiFeature!.bbox![2],
+					maxLat: kojiFeature!.bbox![3]
+				};
+
+				area = { name: ruleArea, features: [], bounds };
 				perms.areas.push(area);
 			}
 
-			addFeatures(area.features, rule.features);
+			addFeatures(area!.features, rule.features);
 		}
 	} else {
 		addFeatures(perms.everywhere, rule.features);
 	}
 }
 
-export function getEveryonePerms() {
+async function getGeofences(thisFetch: typeof fetch) {
+	const data = await fetchKojiGeofences(thisFetch);
+	if (data.error) {
+		console.error("Koji error while handling permissions. All area-based permissions are ignored");
+		return undefined;
+	}
+	return data.result as KojiFeatures;
+}
+
+export async function getEveryonePerms(thisFetch: typeof fetch, geofences?: KojiFeatures) {
 	if (initializedEveryonePerms) return everyonePerms;
+
+	if (!geofences) geofences = await getGeofences(thisFetch);
 
 	const perms: Perms = { everywhere: [], areas: [] };
 	for (const rule of getServerConfig().permissions ?? []) {
 		if (rule.everyone) {
-			handleRule(rule, perms);
+			handleRule(rule, perms, geofences);
 		}
 	}
 	initializedEveryonePerms = true;
@@ -66,12 +89,16 @@ export function getEveryonePerms() {
 	return everyonePerms;
 }
 
-export async function updatePermissions(user: User, accessToken: string) {
+export async function updatePermissions(user: User, accessToken: string, thisFetch: typeof fetch) {
 	const guildCache: { [key: string]: DiscordGuildData } = {};
 	const authConfig = getServerConfig().auth;
 	const permConfig = getServerConfig().permissions;
 
-	const permissions: Perms = JSON.parse(JSON.stringify(getEveryonePerms()));
+	const geofences = await getGeofences(thisFetch);
+
+	const permissions: Perms = JSON.parse(
+		JSON.stringify(await getEveryonePerms(thisFetch, geofences))
+	);
 
 	if (permConfig && authConfig.enabled) {
 		for (const rule of permConfig) {
@@ -93,7 +120,7 @@ export async function updatePermissions(user: User, accessToken: string) {
 			}
 
 			if (ruleApplies) {
-				handleRule(rule, permissions);
+				handleRule(rule, permissions, geofences);
 			}
 		}
 	}
