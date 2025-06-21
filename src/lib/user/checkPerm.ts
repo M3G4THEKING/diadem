@@ -1,9 +1,7 @@
 import type { FeaturesKey, Perms } from "@/lib/server/auth/permissions";
 import type { Bounds } from '@/lib/mapObjects/mapBounds';
-import { json } from '@sveltejs/kit';
 import { featureCollection, intersect, polygon, polygonize, feature as makeFeature, bbox } from '@turf/turf';
 import type { Feature, Polygon } from 'geojson';
-import { intersection } from 's2js/dist/s2/edge_crossings';
 
 export const noPermResult = {
 	error: "Missing permissions",
