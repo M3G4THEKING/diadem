@@ -88,7 +88,7 @@
 			<BottomNav page="/" {onmapclick} />
 		</div>
 
-		<div class="flex flex-col items-end gap-2 max-w-[30rem]">
+		<div class="flex flex-col items-end gap-2 w-[30rem]">
 			<Fabs />
 			{#if (innerWidth.current ?? desktopPopupCutoff) >= desktopPopupCutoff}
 				<PopupContainer />
