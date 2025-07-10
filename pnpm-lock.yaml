@@ -82,6 +82,9 @@ importers:
       uicons.js:
         specifier: ^2.0.2
         version: 2.0.3
+      vaul-svelte:
+        specifier: ^0.3.2
+        version: 0.3.2(svelte@5.30.2)
     devDependencies:
       '@inlang/paraglide-js':
         specifier: 1.11.3
@@ -1162,6 +1165,11 @@ packages:
     resolution: {integrity: sha512-IGJtuBbaGzOUgODdBRg66p8stnwj9iDXkgbYKoYcNiiQmaez5WVRfXm4b03MCDwmZyX93csbfHFWEJJYHnn5oA==}
     hasBin: true
 
+  '@melt-ui/svelte@0.76.2':
+    resolution: {integrity: sha512-7SbOa11tXUS95T3fReL+dwDs5FyJtCEqrqG3inRziDws346SYLsxOQ6HmX+4BkIsQh1R8U3XNa+EMmdMt38lMA==}
+    peerDependencies:
+      svelte: '>=3 <5'
+
   '@napi-rs/wasm-runtime@0.2.10':
     resolution: {integrity: sha512-bCsCyeZEwVErsGmyPNSzwfwFn4OdxBj0mmv6hOFucB/k81Ojdu68RbZdxYsRQUPc9l6SU5F/cG+bXgWs3oUgsQ==}
 
@@ -2118,6 +2126,11 @@ packages:
   bignumber.js@9.3.0:
     resolution: {integrity: sha512-EM7aMFTXbptt/wZdMlBv2t8IViwQL+h6SLHosp8Yf0dqJMTnY6iL32opnAB6kAdL0SZPuvcAzFr31o0c/R3/RA==}
 
+  bits-ui@0.21.16:
+    resolution: {integrity: sha512-XFZ7/bK7j/K+5iktxX/ZpmoFHjYjpPzP5EOO/4bWiaFg5TG1iMcfjDhlBTQnJxD6BoVoHuqeZPHZvaTgF4Iv3Q==}
+    peerDependencies:
+      svelte: ^4.0.0 || ^5.0.0-next.118
+
   bits-ui@1.4.8:
     resolution: {integrity: sha512-j34GsdSsJ+ZBl9h/70VkufvrlEgTKQSZvm80eM5VvuhLJWvpfEpn9+k0FVmtDQl9NSPgEVtI9imYhm8nW9Nj/w==}
     engines: {node: '>=18', pnpm: '>=8.7.0'}
@@ -2489,6 +2502,9 @@ packages:
 
   fflate@0.8.2:
     resolution: {integrity: sha512-cPJU47OaAoCbg0pBvzsgpTPhmhqI5eJjh/JIu8tPj5q+T7iLvW/JAYUqmE7KOB4R1ZyEhzBaIQpQpardBF5z8A==}
+
+  focus-trap@7.6.5:
+    resolution: {integrity: sha512-7Ke1jyybbbPZyZXFxEftUtxFGLMpE2n6A+z//m4CRDlj0hW+o3iYSmh8nFlYMurOiJVDmJRilUQtJr08KfIxlg==}
 
   follow-redirects@1.15.9:
     resolution: {integrity: sha512-gew4GsXizNgdoRyqmyfMHyAmXsZDk6mHkSxZFCzW9gwlbtOW44CDtYavM+y+72qD/Vq2l550kMF52DT8fOLJqQ==}
@@ -2868,6 +2884,11 @@ packages:
     engines: {node: ^10 || ^12 || ^13.7 || ^14 || >=15.0.1}
     hasBin: true
 
+  nanoid@5.1.5:
+    resolution: {integrity: sha512-Ir/+ZpE9fDsNH0hQ3C68uyThDXzYcim2EqcZ8zn8Chtt1iylPT9xXJB0kPCnqzgcEGikO9RxSrh63MsmVCU7Fw==}
+    engines: {node: ^18 || >=20}
+    hasBin: true
+
   octokit@3.1.2:
     resolution: {integrity: sha512-MG5qmrTL5y8KYwFgE1A4JWmgfQBaIETE/lOlfwNYx1QOtCQHGVxkRJmdUJltFc1HVn73d61TlMhMyNTOtMl+ng==}
     engines: {node: '>= 18'}
@@ -3225,6 +3246,11 @@ packages:
   unplugin@1.16.1:
     resolution: {integrity: sha512-4/u/j4FrCKdi17jaxuJA0jClGxB1AvU2hw/IuayPc4ay1XGaJs/rbb4v5WKwAjNifjmXK9PIFyuPiaK8azyR9w==}
     engines: {node: '>=14.0.0'}
+
+  vaul-svelte@0.3.2:
+    resolution: {integrity: sha512-X4OGWttSTVUl417qGDsSFgOvIx24DoiMRY/jaP9z0v9FL8LQQJ0RQ1ZM0QpdyQPRlNd24ewjNQHh5EgYDtfNpw==}
+    peerDependencies:
+      svelte: ^4.0.0 || ^5.0.0-next.1
 
   vite@5.4.19:
     resolution: {integrity: sha512-qO3aKv3HoQC8QKiNSTuUM1l9o/XX3+c+VTgLHbJWHZGeTPVAg2XwazI9UWzoxjIJCGCV2zU60uqMzjeLZuULqA==}
@@ -4045,6 +4071,16 @@ snapshots:
       quickselect: 3.0.0
       rw: 1.3.3
       tinyqueue: 3.0.0
+
+  '@melt-ui/svelte@0.76.2(svelte@5.30.2)':
+    dependencies:
+      '@floating-ui/core': 1.7.0
+      '@floating-ui/dom': 1.7.0
+      '@internationalized/date': 3.8.0
+      dequal: 2.0.3
+      focus-trap: 7.6.5
+      nanoid: 5.1.5
+      svelte: 5.30.2
 
   '@napi-rs/wasm-runtime@0.2.10':
     dependencies:
@@ -5745,6 +5781,13 @@ snapshots:
 
   bignumber.js@9.3.0: {}
 
+  bits-ui@0.21.16(svelte@5.30.2):
+    dependencies:
+      '@internationalized/date': 3.8.0
+      '@melt-ui/svelte': 0.76.2(svelte@5.30.2)
+      nanoid: 5.1.5
+      svelte: 5.30.2
+
   bits-ui@1.4.8(svelte@5.30.2):
     dependencies:
       '@floating-ui/core': 1.7.0
@@ -6092,6 +6135,10 @@ snapshots:
       picomatch: 4.0.2
 
   fflate@0.8.2: {}
+
+  focus-trap@7.6.5:
+    dependencies:
+      tabbable: 6.2.0
 
   follow-redirects@1.15.9: {}
 
@@ -6473,6 +6520,8 @@ snapshots:
       lru-cache: 7.18.3
 
   nanoid@3.3.11: {}
+
+  nanoid@5.1.5: {}
 
   octokit@3.1.2:
     dependencies:
@@ -6865,6 +6914,11 @@ snapshots:
     dependencies:
       acorn: 8.14.1
       webpack-virtual-modules: 0.6.2
+
+  vaul-svelte@0.3.2(svelte@5.30.2):
+    dependencies:
+      bits-ui: 0.21.16(svelte@5.30.2)
+      svelte: 5.30.2
 
   vite@5.4.19(@types/node@18.19.100)(lightningcss@1.30.1):
     dependencies:

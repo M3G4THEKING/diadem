@@ -55,7 +55,8 @@
 		"tailwind-merge": "^2.5.5",
 		"tailwindcss-animate": "^1.0.7",
 		"toml": "^3.0.0",
-		"uicons.js": "^2.0.2"
+		"uicons.js": "^2.0.2",
+		"vaul-svelte": "^0.3.2"
 	},
 	"engines": {
 		"node": "^22"

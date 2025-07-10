@@ -103,9 +103,7 @@
 		</div>
 	</div>
 {:else}
-	{#if getOpenedMenu()}
-		<MobileMenu />
-	{/if}
+	<MobileMenu />
 
 	<div
 		class="fixed z-20 bottom-2 w-full flex flex-col pointer-events-none gap-2"

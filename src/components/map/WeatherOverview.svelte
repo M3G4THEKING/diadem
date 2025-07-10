@@ -18,7 +18,7 @@
 	import { watch } from 'runed';
 	import type { WeatherData } from '@/lib/types/mapObjectData/weather';
 	import { getUserSettings } from '@/lib/userSettings.svelte';
-	import { isUiLeft } from '@/lib/menus.svelte';
+	import { isUiLeft, openMenu } from '@/lib/menus.svelte';
 
 	let ignoreWatch = false
 	let isClicked: boolean = $state(false)
@@ -35,6 +35,7 @@
 
 	async function onClick() {
 		isClicked = !isClicked
+		openMenu(null)
 
 		if (isClicked && getMap()?.isMoving()) {
 			ignoreWatch = true
