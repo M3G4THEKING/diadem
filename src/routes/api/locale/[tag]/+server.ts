@@ -10,7 +10,7 @@ type RemoteLocale = { [key: string]: string }
 
 const allowedLanguages = AVAILABLE_LANGUAGES.map(v => v.value)
 const url = "https://raw.githubusercontent.com/WatWowMap/pogo-translations/refs/heads/master/static/locales/{}.json"
-const allowedPrefixes = Object.keys(localePrefixesObject)
+const allowedPrefixes = Object.values(localePrefixesObject)
 const updateCache: TTLCache<string, undefined> = new TTLCache({ ttl: 24 * 60 * 60 * 1000 })  // update once per day
 
 let remoteLocales: { [key: string]: RemoteLocale } = {}
