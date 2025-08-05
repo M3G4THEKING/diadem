@@ -14,6 +14,8 @@ import {
 import { getUserSettings, updateUserSettings } from '@/lib/userSettings.svelte';
 import { getMap } from '@/lib/map/map.svelte';
 import { setAnimateLocationMarker } from '@/lib/map/geolocate.svelte';
+import type { MapMoveEvent } from 'svelte-maplibre';
+import { setSkew } from '@/lib/map/mapSkew.svelte';
 
 export async function onMapMoveEnd() {
 	clearLoadMapObjectsInterval();
@@ -45,4 +47,8 @@ export function onWindowFocus() {
 	if (!getMap()) return;
 	updateAllMapObjects();
 	resetUpdateMapObjectsInterval();
+}
+
+export function onMapMove(event: MapMoveEvent) {
+	setSkew(event.target.getPitch(), event.target.getBearing())
 }

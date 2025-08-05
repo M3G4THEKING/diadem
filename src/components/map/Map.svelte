@@ -14,7 +14,7 @@
 	import { clearPressTimer, onContextMenu } from '@/lib/map/contextmenu.svelte';
 	import { clearSessionImageUrls, getMapObjectsGeoJson } from '@/lib/map/featuresManage.svelte';
 	import { loadMapObjectInterval } from '@/lib/map/loadMapObjects';
-	import { onMapMoveEnd, onMapMoveStart, onTouchStart, onWindowFocus } from '@/lib/map/events';
+	import { onMapMove, onMapMoveEnd, onMapMoveStart, onTouchStart, onWindowFocus } from '@/lib/map/events';
 	import maplibre from 'maplibre-gl';
 	import FrameRateControl from '@/lib/map/framerate';
 	import { getS2CellGeojson } from '@/lib/mapObjects/s2cells.svelte.js';
@@ -44,6 +44,7 @@
 			map.on('touchmove', clearPressTimer);
 			map.on('touchcancel', clearPressTimer);
 			map.on('movestart', onMapMoveStart);
+			map.on('move', onMapMove);
 
 			// tick so feature handler registers first
 			tick().then(() => map?.on('click', clickMapHandler));
@@ -64,7 +65,7 @@
 	}
 
 	// update initial map objects only once every required part has been loaded
-	let isInitUpdatedMapObjects = false
+	let isInitUpdatedMapObjects = false;
 	$effect(() => {
 		if (
 			!isInitUpdatedMapObjects &&
@@ -73,9 +74,9 @@
 			&& hasLoadedFeature(LoadedFeature.MASTER_FILE)
 			&& hasLoadedFeature(LoadedFeature.ICON_SETS)
 		) {
-			console.debug("initial load data")
-			isInitUpdatedMapObjects = true
-			updateAllMapObjects(false).then(() => resetUpdateMapObjectsInterval()).catch(e => console.error(e))
+			console.debug('initial load data');
+			isInitUpdatedMapObjects = true;
+			updateAllMapObjects(false).then(() => resetUpdateMapObjectsInterval()).catch(e => console.error(e));
 		}
 	});
 
