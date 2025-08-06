@@ -14,7 +14,7 @@
 </script>
 
 <svelte:head>
-	<Metadata  />
+	<Metadata description="test description" />
 </svelte:head>
 
 <a href="../../">
