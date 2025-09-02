@@ -81,6 +81,11 @@ export type ServerConfig = {
 		url: string
 		auth: string
 	}
+	dragonite: {
+		url: string
+		secret?: string
+		basicAuth?: string
+	}
 	db: DbCreds
 	koji?: {
 		url: string

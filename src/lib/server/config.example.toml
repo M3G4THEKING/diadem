@@ -2,6 +2,11 @@
 url = "http://127.0.0.1:9001"
 auth = ""
 
+[server.dragonite]
+url = "http://127.0.0.1:7272"
+secret = ""
+basicAuth = ""
+
 [server.koji]
 url = "http://127.0.0.1:8080"
 secret = "secret"

@@ -1,7 +1,7 @@
 import { innerWidth } from "svelte/reactivity/window";
 import { getUserSettings } from "@/lib/userSettings.svelte";
 
-export type MenuTypes = null | "profile" | "filters"
+export type MenuTypes = null | "profile" | "filters" | "scout"
 
 let openedMenu: MenuTypes = $state(null)
 

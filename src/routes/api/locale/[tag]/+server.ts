@@ -1,10 +1,12 @@
 import { json } from '@sveltejs/kit';
 import {env} from '$env/dynamic/private'
 import { getServerConfig } from '@/lib/config/config.server';
-import { hasFeatureAnywhere, noPermResult } from '@/lib/user/checkPerm';
+import { hasFeatureAnywhere } from '@/lib/user/checkPerm';
 import { prefixes as localePrefixesObject } from '@/lib/ingameLocale';
 import { AVAILABLE_LANGUAGES } from '@/lib/constants';
 import TTLCache from '@isaacs/ttlcache';
+
+import { noPermResult } from '@/lib/server/api/results';
 
 type RemoteLocale = { [key: string]: string }
 

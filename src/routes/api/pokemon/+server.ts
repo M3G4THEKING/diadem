@@ -2,12 +2,14 @@ import { json } from '@sveltejs/kit';
 import {env} from '$env/dynamic/private'
 import { getServerConfig } from '@/lib/config/config.server';
 import type { AllFilters, FilterPokemon } from '@/lib/filters/filters';
-import { checkFeatureInBounds, hasFeatureAnywhere, noPermResult } from '@/lib/user/checkPerm';
+import { checkFeatureInBounds, hasFeatureAnywhere } from '@/lib/user/checkPerm';
 import type { Bounds } from '@/lib/mapObjects/mapBounds';
 import type { MapObjectRequestData } from '@/lib/mapObjects/updateMapObject';
 
+import { noPermResult } from '@/lib/server/api/results';
+
 export async function POST({ request, locals }) {
-	if (!hasFeatureAnywhere(locals.perms, "pokemon")) return json(noPermResult)
+	if (!hasFeatureAnywhere(locals.perms, "pokemon")) return json(noPermResult())
 
 	const reqBody: MapObjectRequestData = await request.json()
 	const filter = reqBody.filter as FilterPokemon

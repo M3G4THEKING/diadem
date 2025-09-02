@@ -16,6 +16,7 @@
 	import DesktopMenu from '@/components/menus/DesktopMenu.svelte';
 	import { hasLoadedFeature, LoadedFeature } from '@/lib/initialLoad.svelte';
 	import Metadata from '@/components/utils/Metadata.svelte';
+	import { getContextMenuEvent, getIsContextMenuOpen } from '@/lib/map/contextmenu.svelte';
 
 	let showSignInButton = $derived(
 		hasLoadedFeature(LoadedFeature.SUPPORTED_FEATURES, LoadedFeature.USER_DETAILS)
@@ -81,7 +82,7 @@
 			<PopupContainer />
 		</div>
 	</div>
-{:else}
+{:else if !getIsContextMenuOpen()}
 	<MobileMenu />
 
 	<div

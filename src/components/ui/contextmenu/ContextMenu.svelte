@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { ContextMenu } from "bits-ui"
-	import { fly } from "svelte/transition"
+	import { fly, slide } from "svelte/transition"
 	import maplibre from 'maplibre-gl';
 	import { onMount } from 'svelte';
 	import { Binoculars, Clipboard, Navigation } from 'lucide-svelte';
@@ -13,7 +13,8 @@
 
 	import { getContextMenuEvent, getIsContextMenuOpen, setIsContextMenuOpen } from '@/lib/map/contextmenu.svelte';
 	import { onClickOutside } from 'runed';
-	import { isUiLeft } from '@/lib/menus.svelte';
+	import { isMenuSidebar, isUiLeft, openMenu } from '@/lib/menus.svelte';
+	import { setCurrentScoutCenter, setCurrentScoutCoords } from '@/lib/scout.svelte';
 
 	let div = $state<HTMLDivElement>()
 	let style: string = $state("")
@@ -27,6 +28,7 @@
 	$effect(() => {
 		if (!div) return
 		if (!getContextMenuEvent()) return
+		if (!isMenuSidebar()) return
 
 		event = getContextMenuEvent()
 		mapsUrl = getMapsUrl(event.lngLat.lat, event.lngLat.lng)
@@ -53,31 +55,67 @@
 	})
 
 	function copyCoords() {
+		event = getContextMenuEvent()
+
 		copyToClipboard("" + event.lngLat.lat + "," + event.lngLat.lng)
+	}
+
+	function openScout() {
+		event = getContextMenuEvent()
+
+		const center = { lat: event.lngLat.lat, lon: event.lngLat.lng }
+		setCurrentScoutCoords([center])
+		setCurrentScoutCenter(center)
+		openMenu("scout")
 	}
 </script>
 
-{#if getIsContextMenuOpen()}
-	<div
-		bind:this={div}
-		class="absolute py-2 flex flex-col z-50 bg-popover text-popover-foreground min-w-[8rem] rounded-md border p-1 shadow-md focus:outline-hidden"
-		style={style}
-	>
-		{#if hasClipboardWrite()}
-			<ContextMenuItem onclick={copyCoords}>
-				<Clipboard size="14"/>
-				<span>{m.context_menu_copy_coordinates()}</span>
-			</ContextMenuItem>
-		{/if}
+{#snippet menuItems()}
+	{#if hasClipboardWrite()}
+		<ContextMenuItem
+			Icon={Clipboard}
+			label={m.context_menu_copy_coordinates()}
+			onclick={copyCoords}
+		/>
+	{/if}
 
-		<ContextMenuItem tag="a" href={mapsUrl} target="_blank">
-			<Navigation size="14"/>
-			<span>{m.context_menu_navigate_here()}</span>
-		</ContextMenuItem>
+	<ContextMenuItem
+		Icon={Navigation}
+		label={m.context_menu_navigate_here()}
+		tag="a"
+		href={mapsUrl}
+		target="_blank"
+	/>
 
-		<ContextMenuItem onclick={() => openToast("This will work eventually")}>
-			<Binoculars size="14"/>
-			<span>{m.context_menu_scout_location()}</span>
-		</ContextMenuItem>
-	</div>
+	<ContextMenuItem
+		Icon={Binoculars}
+		label={m.context_menu_scout_location()}
+		onclick={openScout}
+	/>
+{/snippet}
+
+{#if isMenuSidebar()}
+	{#if getIsContextMenuOpen()}
+		<div
+			bind:this={div}
+			class="absolute py-2 flex flex-col z-50 bg-popover text-popover-foreground min-w-[8rem] rounded-md border p-1 shadow-md focus:outline-hidden"
+			style={style}
+		>
+			{@render menuItems()}
+		</div>
+	{/if}
+{:else}
+	{#if getIsContextMenuOpen()}
+		<div
+			class="w-full absolute bottom-2 px-2 z-50"
+			transition:slide={{ duration: 70 }}
+		>
+			<div
+				bind:this={div}
+				class="w-full flex flex-col bg-popover text-popover-foreground rounded-md border p-1 py-2 shadow-md focus:outline-hidden"
+			>
+				{@render menuItems()}
+			</div>
+		</div>
+	{/if}
 {/if}

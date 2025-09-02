@@ -1,10 +1,12 @@
 import { json } from '@sveltejs/kit';
 import {env} from '$env/dynamic/private'
 import { getServerConfig } from '@/lib/config/config.server';
-import { hasFeatureAnywhere, noPermResult } from '@/lib/user/checkPerm';
+import { hasFeatureAnywhere } from '@/lib/user/checkPerm';
+
+import { noPermResult } from '@/lib/server/api/results';
 
 export async function GET({ params, locals }) {
-	if (!hasFeatureAnywhere(locals.perms, "pokemon")) return json(noPermResult)
+	if (!hasFeatureAnywhere(locals.perms, "pokemon")) return json(noPermResult())
 
 	let url = getServerConfig().golbat.url || env.GOLBAT_BACKEND_URL
 	url += "/api/pokemon/id/" + params.id

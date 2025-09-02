@@ -1,9 +1,11 @@
 import { json } from '@sveltejs/kit';
 import { query } from '@/lib/db.server';
-import { hasFeatureAnywhere, noPermResult } from '@/lib/user/checkPerm';
+import { hasFeatureAnywhere } from '@/lib/user/checkPerm';
+
+import { noPermResult } from '@/lib/server/api/results';
 
 export async function POST({ request, locals }) {
-	if (!hasFeatureAnywhere(locals.perms, "gym")) return json(noPermResult)
+	if (!hasFeatureAnywhere(locals.perms, "gym")) return json(noPermResult())
 
 	const reqBody = await request.json()
 	const result = await query(

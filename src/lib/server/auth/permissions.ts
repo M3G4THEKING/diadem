@@ -8,7 +8,7 @@ import { type KojiFeatures } from "@/lib/koji";
 import { fetchKojiGeofences } from "@/lib/koji.server";
 import type { Polygon } from 'geojson';
 
-export type FeaturesKey = "*" | "pokemon" | "gym" | "pokestop" | "station" | "weather" | "s2cell";
+export type FeaturesKey = "*" | "pokemon" | "gym" | "pokestop" | "station" | "weather" | "s2cell" | "scout";
 type PermArea = {
 	name: string;
 	features: FeaturesKey[];
@@ -46,7 +46,7 @@ function handleRule(rule: ConfigRule, perms: Perms, geofences: KojiFeatures | un
 					);
 					continue;
 				}
-				
+
 				area = { name: ruleArea, features: [], polygon: kojiFeature.geometry };
 				perms.areas.push(area);
 			}

@@ -1,4 +1,6 @@
 import maplibre from 'maplibre-gl';
+import { getOpenedMenu } from '@/lib/menus.svelte';
+import { setCurrentScoutCenter } from '@/lib/scout.svelte';
 
 export let pressTimer: NodeJS.Timeout[] = [];
 export const longPressDuration = 500;
@@ -24,6 +26,11 @@ export function setContextMenuEvent(event: maplibre.MapTouchEvent | maplibre.Map
 }
 
 export function onContextMenu(event: maplibre.MapTouchEvent | maplibre.MapMouseEvent) {
+	if (getOpenedMenu() === "scout") {
+		setCurrentScoutCenter({ lat: event.lngLat.lat, lon: event.lngLat.lng })
+		return
+	}
+
 	setContextMenuEvent(event);
 	setIsContextMenuOpen(true);
 }

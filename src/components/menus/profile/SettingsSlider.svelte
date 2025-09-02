@@ -9,7 +9,6 @@
 	}: {
 		onchange: (value: number) => void,
 		value: number,
-		title: string,
 		steps: number[],
 		labels: { [key: number]: string }
 	} = $props();

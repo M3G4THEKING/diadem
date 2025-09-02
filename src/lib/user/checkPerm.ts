@@ -1,17 +1,12 @@
 import type { FeaturesKey, Perms } from "@/lib/server/auth/permissions";
-import type { Bounds } from '@/lib/mapObjects/mapBounds';
-import { featureCollection, intersect, polygon, polygonize, feature as makeFeature, bbox } from '@turf/turf';
-import type { Feature, Polygon } from 'geojson';
-
-export const noPermResult = {
-	error: "Missing permissions",
-	result: []
-};
+import type { Bounds } from "@/lib/mapObjects/mapBounds";
+import { bbox, feature as makeFeature, featureCollection, intersect, polygon } from "@turf/turf";
+import type { Feature, Polygon } from "geojson";
 
 function isFeatureInFeatureList(featureList: FeaturesKey[] | undefined, feature: FeaturesKey) {
-	if (featureList === undefined) return false
+	if (featureList === undefined) return false;
 
-	return featureList.includes("*") || featureList.includes(feature)
+	return featureList.includes("*") || featureList.includes(feature);
 }
 
 export function hasFeatureAnywhere(perms: Perms, feature: FeaturesKey) {
@@ -19,49 +14,53 @@ export function hasFeatureAnywhere(perms: Perms, feature: FeaturesKey) {
 
 	for (const area of perms.areas ?? []) {
 		if (isFeatureInFeatureList(area.features, feature)) {
-			return true
+			return true;
 		}
 	}
-	return false
+	return false;
 }
 
 export function checkFeatureInBounds(perms: Perms, feature: FeaturesKey, bounds: Bounds): Bounds {
-	if (isFeatureInFeatureList(perms.everywhere, feature)) return bounds
+	if (isFeatureInFeatureList(perms.everywhere, feature)) return bounds;
 
-	const start = performance.now()
+	const start = performance.now();
 
 	const allPolygons: Feature<Polygon>[] = [
-		polygon([[
-			[bounds.minLon, bounds.minLat],
-			[bounds.minLon, bounds.maxLat],
-			[bounds.maxLon, bounds.maxLat],
-			[bounds.maxLon, bounds.minLat],
-			[bounds.minLon, bounds.minLat]
-		]])
-	]
+		polygon([
+			[
+				[bounds.minLon, bounds.minLat],
+				[bounds.minLon, bounds.maxLat],
+				[bounds.maxLon, bounds.maxLat],
+				[bounds.maxLon, bounds.minLat],
+				[bounds.minLon, bounds.minLat]
+			]
+		])
+	];
 
 	for (const area of perms.areas) {
 		if (isFeatureInFeatureList(area.features, feature)) {
-			allPolygons.push(makeFeature(area.polygon))
+			allPolygons.push(makeFeature(area.polygon));
 		}
 	}
 
 	if (allPolygons.length === 1) {
-		return bounds
+		return bounds;
 	}
 
-	const intersection = intersect(featureCollection(allPolygons))
+	const intersection = intersect(featureCollection(allPolygons));
 
-	console.debug(`CheckFeatureInBound for ${feature} with ${allPolygons.length} polygons took ${performance.now() - start} ms`)
+	console.debug(
+		`CheckFeatureInBound for ${feature} with ${allPolygons.length} polygons took ${performance.now() - start} ms`
+	);
 
-	if (!intersection) return bounds
+	if (!intersection) return bounds;
 
-	const result = bbox(intersection)
+	const result = bbox(intersection);
 
 	return {
 		minLon: result[0],
 		minLat: result[1],
 		maxLon: result[2],
 		maxLat: result[3]
-	}
+	};
 }

@@ -15,6 +15,7 @@
 	<Drawer.Portal>
 		<Drawer.Content
 			class="after:h-0! duration-150! touch-auto! fixed z-10 w-full h-full overflow-y-scroll bottom-0 pointer-events-none"
+			style="{getOpenedMenu() === 'scout' ? 'height: fit-content !important;' : '' }"
 		>
 			<div
 				class="pb-20 px-2 pt-2 mt-40 min-h-full rounded-t-xl border border-t-border bg-card/60 backdrop-blur-sm pointer-events-auto"

@@ -1,0 +1,39 @@
+import { hasFeatureAnywhere } from '@/lib/user/checkPerm';
+import { json, redirect } from '@sveltejs/kit';
+import type { MapObjectRequestData } from '@/lib/mapObjects/updateMapObject';
+import type { ScoutRequest } from '@/lib/scout.svelte';
+import { getServerConfig } from '@/lib/config/config.server';
+import { addScoutEntries, getScoutQueue } from '@/lib/server/api/dragoniteApi';
+
+import { noPermResult, result } from '@/lib/server/api/results';
+
+export async function POST({ request, locals }) {
+	// TODO: rate limit
+	if (!hasFeatureAnywhere(locals.perms, "scout")) return json(noPermResult(undefined))
+
+	const scoutData: ScoutRequest = await request.json()
+
+	if (!scoutData.coords) return json(result(undefined, "No Coords"))
+
+	const username = locals.user?.username ?? "unknown user from maltemap"
+	const locations = scoutData.coords.map(c => [c.lat, c.lon])
+	const success = await addScoutEntries(username, locations)
+
+	if (success) {
+		return json(result())
+	} else {
+		return json(result(undefined, "Internal Error"))
+	}
+}
+
+export async function GET({ request, locals }) {
+	if (!hasFeatureAnywhere(locals.perms, "scout")) return json(noPermResult(undefined))
+
+	const response = await getScoutQueue()
+
+	if (response === undefined) {
+		return json(result(undefined, "Internal Error"))
+	} else {
+		return json(result(response))
+	}
+}

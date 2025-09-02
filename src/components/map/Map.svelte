@@ -11,7 +11,12 @@
 	import { isWebglSupported } from '@/lib/map/utils';
 	import { clearUpdateMapObjectsInterval, resetUpdateMapObjectsInterval } from '@/lib/map/mapObjectsInterval';
 	import { getMap, setMap } from '@/lib/map/map.svelte';
-	import { clearPressTimer, onContextMenu } from '@/lib/map/contextmenu.svelte';
+	import {
+		clearPressTimer,
+		getContextMenuEvent,
+		getIsContextMenuOpen,
+		onContextMenu
+	} from '@/lib/map/contextmenu.svelte';
 	import { clearSessionImageUrls, getMapObjectsGeoJson } from '@/lib/map/featuresManage.svelte';
 	import { loadMapObjectInterval } from '@/lib/map/loadMapObjects';
 	import { onMapMove, onMapMoveEnd, onMapMoveStart, onTouchStart, onWindowFocus } from '@/lib/map/events';
@@ -25,6 +30,9 @@
 	import { hasLoadedFeature, LoadedFeature } from '@/lib/initialLoad.svelte';
 	import { openToast } from '@/components/ui/toast/toastUtils.svelte';
 	import { addMapObject, getMapObjects } from '@/lib/mapObjects/mapObjectsState.svelte';
+	import MarkerCurrentLocation from '@/components/map/MarkerCurrentLocation.svelte';
+	import MarkerContextMenu from '@/components/map/MarkerContextMenu.svelte';
+	import { getCurrentScoutData } from '@/lib/scout.svelte';
 
 	let map: maplibre.Map | undefined = $state(undefined);
 	let debugRerender: boolean = $state(true);
@@ -130,6 +138,8 @@
 	>
 		<S2CellLayer id="s2cells" data={getS2CellGeojson()} />
 		<S2CellLayer id="selectedWeatherLayer" data={getSelectedWeatherS2Cells()} />
+		<S2CellLayer id="scoutBigPoints" data={getCurrentScoutData().bigPoints} />
+		<S2CellLayer id="scoutSmallPoints" data={getCurrentScoutData().smallPoints} />
 
 		<GeoJSON
 			id="mapObjects"
@@ -155,17 +165,8 @@
 			/>
 		</GeoJSON>
 
-		{#if getCurrentLocation()}
-			<Marker lngLat={getCurrentLocation()}>
-				<div class="relative w-4 h-4 rounded-full bg-sky-500 outline-white outline-4">
-					{#if getAnimateLocationMarker()}
-						<div
-							class="absolute left-1/2 top-1/2 -translate-1/2 bg-sky-500/75 w-5 h-5 rounded-full duration-1500 animate-ping"
-						></div>
-					{/if}
-				</div>
-			</Marker>
-		{/if}
+		<MarkerCurrentLocation />
+		<MarkerContextMenu />
 	</MapLibre>
 {:else}
 	<div class="mx-auto w-fit">

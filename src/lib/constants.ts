@@ -46,6 +46,16 @@ export const DISCORD_REFRESH_INTERVAL = 60 * 60 * 24
 export const PERMISSION_UPDATE_INTERVAL = 5 * 60
 
 /**
+ * The radius in which a bot can see wild pokemon, in meters
+ */
+export const RADIUS_POKEMON = 70
+
+/**
+ * The radius in which scout mode requests cells, in meters
+ */
+export const RADIUS_SCOUT_GMO = 1000
+
+/**
  * All languages supported by the project
  */
 export const AVAILABLE_LANGUAGES = [

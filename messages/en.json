@@ -151,5 +151,10 @@
 	"unknown_alignment": "Unknown Alignment",
 	"unknown_generation": "Unknown Generation",
 	"unknown_quest": "Unknown Quest",
-	"unknown_character": "Unknown Grunt"
+	"unknown_character": "Unknown Grunt",
+	"nav_scout": "Scout",
+	"scout_area_size": "Area Size",
+	"scout_queue_position": "Position in queue",
+	"scout_toast_success": "Started scouting, please wait a few seconds",
+	"scout_toast_error": "There was an error while scouting, please try again"
 }
