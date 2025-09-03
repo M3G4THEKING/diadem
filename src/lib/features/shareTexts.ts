@@ -43,29 +43,29 @@ function getPokemonShareText(data: PokemonData) {
 	let text = "";
 
 	if (hasTimer(data)) {
-		text += `${m.popup_despawns()} ${timestampToLocalTime(data.expire_timestamp)}\n`;
+		text += `🕜 ${m.popup_despawns()} ${timestampToLocalTime(data.expire_timestamp)}\n`;
 	} else {
-		text += `${m.popup_found()} ${timestampToLocalTime(data.first_seen_timestamp)}\n`;
+		text += `🕜 ${m.popup_found()} ${timestampToLocalTime(data.first_seen_timestamp)}\n`;
 	}
 
 	if (data.cp !== null && data.level !== null) {
-		text += `${m.pogo_cp({ cp: data.cp })} (${m.pogo_level({ level: data.level })})\n`;
+		text += `📈 ${m.pogo_cp({ cp: data.cp })} (${m.pogo_level({ level: data.level })})\n`;
 	}
 
 	if (data.iv !== null) {
-		text += `${m.pogo_ivs()}: ${data.iv.toFixed(1)}% (${data.atk_iv ?? "?"}/${data.def_iv ?? "?"}/${data.sta_iv ?? "?"})\n`;
+		text += `📚 ${m.pogo_ivs()}: ${data.iv.toFixed(1)}% (${data.atk_iv ?? "?"}/${data.def_iv ?? "?"}/${data.sta_iv ?? "?"})\n`;
 	}
 
 	if (showLittle(data)) {
-		text += `${m.league_rank({ league: m.little_league() })}: ${getRank(data, "little")}\n`;
+		text += `🏆 ${m.league_rank({ league: m.little_league() })}: ${getRank(data, "little")}\n`;
 	}
 
 	if (showGreat(data)) {
-		text += `${m.league_rank({ league: m.great_league() })}: ${getRank(data, "great")}\n`;
+		text += `🏆 ${m.league_rank({ league: m.great_league() })}: ${getRank(data, "great")}\n`;
 	}
 
 	if (showUltra(data)) {
-		text += `${m.league_rank({ league: m.ultra_league() })}: ${getRank(data, "ultra")}\n`;
+		text += `🏆 ${m.league_rank({ league: m.ultra_league() })}: ${getRank(data, "ultra")}\n`;
 	}
 
 	return text;
@@ -84,22 +84,19 @@ function getQuestShareText(isAr: boolean, questReward?: string, questTitle?: str
 	const taskText = mQuest(questTitle, questTarget)
 	if (taskText) texts.push(taskText)
 
-	return texts.join(" · ") + '\n'
+	if (!texts) return ""
+
+	return "🔎 " + texts.join(" · ") + '\n'
 }
 
 function getPokestopShareText(data: PokestopData) {
-	const texts: string[] = []
+	let text = ""
 
-	const arQuest = getQuestShareText(true, data.quest_rewards, data.quest_title, data.quest_target)
-	const noArQuest = getQuestShareText(false, data.alternative_quest_rewards, data.alternative_quest_title, data.alternative_quest_target)
-	let questText = ""
-	if (arQuest && noArQuest) questText = m.pogo_quests() + ":\n"
-	else if (arQuest || noArQuest) questText = m.pogo_quest() + ":\n"
-	questText += arQuest + noArQuest
-	if (questText) texts.push(questText)
+	text += getQuestShareText(true, data.quest_rewards, data.quest_title, data.quest_target)
+	text += getQuestShareText(false, data.alternative_quest_rewards, data.alternative_quest_title, data.alternative_quest_target)
 
 	if (hasFortActiveLure(data)) {
-		texts.push(`${mItem(data.lure_id)} (${timestampToLocalTime(data.lure_expire_timestamp)})\n`)
+		text += `🧲 ${mItem(data.lure_id)} (${timestampToLocalTime(data.lure_expire_timestamp)})\n`
 	}
 
 	let invasionText = ''
@@ -109,17 +106,17 @@ function getPokestopShareText(data: PokestopData) {
 		if (!incident.id || incident.expiration < currentTimestamp()) return
 
 		if (isIncidentInvasion(incident)) {
-			invasionText += `${mCharacter(incident.character)} (${timestampToLocalTime(incident.expiration, true)})\n`
+			invasionText += `🥷 ${mCharacter(incident.character)} (${timestampToLocalTime(incident.expiration, true)})\n`
 		} else if (isIncidentKecleon(incident)) {
-			kecleonText += `${mPokemon({ pokemon_id: 352 })} (${timestampToLocalTime(incident.expiration)})\n`
+			kecleonText += `🦎 ${mPokemon({ pokemon_id: 352 })} (${timestampToLocalTime(incident.expiration)})\n`
 		} else if (isIncidentContest()) {
-			contestText += `${getContestText(data)} (${timestampToLocalTime(incident.expiration, true)})\n`
+			contestText += `🏅 ${getContestText(data)} (${timestampToLocalTime(incident.expiration, true)})\n`
 		}
 	})
 
-	if (invasionText) texts.push(invasionText)
-	if (kecleonText) texts.push(kecleonText)
-	if (contestText) texts.push(contestText)
+	if (invasionText) text += invasionText
+	if (kecleonText) text += kecleonText
+	if (contestText) text += contestText
 
 	return texts.join("\n")
 }
@@ -128,7 +125,7 @@ function getGymShareText(data: GymData) {
 	let text = ""
 
 	if (hasActiveRaid(data)) {
-		text += `${mRaid(data.raid_level)} `
+		text += `⚔️ ${mRaid(data.raid_level)} `
 
 		if (data.raid_pokemon_id) text += `· ${mPokemon(getRaidPokemon(data))} `
 		if (isRaidHatched(data)) {
@@ -139,7 +136,7 @@ function getGymShareText(data: GymData) {
 	}
 
 	if (!isFortOutdated(data.updated)) {
-		text += `${m.gym_members()}: ${GYM_SLOTS - (data.availble_slots ?? 0)}/${GYM_SLOTS}\n`
+		text += `👥 ${m.gym_members()}: ${GYM_SLOTS - (data.availble_slots ?? 0)}/${GYM_SLOTS}\n`
 	}
 	return text
 }
@@ -148,10 +145,10 @@ function getStationShareText(data: StationData) {
 	let text = ""
 
 	if (data.battle_pokemon_id) {
-		text += `${m.pogo_station()}: ${data.name}\n`
+		text += `📍 ${m.pogo_station()}: ${data.name}\n`
 	}
-	text += `${m.start()}: ${timestampToLocalTime(data.start_time, true)}\n`
-	text += `${m.end()}: ${timestampToLocalTime(data.end_time, true)}\n`
+	text += `🕜 ${m.start()}: ${timestampToLocalTime(data.start_time, true)}\n`
+	text += `🕜 ${m.end()}: ${timestampToLocalTime(data.end_time, true)}\n`
 
 	return text
 }
