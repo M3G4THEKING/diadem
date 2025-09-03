@@ -5,7 +5,7 @@
 	import { goto } from '$app/navigation';
 	import * as m from '@/lib/paraglide/messages';
 	import { getShareText } from '@/lib/features/shareTexts';
-	import { getIconForMap } from '@/lib/services/uicons.svelte.js';
+	import { getIconForMap, getIconPokemon } from '@/lib/services/uicons.svelte.js';
 	import { browser } from '$app/environment';
 	import type { MapData } from '@/lib/types/mapObjectData/mapObjects';
 	import type { PageProps } from './$types';
@@ -45,10 +45,14 @@
 		if (!data || !data.type) return '';
 		const mapData = data as MapData
 
-		if (mapData.type === "pokemon" && !mapData.id) return ''
-		if (mapData.type === "station" && mapData.battle_pokemon_id) return mPokemon(getStationPokemon(mapData as StationData))
+		let icon = ""
 
-		return mapData.url ?? getIconForMap(mapData, getDefaultIconSet(mapData.type).id) ?? '';
+		if (mapData.type === "pokemon" && !mapData.id) return ''
+		if (mapData.type === "station" && mapData.battle_pokemon_id) {
+			icon = getIconPokemon(getStationPokemon(mapData as StationData), getDefaultIconSet("pokemon").id)
+		}
+
+		return icon || mapData.url || getIconForMap(mapData, getDefaultIconSet(mapData.type).id) || '';
 	});
 
 	onMount(() => {
