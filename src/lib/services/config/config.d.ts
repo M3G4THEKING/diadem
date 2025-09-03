@@ -29,6 +29,7 @@ export type UiconSet = {
 
 type General = {
 	mapName: string
+	defaultLocale: string
 }
 
 export type DbCreds = {
@@ -73,7 +74,7 @@ export type ClientConfig = {
 	}[]
 	uiconSets: UiconSet[]
 	general: General,
-	discord: ClientDiscord
+	discord: ClientDiscord,
 }
 
 export type ServerConfig = {

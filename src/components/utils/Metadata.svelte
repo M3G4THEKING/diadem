@@ -3,18 +3,38 @@
 
 	let {
 		title,
-		description
+		embedTitle,
+		description,
+		image,
+		color
 	}: {
 		title?: string,
-		description?: string
+		embedTitle?: string,
+		description?: string,
+		image?: string,
+		color?: string
 	} = $props();
 
-	let pageTitle = $derived(getConfig().general.mapName + (title ? `| ${title}` : ''));
+	let pageTitle = $derived(getConfig().general.mapName + (title ? ` | ${title}` : ''));
 </script>
 
 <title>{pageTitle}</title>
-<meta property="og:title" content={pageTitle}>
+<meta property="og:title" content={title ? pageTitle : embedTitle}>
+<meta name="twitter:title" content={title ? pageTitle : embedTitle}>
+
+<meta property="og:site_name" content={getConfig().general.mapName}>
+<meta name="twitter:site" content={getConfig().general.mapName}>
+
 
 {#if description}
 	<meta property="og:description" content={description}>
+	<meta name="twitter:description" content={description}>
+{/if}
+
+{#if image}
+	<meta property="og:image" content={image} />
+{/if}
+
+{#if color}
+	<meta name="theme-color" content={color}>
 {/if}

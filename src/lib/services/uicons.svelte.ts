@@ -17,18 +17,28 @@ const DEFAULT_URL = "https://raw.githubusercontent.com/WatWowMap/wwm-uicons/main
 
 const iconSets: {[key: string]: UICONS} = {}
 
-export async function initIconSet(id: string, url: string) {
+export async function initIconSet(id: string, url: string, thisFetch: typeof fetch = fetch) {
 	if (id in iconSets) return
+
+	url = url.endsWith('/') ? url.slice(0, -1) : url
+
 	const newSet = new UICONS(url)
 	iconSets[id] = newSet
-	await newSet.remoteInit()
+
+	const data = await thisFetch(`${url}/index.json`)
+	if (!data.ok) {
+		console.error("Failed to load uicon set: " + id)
+		return
+	}
+	const indexFile = await data.json()
+	newSet.init(indexFile)
 }
 
-export async function initAllIconSets() {
+export async function initAllIconSets(thisFetch: typeof fetch = fetch) {
 	await Promise.all(
 		[
-			...getConfig().uiconSets.map(s => initIconSet(s.id, s.url)),
-			initIconSet(DEFAULT_UICONS, DEFAULT_URL)
+			...getConfig().uiconSets.map(s => initIconSet(s.id, s.url, thisFetch)),
+			initIconSet(DEFAULT_UICONS, DEFAULT_URL, thisFetch)
 		]
 	)
 }

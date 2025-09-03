@@ -57,6 +57,7 @@ password = "XgwmleVgzYcp8q2kwELFzhBixeK7DGv2GffQJQNinwihAdSV5AWBr"
 
 [client.general]
 mapName = "Maltemap"
+defaultLocale = "en"
 
 ### Map Styles
 

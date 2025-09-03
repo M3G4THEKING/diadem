@@ -2,28 +2,29 @@ import {
 	addMapObject,
 	addMapObjects,
 	allMapTypes,
-	allMinorMapTypes, clearAllMapObjects,
+	allMinorMapTypes,
+	clearAllMapObjects,
 	clearMapObjects,
 	getMapObjects
-} from '@/lib/mapObjects/mapObjectsState.svelte.js';
-import { type Bounds, getBounds } from '@/lib/mapObjects/mapBounds';
+} from "@/lib/mapObjects/mapObjectsState.svelte.js";
+import { type Bounds, getBounds } from "@/lib/mapObjects/mapBounds";
 import type {
 	MapData,
 	MapObjectType,
 	MinorMapObjectType
-} from '@/lib/types/mapObjectData/mapObjects';
-import { getUserSettings } from '@/lib/services/userSettings.svelte.js';
-import type { AllFilters, FilterS2Cell } from '@/lib/features/filters/filters';
-import { updateFeatures } from '@/lib/map/featuresGen.svelte';
-import { clearS2Cells, updateS2CellGeojson } from '@/lib/mapObjects/s2cells.svelte.js';
-import { updateWeather } from '@/lib/mapObjects/weather.svelte';
-import { hasFeatureAnywhere } from '@/lib/services/user/checkPerm';
-import { getUserDetails } from '@/lib/services/user/userDetails.svelte';
+} from "@/lib/types/mapObjectData/mapObjects";
+import { getUserSettings } from "@/lib/services/userSettings.svelte.js";
+import type { AllFilters, FilterS2Cell } from "@/lib/features/filters/filters";
+import { updateFeatures } from "@/lib/map/featuresGen.svelte";
+import { clearS2Cells, updateS2CellGeojson } from "@/lib/mapObjects/s2cells.svelte.js";
+import { updateWeather } from "@/lib/mapObjects/weather.svelte";
+import { hasFeatureAnywhere } from "@/lib/services/user/checkPerm";
+import { getUserDetails } from "@/lib/services/user/userDetails.svelte";
 
-export type MapObjectRequestData = Bounds & { filter: AllFilters | undefined }
+export type MapObjectRequestData = Bounds & { filter: AllFilters | undefined };
 
 export function getMapObjectId(type: MapObjectType, id: string) {
-	return type + '-' + id
+	return type + "-" + id;
 }
 
 export function makeMapObject(data: MapData, type: MapObjectType): MapData {
@@ -31,34 +32,13 @@ export function makeMapObject(data: MapData, type: MapObjectType): MapData {
 	data.mapId = getMapObjectId(type, data.id);
 	addMapObject(data);
 
-	return data
-}
-
-export async function getOneMapObject(
-	type: MapObjectType,
-	id: string,
-	thisFetch?: typeof fetch
-): Promise<{ lat: number, lon: number } | undefined> {
-	const response = await (thisFetch ?? fetch)('/api/' + type + '/' + id);
-	const data = await response.json();
-
-	if (!data) return;
-	if (data.error) {
-		console.error('Error while fetching ' + type + ': ' + data.error);
-		return;
-	}
-
-	if (!data.result) {
-		return;
-	}
-
-	return data.result[0];
+	return data;
 }
 
 export function clearMap() {
 	// TODO: Also do this on login
-	clearAllMapObjects()
-	clearS2Cells()
+	clearAllMapObjects();
+	clearS2Cells();
 	updateFeatures(getMapObjects());
 }
 
@@ -66,24 +46,24 @@ export async function updateMapObject(
 	type: MapObjectType | MinorMapObjectType,
 	removeOld: boolean = true
 ) {
-	if (!hasFeatureAnywhere(getUserDetails().permissions, type)) return
+	if (!hasFeatureAnywhere(getUserDetails().permissions, type)) return;
 
 	const startTime = performance.now();
 	let filter: AllFilters | undefined = undefined;
 
-	if (type === 'pokemon') {
+	if (type === "pokemon") {
 		filter = getUserSettings().filters.pokemonMajor;
-	} else if (type === 'pokestop') {
+	} else if (type === "pokestop") {
 		filter = getUserSettings().filters.pokestopPlain;
-	} else if (type === 'gym') {
+	} else if (type === "gym") {
 		filter = getUserSettings().filters.gymPlain;
-	} else if (type === 'station') {
+	} else if (type === "station") {
 		filter = getUserSettings().filters.stationMajor;
-	} else if (type === 's2cell') {
-		filter = getUserSettings().filters.s2cell
+	} else if (type === "s2cell") {
+		filter = getUserSettings().filters.s2cell;
 	}
 
-	if ((!filter || filter.type === 'none') && type !== "s2cell") {
+	if ((!filter || filter.type === "none") && type !== "s2cell") {
 		clearMapObjects(type);
 		updateFeatures(getMapObjects());
 		return;
@@ -94,19 +74,19 @@ export async function updateMapObject(
 		filter
 	};
 
-	if (type === 's2cell') {
+	if (type === "s2cell") {
 		updateS2CellGeojson(body as { filter: FilterS2Cell } & Bounds);
 		return;
 	}
 
 	const fetchStart = performance.now();
-	const response = await fetch('/api/' + type, { method: 'POST', body: JSON.stringify(body) });
+	const response = await fetch("/api/" + type, { method: "POST", body: JSON.stringify(body) });
 	const data = await response.json();
-	console.debug('updateMapObject | fetch took ' + (performance.now() - fetchStart) + 'ms');
+	console.debug("updateMapObject | fetch took " + (performance.now() - fetchStart) + "ms");
 
 	if (!data) return;
 	if (data.error) {
-		console.error('Error while fetching ' + type + ': ' + data.error);
+		console.error("Error while fetching " + type + ": " + data.error);
 		return;
 	}
 
@@ -125,7 +105,7 @@ export async function updateMapObject(
 		// }
 		clearMapObjects(type);
 		console.debug(
-			'updateMapObject | clearMapObject took ' + (performance.now() - removeStart) + 'ms'
+			"updateMapObject | clearMapObject took " + (performance.now() - removeStart) + "ms"
 		);
 	}
 
@@ -143,14 +123,14 @@ export async function updateMapObject(
 		// }
 		addMapObjects(data.result, type);
 		// setMapObjectState(mapObjects)
-		console.debug('updateMapObject | addMapObjects took ' + (performance.now() - makeStart) + 'ms');
+		console.debug("updateMapObject | addMapObjects took " + (performance.now() - makeStart) + "ms");
 	} catch (e) {
 		console.log(data);
 		console.error(e);
 	}
 
 	console.debug(
-		'updateMapObject | type ' + type + ' took ' + (performance.now() - startTime) + 'ms'
+		"updateMapObject | type " + type + " took " + (performance.now() - startTime) + "ms"
 	);
 	updateFeatures(getMapObjects());
 }

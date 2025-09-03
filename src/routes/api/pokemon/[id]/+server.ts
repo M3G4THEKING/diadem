@@ -21,6 +21,11 @@ export async function GET({ params, locals }) {
 		}
 	)
 
+	if (!response.ok) return json({
+		result: [],
+		error: "Error"
+	}, { status: response.status });
+
 	const data = await response.json()
 
 	return json({

@@ -148,7 +148,7 @@ class FrameRateControl {
 	};
 }
 
-if (window.mapboxgl) {
+if (window?.mapboxgl) {
 	mapboxgl.FrameRateControl = FrameRateControl;
 }
 

@@ -20,10 +20,10 @@ export const prefixes = {
 
 let remoteLocales: { [key: string]: { [key: string]: string } } = {}
 
-export async function loadRemoteLocale(languageTag: string) {
+export async function loadRemoteLocale(languageTag: string, thisFetch: typeof fetch = fetch) {
 	if (Object.keys(remoteLocales).includes(languageTag)) return
 
-	const result = await fetch("/api/locale/" + languageTag)
+	const result = await thisFetch("/api/locale/" + languageTag)
 	const data = await result.json()
 	remoteLocales[languageTag] = data
 }

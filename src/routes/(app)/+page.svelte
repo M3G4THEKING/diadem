@@ -3,8 +3,8 @@
 	import Map from '@/components/map/Map.svelte';
 	import ContextMenu from '@/components/ui/contextmenu/ContextMenu.svelte';
 	import { getConfig } from '@/lib/services/config/config';
-	import { getCurrentSelectedData } from '@/lib/mapObjects/currentSelectedState.svelte';
-	import { resetMap } from '@/lib/map/map.svelte';
+	import { getCurrentSelectedData } from '@/lib/mapObjects/currentSelectedState.svelte.js';
+	import { resetMap } from '@/lib/map/map.svelte.js';
 	import WeatherOverview from '@/components/map/WeatherOverview.svelte';
 	import { isSupportedFeature } from '@/lib/services/supportedFeatures';
 	import { getUserDetails } from '@/lib/services/user/userDetails.svelte.js';

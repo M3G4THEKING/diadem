@@ -1,33 +1,33 @@
-import { LngLat } from 'maplibre-gl';
+import maplibre from "maplibre-gl";
 
 export type LatLon = {
-	lat: number
-	lon: number
-}
+	lat: number;
+	lon: number;
+};
 
 export class Coords {
-	lat: number
-	lon: number
+	lat: number;
+	lon: number;
 
 	constructor(lat: number, lon: number) {
 		this.lat = lat;
 		this.lon = lon;
 	}
 
-	static infer(coords: LngLat | LatLon | number[]): Coords {
+	static infer(coords: maplibre.LngLat | LatLon | number[]): Coords {
 		if ("lng" in coords) {
-			return new Coords(coords.lat, coords.lng)
+			return new Coords(coords.lat, coords.lng);
 		} else if ("lon" in coords) {
-			return new Coords(coords.lat, coords.lon)
+			return new Coords(coords.lat, coords.lon);
 		} else if (Array.isArray(coords)) {
-			return new Coords(coords[1], coords[0])
+			return new Coords(coords[1], coords[0]);
 		} else {
-			throw new Error("Invalid Coordinate input: " + coords)
+			throw new Error("Invalid Coordinate input: " + coords);
 		}
 	}
 
-	maplibre(): LngLat {
-		return new LngLat(this.lon, this.lat)
+	maplibre(): maplibre.LngLat {
+		return new maplibre.LngLat(this.lon, this.lat);
 	}
 
 	internal() {
@@ -35,6 +35,6 @@ export class Coords {
 	}
 
 	geojson() {
-		return [this.lon, this.lat]
+		return [this.lon, this.lat];
 	}
 }

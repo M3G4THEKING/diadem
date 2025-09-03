@@ -6,46 +6,35 @@
 	import ImagePopup from '@/components/ui/popups/common/ImagePopup.svelte';
 	import { getIconPokemon } from '@/lib/services/uicons.svelte.js';
 	import {
+		ArrowLeftRight,
+		BicepsFlexed,
+		ChartSpline,
+		CircleSmall,
 		Clock,
 		ClockAlert,
-		SearchX,
+		LibraryBig,
 		MapPinX,
-		DraftingCompass,
-		ChartBar,
-		Ruler,
-		ClockArrowUp,
-		Gift,
-		ArrowLeftRight,
-		Search,
-		Swords,
 		Mars,
-		Venus,
-		CircleSmall,
-		Sun,
-		Umbrella,
-		CloudSun,
-		Cloudy,
-		Wind,
-		Snowflake,
-		Waves, CloudOff, BicepsFlexed, Percent, ChartNoAxesColumn, LibraryBig, ChartSpline, Trophy, SearchCheck
+		Ruler,
+		Search,
+		SearchCheck,
+		SearchX,
+		Swords,
+		Trophy,
+		Venus
 	} from 'lucide-svelte';
 	import IconValue from '@/components/ui/popups/common/IconValue.svelte';
-	import {getMasterPokemon, defaultProp} from '@/lib/services/masterfile';
-	import type { MasterPokemon } from '@/lib/types/masterfile';
-	import TextSeparator from '@/components/utils/TextSeparator.svelte';
-	import * as m from "@/lib/paraglide/messages"
+	import * as m from '@/lib/paraglide/messages';
 	import { getConfig } from '@/lib/services/config/config';
 	import { mMove, mPokemon, mWeather } from '@/lib/services/ingameLocale';
 	import TimeWithCountdown from '@/components/ui/popups/common/TimeWithCountdown.svelte';
 	import { getMapObjects } from '@/lib/mapObjects/mapObjectsState.svelte.js';
-	import { getPokemonSize, isFortOutdated } from '@/lib/utils/pogoUtils';
-	import type { GymData } from '@/lib/types/mapObjectData/gym';
-	import UpdatedTimes from '@/components/ui/popups/common/UpdatedTimes.svelte';
+	import { getPokemonSize } from '@/lib/utils/pogoUtils';
 	import { POKEMON_MIN_RANK } from '@/lib/constants';
 	import PvpEntry from '@/components/ui/popups/pokemon/PvpEntry.svelte';
 	import { getCurrentSelectedData } from '@/lib/mapObjects/currentSelectedState.svelte';
-
-	import { timestampToLocalTime } from '@/lib/utils/timestampToLocalTime';
+	import { getRank, hasTimer, showGreat, showLittle, showUltra } from '@/lib/utils/pokemonUtils';
+	import Metadata from '@/components/utils/Metadata.svelte';
 
 	let { mapId } : { mapId: string } = $props()
 	let data: PokemonData = $derived(getMapObjects()[mapId] as PokemonData ?? getCurrentSelectedData() as PokemonData)
@@ -53,41 +42,16 @@
 
 	// let masterPokemon: MasterPokemon | undefined = $derived(getMasterPokemon(data.pokemon_id))
 
-	function hasTimer() {
-		return data.expire_timestamp && data.expire_timestamp_verified
-	}
-
-	function getTitle() {
-		let title = getConfig().general.mapName
-		title += " | " + mPokemon(data)
-		return title
-	}
-
-	function getRank(league: "little" | "great" | "ultra") {
-		return data.pvp?.[league]?.[0]?.rank ?? 0
-	}
-
-	function showLittle() {
-		return getRank("little") > 0 && getRank("little") <= POKEMON_MIN_RANK
-	}
-
-	function showGreat() {
-		return getRank("great") > 0 && getRank("great") <= POKEMON_MIN_RANK
-	}
-
-	function showUltra() {
-		return getRank("ultra") > 0 && getRank("ultra") <= POKEMON_MIN_RANK
-	}
-</script>
+	</script>
 
 <svelte:head>
-	<title>{getTitle()}</title>
+	<Metadata title={mPokemon(data)}/>
 </svelte:head>
 
 {#snippet timer()}
-	<IconValue Icon={hasTimer() ? Clock : ClockAlert}>
+	<IconValue Icon={hasTimer(data) ? Clock : ClockAlert}>
 		<span>
-			{#if hasTimer()}
+			{#if hasTimer(data)}
 				{m.popup_despawns()}
 			{:else}
 				{m.popup_found()}
@@ -95,7 +59,7 @@
 		</span>
 
 		<TimeWithCountdown
-			expireTime={hasTimer() ? data.expire_timestamp : data.first_seen_timestamp}
+			expireTime={hasTimer(data) ? data.expire_timestamp : data.first_seen_timestamp}
 		/>
 	</IconValue>
 {/snippet}
@@ -136,30 +100,30 @@
 
 	{#if data.iv !== null}
 		<IconValue Icon={LibraryBig}>
-			IVs: <b>{data.iv.toFixed(1)}%</b>
+			{m.pogo_ivs()}: <b>{data.iv.toFixed(1)}%</b>
 			({data.atk_iv ?? "?"}/{data.def_iv ?? "?"}/{data.sta_iv ?? "?"})
 		</IconValue>
 	{/if}
 
 
-	{#if showLittle()}
+	{#if showLittle(data)}
 		<IconValue Icon={Trophy}>
 			{m.league_rank({ league: m.little_league() })}:
-			<b>#{getRank("little")}</b>
+			<b>#{getRank(data, "little")}</b>
 		</IconValue>
 	{/if}
 
-	{#if showGreat()}
+	{#if showGreat(data)}
 		<IconValue Icon={Trophy}>
 			{m.league_rank({ league: m.great_league() })}:
-			<b>#{getRank("great")}</b>
+			<b>#{getRank(data, "great")}</b>
 		</IconValue>
 	{/if}
 
-	{#if showUltra()}
+	{#if showUltra(data)}
 		<IconValue Icon={Trophy}>
 			{m.league_rank({ league: m.ultra_league() })}:
-			<b>#{getRank("ultra")}</b>
+			<b>#{getRank(data, "ultra")}</b>
 		</IconValue>
 	{/if}
 {/snippet}
@@ -207,7 +171,7 @@
 			{@render basicInfo()}
 		</div>
 
-		{#if showLittle() || showGreat() || showUltra()}
+		{#if showLittle(data) || showGreat(data) || showUltra(data)}
 		PVP Rankings:
 		<div class="mb-3 space-y-1">
 			{#each (data.pvp?.little ?? []) as entry}
