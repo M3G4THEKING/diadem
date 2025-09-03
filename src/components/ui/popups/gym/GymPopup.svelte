@@ -1,14 +1,13 @@
 <script lang="ts">
 	import type { GymData, GymDefender, Rsvp } from '@/lib/types/mapObjectData/gym';
 	import BasePopup from '@/components/ui/popups/BasePopup.svelte';
-	import { getIconGym, getIconPokemon, getIconRaidEgg } from '@/lib/uicons.svelte.js';
+	import { getIconGym, getIconPokemon, getIconRaidEgg } from '@/lib/services/uicons.svelte.js';
 	import ImagePopup from '@/components/ui/popups/common/ImagePopup.svelte';
 	import * as m from '@/lib/paraglide/messages';
 	import FortImage from '@/components/ui/popups/common/FortImage.svelte';
-	import { currentTimestamp, timestampToLocalTime } from '@/lib/utils.svelte.js';
-	import { mMove, mPokemon, mRaid } from '@/lib/ingameLocale';
+	import { mMove, mPokemon, mRaid } from '@/lib/services/ingameLocale';
 	import Countdown from '@/components/utils/Countdown.svelte';
-	import { getRaidPokemon, GYM_SLOTS, isFortOutdated } from '@/lib/pogoUtils';
+	import { getRaidPokemon, GYM_SLOTS, isFortOutdated } from '@/lib/utils/pogoUtils';
 	import { getMapObjects } from '@/lib/mapObjects/mapObjectsState.svelte.js';
 	import TimeWithCountdown from '@/components/ui/popups/common/TimeWithCountdown.svelte';
 	import {
@@ -24,10 +23,12 @@
 	import IconValue from '@/components/ui/popups/common/IconValue.svelte';
 	import UpdatedTimes from '@/components/ui/popups/common/UpdatedTimes.svelte';
 	import FortPowerUp from '@/components/ui/popups/common/FortPowerUp.svelte';
-	import { getConfig } from '@/lib/config/config';
+	import { getConfig } from '@/lib/services/config/config';
 	import Button from '@/components/ui/basic/Button.svelte';
 	import GymDefenderOverview from '@/components/ui/popups/gym/GymDefenderOverview.svelte';
 	import { getCurrentSelectedData } from '@/lib/mapObjects/currentSelectedState.svelte';
+	import { timestampToLocalTime } from '@/lib/utils/timestampToLocalTime';
+	import { currentTimestamp } from '@/lib/utils/currentTimestamp';
 
 	let { mapId }: { mapId: string } = $props();
 	let data: GymData = $derived(getMapObjects()[mapId] as GymData ?? getCurrentSelectedData() as GymData);

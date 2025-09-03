@@ -3,7 +3,7 @@
 	import { flyTo } from '@/lib/map/utils';
 	import SearchItem from '@/components/ui/search/SearchItem.svelte';
 	import { watch } from 'runed';
-	import { type AddressData, geocode } from '@/lib/geocoding';
+	import { type AddressData, geocode } from '@/lib/features/geocoding';
 	import * as m from '@/lib/paraglide/messages';
 
 	let {

@@ -1,4 +1,4 @@
-import { getConfig } from '@/lib/config/config';
+import { getConfig } from '@/lib/services/config/config';
 import type { MapMouseEvent } from 'maplibre-gl';
 import type { LayerClickInfo } from 'svelte-maplibre';
 import type { Feature } from '@/lib/map/featuresGen.svelte.js';
@@ -6,7 +6,7 @@ import type { MapData } from '@/lib/types/mapObjectData/mapObjects';
 import { getMapObjects } from '@/lib/mapObjects/mapObjectsState.svelte.js';
 import { getCurrentSelectedData, setCurrentSelectedData } from '@/lib/mapObjects/currentSelectedState.svelte';
 
-import { setIsContextMenuOpen } from '@/lib/map/contextmenu.svelte';
+import { setIsContextMenuOpen } from '@/lib/ui/contextmenu.svelte.js';
 
 export function closePopup() {
 	setCurrentSelectedData(null);

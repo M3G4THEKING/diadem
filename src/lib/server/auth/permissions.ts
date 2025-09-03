@@ -1,11 +1,11 @@
-import { type User } from "@/lib/server/auth/db/schema";
+import { type User } from "@/lib/server/db/internal/schema";
 import { setPermissions } from "@/lib/server/auth/auth";
 import { type DiscordGuildData, getGuildMemberInfo } from "@/lib/server/auth/discordDetails";
-import { getServerConfig } from "@/lib/config/config.server";
-import type { Permissions as ConfigRule } from "@/lib/config/config.d";
+import { getServerConfig } from "@/lib/services/config/config.server";
+import type { Permissions as ConfigRule } from "@/lib/services/config/config.d";
 import type { Bounds } from "@/lib/mapObjects/mapBounds";
-import { type KojiFeatures } from "@/lib/koji";
-import { fetchKojiGeofences } from "@/lib/koji.server";
+import { type KojiFeatures } from "@/lib/features/koji";
+import { fetchKojiGeofences } from "@/lib/server/api/kojiApi";
 import type { Polygon } from 'geojson';
 
 export type FeaturesKey = "*" | "pokemon" | "gym" | "pokestop" | "station" | "weather" | "s2cell" | "scout";

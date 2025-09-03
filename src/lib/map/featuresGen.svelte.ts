@@ -8,21 +8,22 @@ import {
 	getIconPokemon,
 	getIconRaidEgg,
 	getIconReward
-} from '@/lib/uicons.svelte.js';
+} from '@/lib/services/uicons.svelte.js';
 import {
 	getMapObjects,
 	type MapObjectsStateType
 } from '@/lib/mapObjects/mapObjectsState.svelte.js';
-import { currentTimestamp } from '@/lib/utils.svelte.js';
-import { getUserSettings } from '@/lib/userSettings.svelte.js';
+import { getUserSettings } from '@/lib/services/userSettings.svelte.js';
 import { FORT_OUTDATED_SECONDS, SELECTED_MAP_OBJECT_SCALE } from '@/lib/constants';
-import { getRaidPokemon, getStationPokemon, isFortOutdated, isIncidentInvasion } from '@/lib/pogoUtils';
-import type { UiconSet, UiconSetModifierType } from '@/lib/config/config.d';
+import { getRaidPokemon, getStationPokemon, isFortOutdated, isIncidentInvasion } from '@/lib/utils/pogoUtils';
+import type { UiconSet, UiconSetModifierType } from '@/lib/services/config/config.d';
 import type { MapData, MapObjectType } from '@/lib/types/mapObjectData/mapObjects';
 import type { Coordinates } from 'maplibre-gl';
 import { untrack } from 'svelte';
 import { getCurrentSelectedMapId } from '@/lib/mapObjects/currentSelectedState.svelte.js';
 import { updateMapObjectsGeoJson } from '@/lib/map/featuresManage.svelte';
+
+import { currentTimestamp } from '@/lib/utils/currentTimestamp';
 
 export type IconProperties = {
 	imageUrl: string;

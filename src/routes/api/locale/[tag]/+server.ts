@@ -1,8 +1,8 @@
 import { json } from '@sveltejs/kit';
 import {env} from '$env/dynamic/private'
-import { getServerConfig } from '@/lib/config/config.server';
-import { hasFeatureAnywhere } from '@/lib/user/checkPerm';
-import { prefixes as localePrefixesObject } from '@/lib/ingameLocale';
+import { getServerConfig } from '@/lib/services/config/config.server';
+import { hasFeatureAnywhere } from '@/lib/services/user/checkPerm';
+import { prefixes as localePrefixesObject } from '@/lib/services/ingameLocale';
 import { AVAILABLE_LANGUAGES } from '@/lib/constants';
 import TTLCache from '@isaacs/ttlcache';
 

@@ -1,6 +1,6 @@
 import { json } from '@sveltejs/kit';
-import { query } from '@/lib/db.server';
-import { hasFeatureAnywhere } from '@/lib/user/checkPerm';
+import { query } from '@/lib/server/db/external/internalQuery';
+import { hasFeatureAnywhere } from '@/lib/services/user/checkPerm';
 
 import { noPermResult } from '@/lib/server/api/results';
 

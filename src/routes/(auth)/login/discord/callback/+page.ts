@@ -1,5 +1,5 @@
 import type { PageLoad } from './$types';
-import { openToast } from '@/components/ui/toast/toastUtils.svelte';
+import { openToast } from '@/lib/ui/toasts.svelte.js';
 import { redirect } from '@sveltejs/kit';
 import * as m from '@/lib/paraglide/messages';
 

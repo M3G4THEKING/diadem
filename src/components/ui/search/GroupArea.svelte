@@ -1,6 +1,6 @@
 <script lang="ts">
 	import SearchGroup from '@/components/ui/search/SearchGroup.svelte';
-	import { getKojiGeofences } from '@/lib/koji.js';
+	import { getKojiGeofences } from '@/lib/features/koji.js';
 	import type { Feature } from 'geojson';
 	import { centroid } from '@turf/turf';
 	import { flyTo } from '@/lib/map/utils';

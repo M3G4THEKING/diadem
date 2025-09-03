@@ -1,8 +1,8 @@
-import { hasFeatureAnywhere } from '@/lib/user/checkPerm';
+import { hasFeatureAnywhere } from '@/lib/services/user/checkPerm';
 import { json, redirect } from '@sveltejs/kit';
 import type { MapObjectRequestData } from '@/lib/mapObjects/updateMapObject';
-import type { ScoutRequest } from '@/lib/scout.svelte';
-import { getServerConfig } from '@/lib/config/config.server';
+import type { ScoutRequest } from '@/lib/features/scout.svelte.js';
+import { getServerConfig } from '@/lib/services/config/config.server';
 import { addScoutEntries, getScoutQueue } from '@/lib/server/api/dragoniteApi';
 
 import { noPermResult, result } from '@/lib/server/api/results';

@@ -1,10 +1,11 @@
 <script lang="ts">
-	import { isFortOutdated } from '@/lib/pogoUtils.js';
+	import { isFortOutdated } from '@/lib/utils/pogoUtils.js';
 	import { Clock, ClockAlert, ClockArrowUp, Gift, ScanEye, Search } from 'lucide-svelte';
-	import { timestampToLocalTime } from '@/lib/utils.svelte.js';
 	import Countdown from '@/components/utils/Countdown.svelte';
 	import IconValue from '@/components/ui/popups/common/IconValue.svelte';
 	import * as m from "@/lib/paraglide/messages"
+
+	import { timestampToLocalTime } from '@/lib/utils/timestampToLocalTime';
 
 	let {
 		updated,

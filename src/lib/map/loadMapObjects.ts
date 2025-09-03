@@ -1,5 +1,5 @@
 import { updateAllMapObjects } from '@/lib/mapObjects/updateMapObject';
-import { getUserSettings } from '@/lib/userSettings.svelte';
+import { getUserSettings } from '@/lib/services/userSettings.svelte.js';
 import { AGGRESSIVE_UPDATE_TIME } from '@/lib/constants';
 
 export let loadMapObjectInterval: undefined | NodeJS.Timeout;

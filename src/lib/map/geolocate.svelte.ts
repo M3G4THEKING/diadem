@@ -1,5 +1,5 @@
 import * as m from "@/lib/paraglide/messages";
-import { openToast } from "@/components/ui/toast/toastUtils.svelte";
+import { openToast } from "@/lib/ui/toasts.svelte.js";
 import { getMap } from '@/lib/map/map.svelte';
 import type { LngLatLike } from 'maplibre-gl';
 import { tick } from 'svelte';

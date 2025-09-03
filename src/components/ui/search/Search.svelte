@@ -5,10 +5,10 @@
 	import { Search, X } from 'lucide-svelte';
 	import GroupArea from '@/components/ui/search/GroupArea.svelte';
 	import GroupAddress from '@/components/ui/search/GroupAddress.svelte';
-	import { isSupportedFeature } from '@/lib/enabledFeatures';
-	import { getKojiGeofences } from '@/lib/koji';
+	import { isSupportedFeature } from '@/lib/services/supportedFeatures';
+	import { getKojiGeofences } from '@/lib/features/koji';
 	import * as m from '@/lib/paraglide/messages';
-	import { closeModal } from '@/lib/modal.svelte';
+	import { closeModal } from '@/lib/ui/modal.svelte.js';
 	import Button from '@/components/ui/basic/Button.svelte';
 
 	let input: HTMLInputElement | undefined = $state();

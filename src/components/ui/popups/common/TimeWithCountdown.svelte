@@ -1,6 +1,7 @@
 <script lang="ts">
-	import { timestampToLocalTime } from '@/lib/utils.svelte.js';
 	import Countdown from '@/components/utils/Countdown.svelte';
+
+	import { timestampToLocalTime } from '@/lib/utils/timestampToLocalTime';
 
 	let {
 		expireTime,

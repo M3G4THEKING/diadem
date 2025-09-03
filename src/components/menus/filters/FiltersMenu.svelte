@@ -1,19 +1,19 @@
 <script lang="ts">
-	import { getConfig } from '@/lib/config/config';
+	import { getConfig } from '@/lib/services/config/config';
 	import * as m from '@/lib/paraglide/messages';
 	import Card from '@/components/ui/basic/Card.svelte';
-	import { getUserSettings, updateUserSettings } from '@/lib/userSettings.svelte';
+	import { getUserSettings, updateUserSettings } from '@/lib/services/userSettings.svelte.js';
 	import { ChevronDown, ChevronUp, Eye, EyeOff, Filter, Plus } from 'lucide-svelte';
 	import SettingsGeneric from '@/components/menus/profile/SettingsGeneric.svelte';
 	import Button from '@/components/ui/basic/Button.svelte';
-	import { getIconPokemon } from '@/lib/uicons.svelte';
+	import { getIconPokemon } from '@/lib/services/uicons.svelte.js';
 	import Switch from '@/components/menus/profile/Switch.svelte';
 	import FilterTypeSelect from '@/components/menus/filters/FilterTypeSelect.svelte';
 
 	import { slide } from 'svelte/transition';
 	import SettingsSelect from '@/components/menus/profile/SettingsSelect.svelte';
-	import { hasFeatureAnywhere } from '@/lib/user/checkPerm';
-	import { getUserDetails } from '@/lib/user/userDetails.svelte';
+	import { hasFeatureAnywhere } from '@/lib/services/user/checkPerm';
+	import { getUserDetails } from '@/lib/services/user/userDetails.svelte';
 
 	let test: boolean = $state(false);
 

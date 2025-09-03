@@ -1,5 +1,5 @@
 import { closePopup } from '@/lib/mapObjects/interact';
-import { closeModal } from '@/lib/modal.svelte';
+import { closeModal } from '@/lib/ui/modal.svelte.js';
 import { getMap } from '@/lib/map/map.svelte';
 
 export function isWebglSupported() {

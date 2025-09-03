@@ -1,6 +1,6 @@
 <script lang="ts">
-	import { getIconPokemon } from '@/lib/uicons.svelte.js';
-	import { mPokemon } from '@/lib/ingameLocale';
+	import { getIconPokemon } from '@/lib/services/uicons.svelte.js';
+	import { mPokemon } from '@/lib/services/ingameLocale';
 	import Button from '@/components/ui/basic/Button.svelte';
 	import ImagePopup from '@/components/ui/popups/common/ImagePopup.svelte';
 	import type { GymDefender } from '@/lib/types/mapObjectData/gym';

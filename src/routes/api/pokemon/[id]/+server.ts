@@ -1,7 +1,7 @@
 import { json } from '@sveltejs/kit';
 import {env} from '$env/dynamic/private'
-import { getServerConfig } from '@/lib/config/config.server';
-import { hasFeatureAnywhere } from '@/lib/user/checkPerm';
+import { getServerConfig } from '@/lib/services/config/config.server';
+import { hasFeatureAnywhere } from '@/lib/services/user/checkPerm';
 
 import { noPermResult } from '@/lib/server/api/results';
 

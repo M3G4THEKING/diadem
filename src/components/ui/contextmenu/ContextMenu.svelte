@@ -2,14 +2,15 @@
 	import { slide } from 'svelte/transition';
 	import { Binoculars, Clipboard, Navigation } from 'lucide-svelte';
 	import ContextMenuItem from '@/components/ui/contextmenu/ContextMenuItem.svelte';
-	import { copyToClipboard, getMapsUrl, hasClipboardWrite } from '@/lib/utils.svelte';
 	import * as m from '@/lib/paraglide/messages';
 
-	import { getContextMenuEvent, getIsContextMenuOpen, setIsContextMenuOpen } from '@/lib/map/contextmenu.svelte';
+	import { getContextMenuEvent, getIsContextMenuOpen, setIsContextMenuOpen } from '@/lib/ui/contextmenu.svelte.js';
 	import { onClickOutside } from 'runed';
-	import { isMenuSidebar, isUiLeft, openMenu } from '@/lib/menus.svelte';
-	import { setCurrentScoutCenter, setCurrentScoutCoords } from '@/lib/scout.svelte';
+	import { openMenu } from '@/lib/ui/menus.svelte.js';
+	import { setCurrentScoutCenter, setCurrentScoutCoords } from '@/lib/features/scout.svelte.js';
 	import { Coords } from '@/lib/utils/coordinates';
+	import { copyToClipboard, hasClipboardWrite, isMenuSidebar, isUiLeft } from '@/lib/utils/device';
+	import { getMapsUrl } from '@/lib/utils/mapUrl';
 
 	let div = $state<HTMLDivElement>()
 	let style: string = $state("")

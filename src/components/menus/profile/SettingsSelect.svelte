@@ -1,7 +1,7 @@
 <script lang="ts">
 	import Button from '@/components/ui/basic/Button.svelte';
 	import SettingsSettingTitle from '@/components/menus/profile/SettingsSettingTitle.svelte';
-	import { closeModal, openModal } from '@/lib/modal.svelte.js';
+	import { closeModal, openModal } from '@/lib/ui/modal.svelte.js';
 	import Card from '@/components/ui/basic/Card.svelte';
 	import ContextMenuItem from '@/components/ui/contextmenu/ContextMenuItem.svelte';
 

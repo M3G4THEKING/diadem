@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { Meter } from "bits-ui";
-	import { getLoadingProgress } from '@/lib/initialLoad.svelte';
+	import { getLoadingProgress } from '@/lib/services/initialLoad.svelte.js';
 </script>
 
 <Meter.Root

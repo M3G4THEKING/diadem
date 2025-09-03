@@ -4,14 +4,14 @@ import {
 	longPressDuration,
 	onContextMenu,
 	pressTimer, setIsContextMenuOpen
-} from '@/lib/map/contextmenu.svelte';
+} from '@/lib/ui/contextmenu.svelte.js';
 import { clearLoadMapObjectsInterval, resetLoadMapObjects } from '@/lib/map/loadMapObjects';
 import { updateAllMapObjects } from '@/lib/mapObjects/updateMapObject';
 import {
 	clearUpdateMapObjectsInterval,
 	resetUpdateMapObjectsInterval
 } from '@/lib/map/mapObjectsInterval';
-import { getUserSettings, updateUserSettings } from '@/lib/userSettings.svelte';
+import { getUserSettings, updateUserSettings } from '@/lib/services/userSettings.svelte.js';
 import { getMap } from '@/lib/map/map.svelte';
 import { setAnimateLocationMarker } from '@/lib/map/geolocate.svelte';
 import type { MapMoveEvent } from 'svelte-maplibre';

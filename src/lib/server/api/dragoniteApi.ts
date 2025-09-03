@@ -1,4 +1,4 @@
-import { getServerConfig } from '@/lib/config/config.server';
+import { getServerConfig } from '@/lib/services/config/config.server';
 
 function getHeaders() {
 	const headers: HeadersInit = {}

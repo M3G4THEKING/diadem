@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { getDefaultIconSet, getUserSettings, updateUserSettings } from '@/lib/userSettings.svelte';
+	import { getDefaultIconSet, getUserSettings, updateUserSettings } from '@/lib/services/userSettings.svelte.js';
 	import { Cloud, Code, Image, Moon, Paintbrush, Sun } from 'lucide-svelte';
 	import SettingsCard from '@/components/menus/profile/SettingsCard.svelte';
 	import {
@@ -8,8 +8,8 @@
 		getIconPokestop,
 		getIconStation,
 		getUiconSetDetails
-	} from '@/lib/uicons.svelte';
-	import { getConfig } from '@/lib/config/config';
+	} from '@/lib/services/uicons.svelte.js';
+	import { getConfig } from '@/lib/services/config/config';
 	import { MapLibre } from 'svelte-maplibre';
 	import type { MapObjectType } from '@/lib/types/mapObjectData/mapObjects';
 	import SettingsToggle from '@/components/menus/profile/SettingsToggle.svelte';
@@ -20,11 +20,11 @@
 	import { deleteAllFeaturesOfType, updateFeatures } from '@/lib/map/featuresGen.svelte.js';
 	import RadioGroup from '@/components/ui/basic/RadioGroup.svelte';
 	import SettingsRadioGroupItem from '@/components/menus/profile/SettingsRadioGroupItem.svelte';
-	import { getUserDetails } from '@/lib/user/userDetails.svelte';
+	import { getUserDetails } from '@/lib/services/user/userDetails.svelte';
 	import type { PageProps } from './$types';
 	import ProfileCard from '@/components/ui/user/ProfileCard.svelte';
-	import { isSupportedFeature } from '@/lib/enabledFeatures';
-	import { isMenuSidebar, openMenu } from '@/lib/menus.svelte';
+	import { isSupportedFeature } from '@/lib/services/supportedFeatures';
+	import { openMenu } from '@/lib/ui/menus.svelte.js';
 	import CloseButton from '@/components/ui/CloseButton.svelte';
 	import { getMap } from '@/lib/map/map.svelte';
 	import { getMapObjects } from '@/lib/mapObjects/mapObjectsState.svelte';
@@ -32,6 +32,7 @@
 	import { clearSessionImageUrls } from '@/lib/map/featuresManage.svelte';
 	import SettingsSlider from '@/components/menus/profile/SettingsSlider.svelte';
 	import { AVAILABLE_LANGUAGES } from '@/lib/constants';
+	import { isMenuSidebar } from '@/lib/utils/device';
 
 	// $effect(() => {
 	// 	getUserSettings()

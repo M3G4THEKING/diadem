@@ -12,13 +12,13 @@ import type {
 	MapObjectType,
 	MinorMapObjectType
 } from '@/lib/types/mapObjectData/mapObjects';
-import { getUserSettings } from '@/lib/userSettings.svelte';
-import type { AllFilters, FilterS2Cell } from '@/lib/filters/filters';
+import { getUserSettings } from '@/lib/services/userSettings.svelte.js';
+import type { AllFilters, FilterS2Cell } from '@/lib/features/filters/filters';
 import { updateFeatures } from '@/lib/map/featuresGen.svelte';
 import { clearS2Cells, updateS2CellGeojson } from '@/lib/mapObjects/s2cells.svelte.js';
 import { updateWeather } from '@/lib/mapObjects/weather.svelte';
-import { hasFeatureAnywhere } from '@/lib/user/checkPerm';
-import { getUserDetails } from '@/lib/user/userDetails.svelte';
+import { hasFeatureAnywhere } from '@/lib/services/user/checkPerm';
+import { getUserDetails } from '@/lib/services/user/userDetails.svelte';
 
 export type MapObjectRequestData = Bounds & { filter: AllFilters | undefined }
 

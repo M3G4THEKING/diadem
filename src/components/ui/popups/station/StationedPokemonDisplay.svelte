@@ -1,8 +1,8 @@
 <script lang="ts">
 	import type { PokemonData } from '@/lib/types/mapObjectData/pokemon';
-	import { mPokemon } from '@/lib/ingameLocale';
-	import { getStationPokemon } from '@/lib/pogoUtils';
-	import { getIconPokemon } from '@/lib/uicons.svelte';
+	import { mPokemon } from '@/lib/services/ingameLocale';
+	import { getStationPokemon } from '@/lib/utils/pogoUtils';
+	import { getIconPokemon } from '@/lib/services/uicons.svelte.js';
 	import ImagePopup from '@/components/ui/popups/common/ImagePopup.svelte';
 
 	let {

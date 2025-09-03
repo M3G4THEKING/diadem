@@ -6,8 +6,8 @@ import { s2 } from 's2js';
 import type { WeatherData } from '@/lib/types/mapObjectData/weather';
 import TTLCache from '@isaacs/ttlcache';
 import type { FeatureCollection, Polygon } from 'geojson';
-import { hasFeatureAnywhere } from '@/lib/user/checkPerm';
-import { getUserDetails } from '@/lib/user/userDetails.svelte';
+import { hasFeatureAnywhere } from '@/lib/services/user/checkPerm';
+import { getUserDetails } from '@/lib/services/user/userDetails.svelte';
 
 const WEATHER_CELL_LEVEL = 10;
 const UPDATE_INTERVAL = 5 * 60 * 1000

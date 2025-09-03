@@ -1,23 +1,23 @@
 <script lang="ts">
 	import { ParaglideJS } from '@inlang/paraglide-sveltekit'
-	import { i18n, resolveLanguageTag } from '@/lib/i18n';
+	import { i18n, resolveLanguageTag } from '@/lib/services/i18n';
 
 	import '../app.css';
-	import {initAllIconSets} from '@/lib/uicons.svelte';
+	import {initAllIconSets} from '@/lib/services/uicons.svelte.js';
 	import { onMount } from 'svelte';
-	import {getUserSettings} from '@/lib/userSettings.svelte';
+	import {getUserSettings} from '@/lib/services/userSettings.svelte.js';
 
-	import { updateDarkMode } from '@/lib/utils.svelte';
-	import Toast from '@/components/ui/toast/Toast.svelte';
-	import { getIsToastOpen } from '@/components/ui/toast/toastUtils.svelte';
-	import { closeModal, getModalOptions, isModalOpen } from '@/lib/modal.svelte';
+	import Toast from '@/components/ui/Toast.svelte';
+	import { getIsToastOpen } from '@/lib/ui/toasts.svelte.js';
+	import { closeModal, getModalOptions, isModalOpen } from '@/lib/ui/modal.svelte.js';
 	import {fade, slide} from 'svelte/transition';
 	import { availableLanguageTags } from '@/lib/paraglide/runtime';
-	import { getConfig } from '@/lib/config/config';
-	import { loadRemoteLocale } from '@/lib/ingameLocale';
-	import { getIsLoading, load } from '@/lib/initialLoad.svelte';
+	import { getConfig } from '@/lib/services/config/config';
+	import { loadRemoteLocale } from '@/lib/services/ingameLocale';
+	import { getIsLoading, load } from '@/lib/services/initialLoad.svelte.js';
 	import Loading from '@/components/ui/Loading.svelte';
 	import Map from '@/components/map/Map.svelte';
+	import { updateDarkMode } from '@/lib/utils/updateDarkMode';
 
 	let { children } = $props();
 

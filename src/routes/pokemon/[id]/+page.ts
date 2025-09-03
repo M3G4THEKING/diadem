@@ -1,6 +1,6 @@
 import type { PageLoad } from "./$types";
 import { browser } from "$app/environment";
-import { setDirectLinkObject } from "@/lib/directLinks.svelte";
+import { setDirectLinkObject } from "@/lib/features/directLinks.svelte.js";
 import { getOneMapObject } from "@/lib/mapObjects/updateMapObject";
 import { redirect } from '@sveltejs/kit';
 

@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { Eye, EyeOff, Funnel } from 'lucide-svelte';
-	import type { FilterCategory, FilterType } from '@/lib/filters/filters';
-	import { getUserSettings, updateUserSettings } from '@/lib/userSettings.svelte.js';
+	import type { FilterCategory, FilterType } from '@/lib/features/filters/filters';
+	import { getUserSettings, updateUserSettings } from '@/lib/services/userSettings.svelte.js';
 	import RadioGroup from '@/components/ui/basic/RadioGroup.svelte';
 	import RadioGroupItem from '@/components/ui/basic/RadioGroupItem.svelte';
 	import { updateFeatures } from '@/lib/map/featuresGen.svelte';

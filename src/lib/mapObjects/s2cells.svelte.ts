@@ -1,5 +1,5 @@
 import { geojson, r1, s1, s2 } from 's2js';
-import type { FilterS2Cell } from '@/lib/filters/filters';
+import type { FilterS2Cell } from '@/lib/features/filters/filters';
 import type { Bounds } from '@/lib/mapObjects/mapBounds';
 import { getMap } from '@/lib/map/map.svelte.js';
 import type { Feature, FeatureCollection, Polygon } from 'geojson';

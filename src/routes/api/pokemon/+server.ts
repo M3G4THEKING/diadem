@@ -1,8 +1,8 @@
 import { json } from '@sveltejs/kit';
 import {env} from '$env/dynamic/private'
-import { getServerConfig } from '@/lib/config/config.server';
-import type { AllFilters, FilterPokemon } from '@/lib/filters/filters';
-import { checkFeatureInBounds, hasFeatureAnywhere } from '@/lib/user/checkPerm';
+import { getServerConfig } from '@/lib/services/config/config.server';
+import type { AllFilters, FilterPokemon } from '@/lib/features/filters/filters';
+import { checkFeatureInBounds, hasFeatureAnywhere } from '@/lib/services/user/checkPerm';
 import type { Bounds } from '@/lib/mapObjects/mapBounds';
 import type { MapObjectRequestData } from '@/lib/mapObjects/updateMapObject';
 

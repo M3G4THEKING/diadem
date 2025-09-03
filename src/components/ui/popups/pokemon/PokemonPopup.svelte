@@ -1,10 +1,10 @@
 <script lang="ts">
 	import type { PokemonData } from '@/lib/types/mapObjectData/pokemon';
 	import Countdown from '@/components/utils/Countdown.svelte';
-	import { getWeatherIcon, timestampToLocalTime } from '@/lib/utils.svelte.js';
+	import { getWeatherIcon } from '@/lib/utils/weatherIcons.js';
 	import BasePopup from '@/components/ui/popups/BasePopup.svelte';
 	import ImagePopup from '@/components/ui/popups/common/ImagePopup.svelte';
-	import { getIconPokemon } from '@/lib/uicons.svelte.js';
+	import { getIconPokemon } from '@/lib/services/uicons.svelte.js';
 	import {
 		Clock,
 		ClockAlert,
@@ -30,20 +30,22 @@
 		Waves, CloudOff, BicepsFlexed, Percent, ChartNoAxesColumn, LibraryBig, ChartSpline, Trophy, SearchCheck
 	} from 'lucide-svelte';
 	import IconValue from '@/components/ui/popups/common/IconValue.svelte';
-	import {getMasterPokemon, defaultProp} from '@/lib/masterfile';
+	import {getMasterPokemon, defaultProp} from '@/lib/services/masterfile';
 	import type { MasterPokemon } from '@/lib/types/masterfile';
 	import TextSeparator from '@/components/utils/TextSeparator.svelte';
 	import * as m from "@/lib/paraglide/messages"
-	import { getConfig } from '@/lib/config/config';
-	import { mMove, mPokemon, mWeather } from '@/lib/ingameLocale';
+	import { getConfig } from '@/lib/services/config/config';
+	import { mMove, mPokemon, mWeather } from '@/lib/services/ingameLocale';
 	import TimeWithCountdown from '@/components/ui/popups/common/TimeWithCountdown.svelte';
 	import { getMapObjects } from '@/lib/mapObjects/mapObjectsState.svelte.js';
-	import { getPokemonSize, isFortOutdated } from '@/lib/pogoUtils';
+	import { getPokemonSize, isFortOutdated } from '@/lib/utils/pogoUtils';
 	import type { GymData } from '@/lib/types/mapObjectData/gym';
 	import UpdatedTimes from '@/components/ui/popups/common/UpdatedTimes.svelte';
 	import { POKEMON_MIN_RANK } from '@/lib/constants';
 	import PvpEntry from '@/components/ui/popups/pokemon/PvpEntry.svelte';
 	import { getCurrentSelectedData } from '@/lib/mapObjects/currentSelectedState.svelte';
+
+	import { timestampToLocalTime } from '@/lib/utils/timestampToLocalTime';
 
 	let { mapId } : { mapId: string } = $props()
 	let data: PokemonData = $derived(getMapObjects()[mapId] as PokemonData ?? getCurrentSelectedData() as PokemonData)

@@ -1,5 +1,5 @@
 import { Discord } from 'arctic';
-import { getServerConfig } from '@/lib/config/config.server';
+import { getServerConfig } from '@/lib/services/config/config.server';
 
 const config = getServerConfig().auth.discord;
 export const IS_DISCORD_ENABLED: boolean = !!config && !!config.clientId && !!config.clientSecret && !!config.redirectUri

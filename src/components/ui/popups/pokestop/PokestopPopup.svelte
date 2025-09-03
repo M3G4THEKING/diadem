@@ -1,12 +1,11 @@
 <script lang="ts">
 	import type { PokestopData } from '@/lib/types/mapObjectData/pokestop';
 	import BasePopup from '@/components/ui/popups/BasePopup.svelte';
-	import { getIconInvasion, getIconItem, getIconPokemon, getIconPokestop } from '@/lib/uicons.svelte.js';
+	import { getIconInvasion, getIconItem, getIconPokemon, getIconPokestop } from '@/lib/services/uicons.svelte.js';
 	import ImagePopup from '@/components/ui/popups/common/ImagePopup.svelte';
 	import * as m from '@/lib/paraglide/messages';
 	import FortImage from '@/components/ui/popups/common/FortImage.svelte';
-	import { mCharacter, mItem, mPokemon } from '@/lib/ingameLocale';
-	import { currentTimestamp } from '@/lib/utils.svelte.js';
+	import { mCharacter, mItem, mPokemon } from '@/lib/services/ingameLocale';
 	import TimeWithCountdown from '@/components/ui/popups/common/TimeWithCountdown.svelte';
 	import {
 		hasFortActiveLure,
@@ -14,17 +13,19 @@
 		isIncidentContest,
 		isIncidentInvasion,
 		isIncidentKecleon
-	} from '@/lib/pogoUtils';
+	} from '@/lib/utils/pogoUtils';
 	import { getMapObjects } from '@/lib/mapObjects/mapObjectsState.svelte.js';
 	import UpdatedTimes from '@/components/ui/popups/common/UpdatedTimes.svelte';
 	import FortPowerUp from '@/components/ui/popups/common/FortPowerUp.svelte';
-	import { getConfig } from '@/lib/config/config';
+	import { getConfig } from '@/lib/services/config/config';
 	import { ClockAlert, Smartphone } from 'lucide-svelte';
 	import IconValue from '@/components/ui/popups/common/IconValue.svelte';
 	import QuestDisplay from '@/components/ui/popups/pokestop/QuestDisplay.svelte';
 	import PokestopSection from '@/components/ui/popups/pokestop/PokestopSection.svelte';
 	import ContestDisplay from '@/components/ui/popups/pokestop/ContestDisplay.svelte';
 	import { getCurrentSelectedData } from '@/lib/mapObjects/currentSelectedState.svelte';
+
+	import { currentTimestamp } from '@/lib/utils/currentTimestamp';
 
 	let { mapId } : { mapId: string } = $props()
 	let data: PokestopData = $derived(getMapObjects()[mapId] as PokestopData ?? getCurrentSelectedData() as PokestopData)

@@ -1,6 +1,6 @@
 <script lang="ts">
 	import Button from '@/components/ui/basic/Button.svelte';
-	import { getLoginLink } from '@/lib/user/login';
+	import { getLoginLink } from '@/lib/services/user/login';
 	import DiscordIcon from '@/components/icons/DiscordIcon.svelte';
 	import { X } from 'lucide-svelte';
 	import * as m from '@/lib/paraglide/messages';

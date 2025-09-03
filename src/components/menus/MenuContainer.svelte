@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { getOpenedMenu } from '@/lib/menus.svelte';
+	import { getOpenedMenu } from '@/lib/ui/menus.svelte.js';
 	import ProfileMenu from '@/components/menus/profile/ProfileMenu.svelte';
 	import FiltersMenu from '@/components/menus/filters/FiltersMenu.svelte';
 	import { slide } from 'svelte/transition';

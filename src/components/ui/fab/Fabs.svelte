@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { getMap, resetMap } from '@/lib/map/map.svelte';
-	import { openModal } from '@/lib/modal.svelte';
+	import { openModal } from '@/lib/ui/modal.svelte.js';
 	import Search from '@/components/ui/search/Search.svelte';
 	import BaseFab from '@/components/ui/fab/BaseFab.svelte';
 	import LocateFab from '@/components/ui/fab/LocateFab.svelte';
@@ -12,8 +12,8 @@
 		ArrowUpFromDot, ChevronUp, MousePointer2, Navigation2,
 		Search as SearchIcon
 	} from 'lucide-svelte';
-	import { hasLoadedFeature, LoadedFeature } from '@/lib/initialLoad.svelte';
-	import { isSupportedFeature } from '@/lib/enabledFeatures';
+	import { hasLoadedFeature, LoadedFeature } from '@/lib/services/initialLoad.svelte.js';
+	import { isSupportedFeature } from '@/lib/services/supportedFeatures';
 	import { getSkew, isMapSkewed } from '@/lib/map/mapSkew.svelte';
 	import { fade, scale, slide } from 'svelte/transition';
 

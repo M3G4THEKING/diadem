@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { mType, mWeather } from '@/lib/ingameLocale.js';
+	import { mType, mWeather } from '@/lib/services/ingameLocale.js';
 	import { getCurrentWeather, updateCurrentWeatherFeatures, updateWeather } from '@/lib/mapObjects/weather.svelte.js';
 	import Button from '@/components/ui/basic/Button.svelte';
 	import { getMap } from '@/lib/map/map.svelte';
@@ -7,19 +7,22 @@
 	import { ArrowBigUpDash, Clock } from 'lucide-svelte';
 	import IconValue from '@/components/ui/popups/common/IconValue.svelte';
 	import * as m from '@/lib/paraglide/messages';
-	import { currentTimestamp, getWeatherIcon, timestampToLocalTime } from '@/lib/utils.svelte';
+	import { getWeatherIcon } from '@/lib/utils/weatherIcons.js';
 	import { closePopup } from '@/lib/mapObjects/interact';
-	import { closeModal } from '@/lib/modal.svelte';
+	import { closeModal } from '@/lib/ui/modal.svelte.js';
 	import { slide } from 'svelte/transition';
 	import { WEATHER_OUTDATED_SECONDS } from '@/lib/constants';
-	import { getMasterWeather } from '@/lib/masterfile';
+	import { getMasterWeather } from '@/lib/services/masterfile';
 	import ImagePopup from '@/components/ui/popups/common/ImagePopup.svelte';
-	import { getIconType } from '@/lib/uicons.svelte';
+	import { getIconType } from '@/lib/services/uicons.svelte.js';
 	import { watch } from 'runed';
 	import type { WeatherData } from '@/lib/types/mapObjectData/weather';
-	import { getUserSettings } from '@/lib/userSettings.svelte';
-	import { isMenuSidebar, isUiLeft, openMenu } from '@/lib/menus.svelte';
-	import { hasLoadedFeature, LoadedFeature } from '@/lib/initialLoad.svelte';
+	import { getUserSettings } from '@/lib/services/userSettings.svelte.js';
+	import { openMenu } from '@/lib/ui/menus.svelte.js';
+	import { hasLoadedFeature, LoadedFeature } from '@/lib/services/initialLoad.svelte.js';
+	import { timestampToLocalTime } from '@/lib/utils/timestampToLocalTime';
+	import { currentTimestamp } from '@/lib/utils/currentTimestamp';
+	import { isMenuSidebar, isUiLeft } from '@/lib/utils/device';
 
 	let ignoreWatch = false
 	let isClicked: boolean = $state(false)

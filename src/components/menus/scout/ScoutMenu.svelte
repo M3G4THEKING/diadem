@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { getConfig } from '@/lib/config/config';
+	import { getConfig } from '@/lib/services/config/config';
 	import * as m from '@/lib/paraglide/messages';
 	import Card from '@/components/ui/basic/Card.svelte';
 	import SettingsSlider from '@/components/menus/profile/SettingsSlider.svelte';
@@ -15,13 +15,13 @@
 		setCurrentScoutCoords,
 		setScoutGeojson,
 		startScout
-	} from '@/lib/scout.svelte';
-	import { openMenu } from '@/lib/menus.svelte';
+	} from '@/lib/features/scout.svelte.js';
+	import { openMenu } from '@/lib/ui/menus.svelte.js';
 	import { circle as makeCrircle } from '@turf/turf';
 	import { RADIUS_POKEMON, RADIUS_SCOUT_GMO } from '@/lib/constants';
 	import type { Feature, Polygon } from 'geojson';
 	import { watch } from 'runed';
-	import { openToast } from '@/components/ui/toast/toastUtils.svelte';
+	import { openToast } from '@/lib/ui/toasts.svelte.js';
 
 	let size: 0 | 1 | 2 = $state(0)
 	let queuePosition: number | undefined = $state(undefined)

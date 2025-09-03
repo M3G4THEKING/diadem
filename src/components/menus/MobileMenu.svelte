@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { slide } from 'svelte/transition';
-	import { getOpenedMenu, openMenu } from '@/lib/menus.svelte';
+	import { getOpenedMenu, openMenu } from '@/lib/ui/menus.svelte.js';
 	import MenuContainer from '@/components/menus/MenuContainer.svelte';
 	import CloseButton from '@/components/ui/CloseButton.svelte';
 	import * as m from '@/lib/paraglide/messages';

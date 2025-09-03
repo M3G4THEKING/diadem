@@ -1,10 +1,11 @@
 <script lang="ts">
 	import Button from '@/components/ui/basic/Button.svelte';
 	import type { Snippet } from 'svelte';
-	import type { LucideIcon } from '@/lib/types/misc';
+	import type { LucideIcon } from '@/lib/types/lucide';
 
-	import { setIsContextMenuOpen } from '@/lib/map/contextmenu.svelte';
-	import { isMenuSidebar } from '@/lib/menus.svelte';
+	import { setIsContextMenuOpen } from '@/lib/ui/contextmenu.svelte.js';
+
+	import { isMenuSidebar } from '@/lib/utils/device';
 
 	let {
 		Icon,

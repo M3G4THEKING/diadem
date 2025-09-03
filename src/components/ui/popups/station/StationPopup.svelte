@@ -1,17 +1,16 @@
 <script lang="ts">
 	import type { StationData } from '@/lib/types/mapObjectData/station';
 	import BasePopup from '@/components/ui/popups/BasePopup.svelte';
-	import { getIconStation, getIconPokestop, getIconPokemon } from '@/lib/uicons.svelte.js';
+	import { getIconStation, getIconPokestop, getIconPokemon } from '@/lib/services/uicons.svelte.js';
 	import ImagePopup from '@/components/ui/popups/common/ImagePopup.svelte';
 	import * as m from "@/lib/paraglide/messages"
 	import FortImage from '@/components/ui/popups/common/FortImage.svelte';
 	import type { PokestopData } from '@/lib/types/mapObjectData/pokestop';
 	import { getMapObjects } from '@/lib/mapObjects/mapObjectsState.svelte.js';
 	import type { GymData } from '@/lib/types/mapObjectData/gym';
-	import { currentTimestamp, timestampToLocalTime } from '@/lib/utils.svelte';
-	import { getRaidPokemon, STATION_SLOTS } from '@/lib/pogoUtils';
-	import { mPokemon } from '@/lib/ingameLocale';
-	import { getStationPokemon } from '@/lib/pogoUtils.js';
+	import { getRaidPokemon, STATION_SLOTS } from '@/lib/utils/pogoUtils';
+	import { mPokemon } from '@/lib/services/ingameLocale';
+	import { getStationPokemon } from '@/lib/utils/pogoUtils.js';
 	import { getCurrentSelectedData } from '@/lib/mapObjects/currentSelectedState.svelte';
 	import type { PokemonData } from '@/lib/types/mapObjectData/pokemon';
 	import StationedPokemonDisplay from '@/components/ui/popups/station/StationedPokemonDisplay.svelte';
@@ -19,6 +18,8 @@
 	import { Clock, ClockArrowDown, ClockArrowUp, MapPinned, Star, UsersRound } from 'lucide-svelte';
 	import TimeWithCountdown from '@/components/ui/popups/common/TimeWithCountdown.svelte';
 	import Countdown from '@/components/utils/Countdown.svelte';
+	import { timestampToLocalTime } from '@/lib/utils/timestampToLocalTime';
+	import { currentTimestamp } from '@/lib/utils/currentTimestamp';
 
 	let { mapId } : { mapId: string } = $props()
 	let data: StationData = $derived(getMapObjects()[mapId] as StationData ?? getCurrentSelectedData() as StationData)

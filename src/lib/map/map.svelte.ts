@@ -1,7 +1,7 @@
 import maplibre from 'maplibre-gl';
 import { closePopup } from '@/lib/mapObjects/interact';
-import { closeModal } from '@/lib/modal.svelte';
-import { openMenu } from '@/lib/menus.svelte';
+import { closeModal } from '@/lib/ui/modal.svelte.js';
+import { openMenu } from '@/lib/ui/menus.svelte.js';
 
 let map: maplibre.Map | undefined = $state(undefined);
 

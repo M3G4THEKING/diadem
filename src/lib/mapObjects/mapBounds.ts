@@ -1,5 +1,5 @@
 import type { Map, LngLatLike, LngLat } from 'maplibre-gl';
-import { getUserSettings } from '@/lib/userSettings.svelte';
+import { getUserSettings } from '@/lib/services/userSettings.svelte.js';
 import { getMap } from '@/lib/map/map.svelte';
 
 export type Bounds = {

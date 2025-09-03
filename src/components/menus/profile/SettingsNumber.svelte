@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { getUserSettings } from '@/lib/userSettings.svelte.js';
+	import { getUserSettings } from '@/lib/services/userSettings.svelte.js';
 	import Input from '@/components/menus/profile/Input.svelte';
 	import SettingsSettingTitle from '@/components/menus/profile/SettingsSettingTitle.svelte';
 

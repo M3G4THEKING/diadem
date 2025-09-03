@@ -1,14 +1,14 @@
 <script lang="ts">
 	import Button from '@/components/ui/basic/Button.svelte';
-	import { getUserDetails } from '@/lib/user/userDetails.svelte.js';
-	import { getLoginLink } from '@/lib/user/login';
+	import { getUserDetails } from '@/lib/services/user/userDetails.svelte.js';
+	import { getLoginLink } from '@/lib/services/user/login';
 	import * as m from '@/lib/paraglide/messages';
 	import LogOutButton from '@/components/ui/user/LogOutButton.svelte';
 	// noinspection ES6UnusedImports
 	import { Avatar } from 'bits-ui';
 	import DiscordIcon from '@/components/icons/DiscordIcon.svelte';
 	import { Link2Off, LogOut } from 'lucide-svelte';
-	import { getConfig } from '@/lib/config/config';
+	import { getConfig } from '@/lib/services/config/config';
 
 
 	let details = $derived(getUserDetails().details);

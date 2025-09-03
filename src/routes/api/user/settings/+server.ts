@@ -1,4 +1,4 @@
-import { getUserSettings, setUserSettings } from '@/lib/server/auth/db/repository';
+import { getUserSettings, setUserSettings } from '@/lib/server/db/internal/repository';
 import { json } from '@sveltejs/kit';
 
 export async function POST({ locals, request }) {

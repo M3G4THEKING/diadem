@@ -1,22 +1,23 @@
 <script lang="ts">
-	import BottomNav from '@/components/ui/nav/BottomNav.svelte';
+	import BottomNav from '@/components/ui/BottomNav.svelte';
 	import Map from '@/components/map/Map.svelte';
 	import ContextMenu from '@/components/ui/contextmenu/ContextMenu.svelte';
-	import { getConfig } from '@/lib/config/config';
+	import { getConfig } from '@/lib/services/config/config';
 	import { getCurrentSelectedData } from '@/lib/mapObjects/currentSelectedState.svelte';
 	import { resetMap } from '@/lib/map/map.svelte';
 	import WeatherOverview from '@/components/map/WeatherOverview.svelte';
-	import { isSupportedFeature } from '@/lib/enabledFeatures';
-	import { getUserDetails } from '@/lib/user/userDetails.svelte.js';
+	import { isSupportedFeature } from '@/lib/services/supportedFeatures';
+	import { getUserDetails } from '@/lib/services/user/userDetails.svelte.js';
 	import SignInButton from '@/components/ui/user/SignInButton.svelte';
-	import { getOpenedMenu, isMenuSidebar, isUiLeft, openMenu } from '@/lib/menus.svelte';
+	import { getOpenedMenu, openMenu } from '@/lib/ui/menus.svelte.js';
 	import Fabs from '@/components/ui/fab/Fabs.svelte';
 	import PopupContainer from '@/components/ui/popups/PopupContainer.svelte';
 	import MobileMenu from '@/components/menus/MobileMenu.svelte';
 	import DesktopMenu from '@/components/menus/DesktopMenu.svelte';
-	import { hasLoadedFeature, LoadedFeature } from '@/lib/initialLoad.svelte';
+	import { hasLoadedFeature, LoadedFeature } from '@/lib/services/initialLoad.svelte.js';
 	import Metadata from '@/components/utils/Metadata.svelte';
-	import { getContextMenuEvent, getIsContextMenuOpen } from '@/lib/map/contextmenu.svelte';
+	import { getContextMenuEvent, getIsContextMenuOpen } from '@/lib/ui/contextmenu.svelte.js';
+	import { isMenuSidebar, isUiLeft } from '@/lib/utils/device';
 
 	let showSignInButton = $derived(
 		hasLoadedFeature(LoadedFeature.SUPPORTED_FEATURES, LoadedFeature.USER_DETAILS)

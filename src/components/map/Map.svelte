@@ -1,9 +1,9 @@
 <script lang="ts">
-	import { isModalOpen } from '@/lib/modal.svelte.js';
+	import { isModalOpen } from '@/lib/ui/modal.svelte.js';
 	import { GeoJSON, MapLibre, Marker, SymbolLayer } from 'svelte-maplibre';
-	import { getUserSettings, updateUserSettings } from '@/lib/userSettings.svelte';
+	import { getUserSettings, updateUserSettings } from '@/lib/services/userSettings.svelte.js';
 	import { onDestroy, onMount, tick } from 'svelte';
-	import { getDirectLinkObject } from '@/lib/directLinks.svelte';
+	import { getDirectLinkObject } from '@/lib/features/directLinks.svelte.js';
 	import { clickFeatureHandler, clickMapHandler, openPopup, updateCurrentPath } from '@/lib/mapObjects/interact';
 	import { getMapObjectId, updateAllMapObjects } from '@/lib/mapObjects/updateMapObject';
 	import Card from '@/components/ui/basic/Card.svelte';
@@ -16,7 +16,7 @@
 		getContextMenuEvent,
 		getIsContextMenuOpen,
 		onContextMenu
-	} from '@/lib/map/contextmenu.svelte';
+	} from '@/lib/ui/contextmenu.svelte.js';
 	import { clearSessionImageUrls, getMapObjectsGeoJson } from '@/lib/map/featuresManage.svelte';
 	import { loadMapObjectInterval } from '@/lib/map/loadMapObjects';
 	import { onMapMove, onMapMoveEnd, onMapMoveStart, onTouchStart, onWindowFocus } from '@/lib/map/events';
@@ -27,12 +27,12 @@
 	import { getSelectedWeatherS2Cells } from '@/lib/mapObjects/weather.svelte';
 	import DebugMenu from '@/components/map/DebugMenu.svelte';
 	import { getAnimateLocationMarker, getCurrentLocation } from '@/lib/map/geolocate.svelte';
-	import { hasLoadedFeature, LoadedFeature } from '@/lib/initialLoad.svelte';
-	import { openToast } from '@/components/ui/toast/toastUtils.svelte';
+	import { hasLoadedFeature, LoadedFeature } from '@/lib/services/initialLoad.svelte.js';
+	import { openToast } from '@/lib/ui/toasts.svelte.js';
 	import { addMapObject, getMapObjects } from '@/lib/mapObjects/mapObjectsState.svelte';
 	import MarkerCurrentLocation from '@/components/map/MarkerCurrentLocation.svelte';
 	import MarkerContextMenu from '@/components/map/MarkerContextMenu.svelte';
-	import { getCurrentScoutData } from '@/lib/scout.svelte';
+	import { getCurrentScoutData } from '@/lib/features/scout.svelte.js';
 
 	let map: maplibre.Map | undefined = $state(undefined);
 	let debugRerender: boolean = $state(true);

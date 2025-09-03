@@ -1,13 +1,14 @@
 <script lang="ts">
 	import ImagePopup from '@/components/ui/popups/common/ImagePopup.svelte';
-	import { mItem, mPokemon, mQuest } from '@/lib/ingameLocale';
+	import { mItem, mPokemon, mQuest } from '@/lib/services/ingameLocale';
 	import type { QuestReward } from '@/lib/types/mapObjectData/pokestop';
-	import { getIconPokemon, getIconReward } from '@/lib/uicons.svelte';
+	import { getIconPokemon, getIconReward } from '@/lib/services/uicons.svelte.js';
 	import * as m from '@/lib/paraglide/messages';
-	import { timestampToLocalTime } from '@/lib/utils.svelte';
 	import PokestopSection from '@/components/ui/popups/pokestop/PokestopSection.svelte';
 	import IconValue from '@/components/ui/popups/common/IconValue.svelte';
 	import { CircleAlert, Clock, Gift, TriangleAlert } from 'lucide-svelte';
+
+	import { timestampToLocalTime } from '@/lib/utils/timestampToLocalTime';
 
 	let {
 		expanded,

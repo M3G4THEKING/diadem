@@ -1,10 +1,10 @@
 <script lang="ts">
 	import Button from '@/components/ui/basic/Button.svelte';
 	import { clearMap } from '@/lib/mapObjects/updateMapObject';
-	import { isSupportedFeature } from '@/lib/enabledFeatures';
+	import { isSupportedFeature } from '@/lib/services/supportedFeatures';
 	import { goto } from '$app/navigation';
-	import { getLoginLink } from '@/lib/user/login';
-	import { updateUserDetails } from '@/lib/user/userDetails.svelte';
+	import { getLoginLink } from '@/lib/services/user/login';
+	import { updateUserDetails } from '@/lib/services/user/userDetails.svelte';
 
 	let {
 		isLoggingOut = $bindable(),

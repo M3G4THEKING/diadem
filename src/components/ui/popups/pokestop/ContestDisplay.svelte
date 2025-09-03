@@ -1,8 +1,8 @@
 <script lang="ts">
 	import { UsersRound } from 'lucide-svelte';
-	import { CONTEST_SLOTS } from '@/lib/pogoUtils.js';
-	import { getIconContest, getIconPokemon, getIconType } from '@/lib/uicons.svelte.js';
-	import { mAlignment, mGeneration, mPokemon, mType } from '@/lib/ingameLocale.js';
+	import { CONTEST_SLOTS } from '@/lib/utils/pogoUtils.js';
+	import { getIconContest, getIconPokemon, getIconType } from '@/lib/services/uicons.svelte.js';
+	import { mAlignment, mGeneration, mPokemon, mType } from '@/lib/services/ingameLocale.js';
 	import ImagePopup from '@/components/ui/popups/common/ImagePopup.svelte';
 	import TimeWithCountdown from '@/components/ui/popups/common/TimeWithCountdown.svelte';
 	import IconValue from '@/components/ui/popups/common/IconValue.svelte';

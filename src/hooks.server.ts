@@ -8,8 +8,8 @@ import {
 } from '@/lib/server/auth/auth';
 import TTLCache from '@isaacs/ttlcache';
 import { getEveryonePerms, type Perms, updatePermissions } from '@/lib/server/auth/permissions';
-import type { User } from '@/lib/server/auth/db/schema';
-import { getServerConfig, isAuthRequired } from '@/lib/config/config.server';
+import type { User } from '@/lib/server/db/internal/schema';
+import { getServerConfig, isAuthRequired } from '@/lib/services/config/config.server';
 import { DISCORD_REFRESH_INTERVAL, PERMISSION_UPDATE_INTERVAL } from '@/lib/constants';
 import { getDiscordAuth } from '@/lib/server/auth/discord';
 import { building } from '$app/environment';

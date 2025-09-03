@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { getConfig } from '@/lib/config/config';
+	import { getConfig } from '@/lib/services/config/config';
 
 	let {
 		title,
