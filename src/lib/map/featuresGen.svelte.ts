@@ -112,6 +112,7 @@ export function updateFeatures(mapObjects: MapObjectsStateType) {
 
 	// TODO perf: only update if needed by storing a id: hash table
 	// TODO perf: when currentSelected is updated, only update what's needed and not the whole array
+	// TODO: when a gym is updated, it's not being shown on the map
 
 	const startTime = performance.now();
 

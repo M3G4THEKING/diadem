@@ -116,7 +116,7 @@
 						{m.pogo_cp({ cp: data.raid_pokemon_cp ?? 0 })}
 						({mMove(data.raid_pokemon_move_1)}
 						/
-						({mMove(data.raid_pokemon_move_2)}
+						{mMove(data.raid_pokemon_move_2)})
 					</div>
 				{/if}
 
