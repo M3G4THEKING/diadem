@@ -12,7 +12,7 @@ export const load: PageLoad = async ({ params, fetch }) => {
 	setConfig(await configResponse.json());
 
 	const results = await Promise.all([
-		querySingleMapObject(params.directLink, params.id, fetch),
+		querySingleMapObject(params.directLink, params.id, fetch),  // bypassing permissions :S
 		initAllIconSets(fetch),
 		loadRemoteLocale(getConfig().general.defaultLocale, fetch)
 	]);

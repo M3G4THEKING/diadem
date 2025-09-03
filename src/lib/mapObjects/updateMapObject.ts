@@ -21,7 +21,7 @@ import { updateWeather } from "@/lib/mapObjects/weather.svelte";
 import { hasFeatureAnywhere } from "@/lib/services/user/checkPerm";
 import { getUserDetails } from "@/lib/services/user/userDetails.svelte";
 
-export type MapObjectRequestData = Bounds & { filter: AllFilters | undefined };
+export type MapObjectRequestData = Bounds & { filter: AllFilters };
 
 export function getMapObjectId(type: MapObjectType, id: string) {
 	return type + "-" + id;

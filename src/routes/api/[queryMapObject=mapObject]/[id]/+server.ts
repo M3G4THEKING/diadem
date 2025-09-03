@@ -3,19 +3,13 @@ import { hasFeatureAnywhere } from "@/lib/services/user/checkPerm";
 
 import { noPermResult } from "@/lib/server/api/results";
 import type { MapObjectType } from "@/lib/types/mapObjectData/mapObjects";
-import {
-	querySingleGym,
-	querySingleMapObject,
-	querySinglePokemon,
-	querySinglePokestop,
-	querySingleStation
-} from "@/lib/server/api/querySingleMapObject";
+import { querySingleMapObject } from "@/lib/server/api/querySingleMapObject";
 
 export async function GET({ params, locals }) {
-	if (!hasFeatureAnywhere(locals.perms, params.mapObjectType)) return json(noPermResult());
+	if (!hasFeatureAnywhere(locals.perms, params.queryMapObject)) return json(noPermResult());
 
 	const id: string = params.id;
-	const type = params.mapObjectType as MapObjectType;
+	const type = params.queryMapObject as MapObjectType;
 
 	return json(await querySingleMapObject(type, id));
 }

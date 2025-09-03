@@ -3,21 +3,15 @@ import { checkFeatureInBounds, hasFeatureAnywhere } from "@/lib/services/user/ch
 
 import { noPermResult } from "@/lib/server/api/results";
 import type { MapObjectType } from "@/lib/types/mapObjectData/mapObjects";
-import {
-	queryGyms,
-	queryMapObjects,
-	queryPokemon,
-	queryPokestops,
-	queryStations
-} from "@/lib/server/api/queryMapObjects";
+import { queryMapObjects } from "@/lib/server/api/queryMapObjects";
 import type { MapObjectRequestData } from "@/lib/mapObjects/updateMapObject";
 
 export async function POST({ request, locals, params }) {
-	if (!hasFeatureAnywhere(locals.perms, params.mapObjectType)) return json(noPermResult());
+	if (!hasFeatureAnywhere(locals.perms, params.queryMapObject)) return json(noPermResult());
 
 	const data: MapObjectRequestData = await request.json();
-	const bounds = checkFeatureInBounds(locals.perms, params.mapObjectType, data);
-	const type = params.mapObjectType as MapObjectType;
+	const type = params.queryMapObject as MapObjectType;
+	const bounds = checkFeatureInBounds(locals.perms, params.queryMapObject, data);
 
 	return json(await queryMapObjects(type, bounds, data.filter));
 }
