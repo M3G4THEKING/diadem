@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { isModalOpen } from '@/lib/ui/modal.svelte.js';
-	import { GeoJSON, MapLibre, Marker, SymbolLayer } from 'svelte-maplibre';
+	import { GeoJSON, MapLibre, SymbolLayer } from 'svelte-maplibre';
 	import { getUserSettings, updateUserSettings } from '@/lib/services/userSettings.svelte.js';
 	import { onDestroy, onMount, tick } from 'svelte';
 	import { getDirectLinkObject } from '@/lib/features/directLinks.svelte.js';
@@ -11,12 +11,7 @@
 	import { isWebglSupported } from '@/lib/map/utils';
 	import { clearUpdateMapObjectsInterval, resetUpdateMapObjectsInterval } from '@/lib/map/mapObjectsInterval';
 	import { getMap, setMap } from '@/lib/map/map.svelte';
-	import {
-		clearPressTimer,
-		getContextMenuEvent,
-		getIsContextMenuOpen,
-		onContextMenu
-	} from '@/lib/ui/contextmenu.svelte.js';
+	import { clearPressTimer, onContextMenu } from '@/lib/ui/contextmenu.svelte.js';
 	import { clearSessionImageUrls, getMapObjectsGeoJson } from '@/lib/map/featuresManage.svelte';
 	import { loadMapObjectInterval } from '@/lib/map/loadMapObjects';
 	import { onMapMove, onMapMoveEnd, onMapMoveStart, onTouchStart, onWindowFocus } from '@/lib/map/events';
@@ -26,10 +21,9 @@
 	import S2CellLayer from '@/components/map/S2CellLayer.svelte';
 	import { getSelectedWeatherS2Cells } from '@/lib/mapObjects/weather.svelte';
 	import DebugMenu from '@/components/map/DebugMenu.svelte';
-	import { getAnimateLocationMarker, getCurrentLocation } from '@/lib/map/geolocate.svelte';
 	import { hasLoadedFeature, LoadedFeature } from '@/lib/services/initialLoad.svelte.js';
 	import { openToast } from '@/lib/ui/toasts.svelte.js';
-	import { addMapObject, getMapObjects } from '@/lib/mapObjects/mapObjectsState.svelte';
+	import { getMapObjects } from '@/lib/mapObjects/mapObjectsState.svelte';
 	import MarkerCurrentLocation from '@/components/map/MarkerCurrentLocation.svelte';
 	import MarkerContextMenu from '@/components/map/MarkerContextMenu.svelte';
 	import { getCurrentScoutData } from '@/lib/features/scout.svelte.js';
@@ -68,7 +62,7 @@
 		if (
 			!isInitUpdatedMapObjects &&
 			map
-			&& hasLoadedFeature(LoadedFeature.REMOTE_LOCALE, LoadedFeature.MASTER_FILE, LoadedFeature.ICON_SETS)
+			&& hasLoadedFeature(LoadedFeature.REMOTE_LOCALE, LoadedFeature.MASTER_FILE, LoadedFeature.ICON_SETS, LoadedFeature.USER_DETAILS)
 		) {
 			const directLink = getDirectLinkObject();
 			const directLinkData = directLink?.data
@@ -82,7 +76,7 @@
 				map.setCenter({ lat: directLinkData.lat, lng: directLinkData.lon });
 				map.setZoom(18);
 			}
-
+			
 			isInitUpdatedMapObjects = true;
 			updateAllMapObjects(false)
 				.then(() => {

@@ -45,7 +45,7 @@ export async function onMapMoveStart() {
 
 export function onWindowFocus() {
 	if (!getMap()) return;
-	updateAllMapObjects();
+	updateAllMapObjects().then();
 	resetUpdateMapObjectsInterval();
 }
 
