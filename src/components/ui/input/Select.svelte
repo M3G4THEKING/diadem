@@ -1,6 +1,6 @@
 <script lang="ts">
 	import Button from '@/components/ui/basic/Button.svelte';
-	import SettingsSettingTitle from '@/components/menus/profile/SettingsSettingTitle.svelte';
+	import MenuTitle from '@/components/menus/MenuTitle.svelte';
 	import { closeModal, openModal } from '@/lib/ui/modal.svelte.js';
 	import Card from '@/components/ui/basic/Card.svelte';
 	import ContextMenuItem from '@/components/ui/contextmenu/ContextMenuItem.svelte';
@@ -48,7 +48,7 @@
 	class="relative group py-3 px-4 w-full flex justify-between! items-center text-left rounded-md"
 	onclick={() => openModal(selectModal)}
 >
-	<SettingsSettingTitle {title} {description} />
+	<MenuTitle {title} {description} />
 
 	<span
 		class="border-border dark:group-hover:border-card dark:group-active:border-card ring-offset-background rounded-md border px-6 py-2 text-sm"

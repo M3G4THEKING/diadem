@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { getDefaultIconSet, getUserSettings, updateUserSettings } from '@/lib/services/userSettings.svelte.js';
 	import { Cloud, Code, Image, Moon, Paintbrush, Sun } from 'lucide-svelte';
-	import SettingsCard from '@/components/menus/profile/SettingsCard.svelte';
+	import MenuCard from '@/components/menus/MenuCard.svelte';
 	import {
 		getIconGym,
 		getIconPokemon,
@@ -12,27 +12,21 @@
 	import { getConfig } from '@/lib/services/config/config';
 	import { MapLibre } from 'svelte-maplibre';
 	import type { MapObjectType } from '@/lib/types/mapObjectData/mapObjects';
-	import SettingsToggle from '@/components/menus/profile/SettingsToggle.svelte';
-	import SettingsNumber from '@/components/menus/profile/SettingsNumber.svelte';
-	import SettingsGeneric from '@/components/menus/profile/SettingsGeneric.svelte';
+	import Toggle from '@/components/ui/input/Toggle.svelte';
+	import NumberInput from '@/components/ui/input/NumberInput.svelte';
+	import MenuGeneric from '@/components/menus/MenuGeneric.svelte';
 	import * as m from '@/lib/paraglide/messages';
-	import SettingsSelect from '@/components/menus/profile/SettingsSelect.svelte';
+	import Select from '@/components/ui/input/Select.svelte';
 	import { deleteAllFeaturesOfType, updateFeatures } from '@/lib/map/featuresGen.svelte.js';
 	import RadioGroup from '@/components/ui/basic/RadioGroup.svelte';
-	import SettingsRadioGroupItem from '@/components/menus/profile/SettingsRadioGroupItem.svelte';
-	import { getUserDetails } from '@/lib/services/user/userDetails.svelte';
-	import type { PageProps } from './$types';
 	import ProfileCard from '@/components/ui/user/ProfileCard.svelte';
 	import { isSupportedFeature } from '@/lib/services/supportedFeatures';
-	import { openMenu } from '@/lib/ui/menus.svelte.js';
-	import CloseButton from '@/components/ui/CloseButton.svelte';
-	import { getMap } from '@/lib/map/map.svelte';
 	import { getMapObjects } from '@/lib/mapObjects/mapObjectsState.svelte';
-	import { tick } from 'svelte';
 	import { clearSessionImageUrls } from '@/lib/map/featuresManage.svelte';
-	import SettingsSlider from '@/components/menus/profile/SettingsSlider.svelte';
+	import Slider from '@/components/ui/input/Slider.svelte';
 	import { AVAILABLE_LANGUAGES } from '@/lib/constants';
 	import { isMenuSidebar } from '@/lib/utils/device';
+	import RadioGroupItem from '@/components/ui/basic/RadioGroupItem.svelte';
 
 	// $effect(() => {
 	// 	getUserSettings()
@@ -103,7 +97,7 @@
 
 {#snippet iconSelect(title, type, getIconFunc, getIconParams)}
 	{#if getUiconSets(type).length > 1}
-		<SettingsGeneric {title}>
+		<MenuGeneric {title}>
 			<RadioGroup
 				childCount={getUiconSets(type).length}
 				value={getUserSettings().uiconSet[type].id}
@@ -111,17 +105,17 @@
 				evenColumns={false}
 			>
 				{#each getUiconSets(type) as iconSet (iconSet.value)}
-					<SettingsRadioGroupItem class="p-4" value={iconSet.value}>
+					<RadioGroupItem class="p-4" value={iconSet.value}>
 						<img
 							class="w-5"
 							src={getIconFunc(getIconParams, iconSet.value)}
 							alt="{title} (Style: {iconSet.label})"
 						>
 						{iconSet.label}
-					</SettingsRadioGroupItem>
+					</RadioGroupItem>
 				{/each}
 			</RadioGroup>
-		</SettingsGeneric>
+		</MenuGeneric>
 	{/if}
 {/snippet}
 
@@ -130,13 +124,13 @@
 		<ProfileCard />
 	{/if}
 
-	<SettingsCard>
+	<MenuCard>
 		{#snippet title()}
 			<Paintbrush size="18" />
 			{m.settings_appearance()}
 		{/snippet}
 
-		<SettingsSelect
+		<Select
 			title={m.settings_language()}
 			description=""
 			value={getUserSettings().languageTag}
@@ -145,7 +139,7 @@
 		/>
 
 		{#if !isMenuSidebar()}
-			<SettingsToggle
+			<Toggle
 				title={m.settings_left_handed_mode_title()}
 				description={m.settings_left_handed_mode_description()}
 				onclick={() => {getUserSettings().isLeftHanded = !getUserSettings().isLeftHanded}}
@@ -153,28 +147,28 @@
 			/>
 		{/if}
 
-		<SettingsGeneric title={m.settings_theme()}>
+		<MenuGeneric title={m.settings_theme()}>
 			<RadioGroup
 				value={"" + getUserSettings().isDarkMode}
 				onValueChange={onThemeChange}
 				class="self-center"
 			>
-				<SettingsRadioGroupItem class="p-4" value="false">
+				<RadioGroupItem class="p-4" value="false">
 					<Sun size="20" />
 					{m.theme_light()}
-				</SettingsRadioGroupItem>
-				<SettingsRadioGroupItem class="p-4" value="null">
+				</RadioGroupItem>
+				<RadioGroupItem class="p-4" value="null">
 					<Cloud size="20" />
 					{m.theme_system()}
-				</SettingsRadioGroupItem>
-				<SettingsRadioGroupItem class="p-4" value="true">
+				</RadioGroupItem>
+				<RadioGroupItem class="p-4" value="true">
 					<Moon size="20" />
 					{m.theme_dark()}
-				</SettingsRadioGroupItem>
+				</RadioGroupItem>
 			</RadioGroup>
-		</SettingsGeneric>
+		</MenuGeneric>
 
-		<SettingsGeneric title={m.settings_map_style()}>
+		<MenuGeneric title={m.settings_map_style()}>
 			<RadioGroup
 				childCount={getConfig().mapStyles.length}
 				value={getUserSettings().mapStyle.id}
@@ -182,7 +176,7 @@
 				class="self-center"
 			>
 				{#each getConfig().mapStyles as mapStyle (mapStyle.id)}
-					<SettingsRadioGroupItem class="overflow-hidden" value={mapStyle.id}>
+					<RadioGroupItem class="overflow-hidden" value={mapStyle.id}>
 						<MapLibre
 							center={[9.979, 53.563]}
 							zoom={12}
@@ -196,13 +190,13 @@
 							{mapStyle.name}
 						</span>
 
-					</SettingsRadioGroupItem>
+					</RadioGroupItem>
 				{/each}
 			</RadioGroup>
-		</SettingsGeneric>
+		</MenuGeneric>
 
-		<SettingsGeneric title={m.settings_icon_size()}>
-			<SettingsSlider
+		<MenuGeneric title={m.settings_icon_size()}>
+			<Slider
 				value={getUserSettings().mapIconSize}
 				onchange={value => getUserSettings().mapIconSize = value}
 				steps={[0.75, 1, 1.25, 1.5]}
@@ -213,11 +207,11 @@
 					1.5: "XL"
 				}}
 			/>
-		</SettingsGeneric>
+		</MenuGeneric>
 
-	</SettingsCard>
+	</MenuCard>
 
-	<SettingsCard>
+	<MenuCard>
 		{#snippet title()}
 			<Image size="18" />
 			{m.settings_icons()}
@@ -227,29 +221,29 @@
 		{@render iconSelect(m.pogo_pokestops(), "pokestop", getIconPokestop, {})}
 		{@render iconSelect(m.pogo_gyms(), "gym", getIconGym, {})}
 		{@render iconSelect(m.pogo_stations(), "station", getIconStation, {})}
-	</SettingsCard>
+	</MenuCard>
 
-	<SettingsCard>
+	<MenuCard>
 		{#snippet title()}
 			<Code size="18" />
 			{m.settings_advanced()}
 		{/snippet}
 
-		<SettingsToggle
+		<Toggle
 			title={m.settings_show_debug_title()}
 			description={m.settings_show_debug_description()}
 			onclick={() => {getUserSettings().showDebugMenu = !getUserSettings().showDebugMenu}}
 			value={getUserSettings().showDebugMenu}
 		/>
 
-		<SettingsToggle
+		<Toggle
 			title={m.settings_load_map_objects_while_moving_title()}
 			description={m.settings_load_map_objects_while_moving_description()}
 			onclick={() => {getUserSettings().loadMapObjectsWhileMoving = !getUserSettings().loadMapObjectsWhileMoving}}
 			value={getUserSettings().loadMapObjectsWhileMoving}
 		/>
 
-		<SettingsNumber
+		<NumberInput
 			title={m.settings_load_map_objects_padding_title()}
 			description={m.settings_load_map_objects_padding_description()}
 			value={getUserSettings().loadMapObjectsPadding}
@@ -257,5 +251,5 @@
 			min="0"
 			step="10"
 		/>
-	</SettingsCard>
+	</MenuCard>
 </div>

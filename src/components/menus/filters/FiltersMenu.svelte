@@ -4,14 +4,14 @@
 	import Card from '@/components/ui/basic/Card.svelte';
 	import { getUserSettings, updateUserSettings } from '@/lib/services/userSettings.svelte.js';
 	import { ChevronDown, ChevronUp, Eye, EyeOff, Filter, Plus } from 'lucide-svelte';
-	import SettingsGeneric from '@/components/menus/profile/SettingsGeneric.svelte';
+	import MenuGeneric from '@/components/menus/MenuGeneric.svelte';
 	import Button from '@/components/ui/basic/Button.svelte';
 	import { getIconPokemon } from '@/lib/services/uicons.svelte.js';
-	import Switch from '@/components/menus/profile/Switch.svelte';
+	import Switch from '@/components/ui/input/Switch.svelte';
 	import FilterTypeSelect from '@/components/menus/filters/FilterTypeSelect.svelte';
 
 	import { slide } from 'svelte/transition';
-	import SettingsSelect from '@/components/menus/profile/SettingsSelect.svelte';
+	import Select from '@/components/ui/input/Select.svelte';
 	import { hasFeatureAnywhere } from '@/lib/services/user/checkPerm';
 	import { getUserDetails } from '@/lib/services/user/userDetails.svelte';
 	import Metadata from '@/components/utils/Metadata.svelte';
@@ -87,7 +87,7 @@
 <div class="mt-2" style="container-name: menu; container-type: inline-size">
 	{#if hasFeatureAnywhere(getUserDetails().permissions, "pokemon")}
 		<Card class="pt-4 pb-2 px-2 mb-4">
-			<SettingsGeneric title="Pokémon">
+			<MenuGeneric title="Pokémon">
 				<FilterTypeSelect category="pokemonMajor" />
 
 				{#if getUserSettings().filters.pokemonMajor.type === "filtered"}
@@ -118,29 +118,29 @@
 						</Button>
 					</div>
 				{/if}
-			</SettingsGeneric>
+			</MenuGeneric>
 		</Card>
 	{/if}
 
 	{#if hasFeatureAnywhere(getUserDetails().permissions, "pokestop")}
 		<Card class="pt-4 pb-2 px-2 mb-4">
-			<SettingsGeneric title="Plain Pokéstops">
+			<MenuGeneric title="Plain Pokéstops">
 				<FilterTypeSelect category="pokestopPlain" />
-			</SettingsGeneric>
+			</MenuGeneric>
 			{#if test}
 				<div transition:slide={{ duration: 80 }}>
-					<SettingsGeneric title="Quests">
+					<MenuGeneric title="Quests">
 						<FilterTypeSelect category="quest" />
-					</SettingsGeneric>
-					<SettingsGeneric title="Team Rocket">
+					</MenuGeneric>
+					<MenuGeneric title="Team Rocket">
 						<FilterTypeSelect category="invasion" />
-					</SettingsGeneric>
-					<SettingsGeneric title="Showcases">
+					</MenuGeneric>
+					<MenuGeneric title="Showcases">
 						<FilterTypeSelect category="contest" />
-					</SettingsGeneric>
-					<SettingsGeneric title="Lures">
+					</MenuGeneric>
+					<MenuGeneric title="Lures">
 						<FilterTypeSelect category="lure" />
-					</SettingsGeneric>
+					</MenuGeneric>
 				</div>
 			{/if}
 			<Button class="w-full" variant="ghost" onclick={() => test = !test}>
@@ -158,30 +158,30 @@
 
 	{#if hasFeatureAnywhere(getUserDetails().permissions, "gym")}
 		<Card class="pt-4 pb-2 px-2 mb-4">
-			<SettingsGeneric title="Plain Gyms">
+			<MenuGeneric title="Plain Gyms">
 				<FilterTypeSelect category="gymPlain" />
-			</SettingsGeneric>
-			<SettingsGeneric title="Raids">
+			</MenuGeneric>
+			<MenuGeneric title="Raids">
 				{@render showWhat()}
-			</SettingsGeneric>
+			</MenuGeneric>
 		</Card>
 	{/if}
 
 	{#if hasFeatureAnywhere(getUserDetails().permissions, "station")}
 		<Card class="pt-4 pb-2 px-2 mb-4">
-			<SettingsGeneric title="Plain Power Spots">
+			<MenuGeneric title="Plain Power Spots">
 				<FilterTypeSelect category="stationMajor" />
-			</SettingsGeneric>
+			</MenuGeneric>
 		</Card>
 	{/if}
 
 	{#if hasFeatureAnywhere(getUserDetails().permissions, "s2cell")}
 		<Card class="pt-4 pb-2 px-2">
-			<SettingsGeneric title="S2 Cells">
+			<MenuGeneric title="S2 Cells">
 				<FilterTypeSelect category="s2cell" />
 
 				{#if getUserSettings().filters.s2cell.type === "all"}
-					<SettingsSelect
+					<Select
 						onselect={onS2CellChange}
 						value={getUserSettings().filters.s2cell.filters.levels[0]}
 						title="Level"
@@ -194,7 +194,7 @@
 					]}
 					/>
 				{/if}
-			</SettingsGeneric>
+			</MenuGeneric>
 		</Card>
 	{/if}
 </div>

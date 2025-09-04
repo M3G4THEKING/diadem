@@ -1,8 +1,8 @@
 <script lang="ts">
 	import { getUserSettings } from '@/lib/services/userSettings.svelte.js';
 	import Button from '@/components/ui/basic/Button.svelte';
-	import Switch from '@/components/menus/profile/Switch.svelte';
-	import SettingsSettingTitle from '@/components/menus/profile/SettingsSettingTitle.svelte';
+	import Switch from '@/components/ui/input/Switch.svelte';
+	import MenuTitle from '@/components/menus/MenuTitle.svelte';
 
 	let {
 		onclick,
@@ -23,7 +23,7 @@
 	class="py-3 px-4 w-full flex justify-between! items-center text-left rounded-md"
 	onclick={onclick}
 >
-	<SettingsSettingTitle {title} {description} />
+	<MenuTitle {title} {description} />
 
 	<Switch
 		checked={value}

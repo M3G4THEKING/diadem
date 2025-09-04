@@ -2,8 +2,8 @@
 	import { getConfig } from '@/lib/services/config/config';
 	import * as m from '@/lib/paraglide/messages';
 	import Card from '@/components/ui/basic/Card.svelte';
-	import SettingsSlider from '@/components/menus/profile/SettingsSlider.svelte';
-	import SettingsSettingTitle from '@/components/menus/profile/SettingsSettingTitle.svelte';
+	import Slider from '@/components/ui/input/Slider.svelte';
+	import MenuTitle from '@/components/menus/MenuTitle.svelte';
 	import Button from '@/components/ui/basic/Button.svelte';
 	import { onDestroy, onMount } from 'svelte';
 	import {
@@ -91,8 +91,8 @@
 
 <Card class="py-4 px-4 mt-2">
 	<div class="flex flex-col gap-2">
-		<SettingsSettingTitle title={m.scout_area_size()} />
-		<SettingsSlider
+		<MenuTitle title={m.scout_area_size()} />
+		<Slider
 			value={size}
 			onchange={updatePoints}
 			steps={[0, 1, 2]}
