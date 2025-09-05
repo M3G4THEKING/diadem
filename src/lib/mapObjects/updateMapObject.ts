@@ -1,16 +1,11 @@
 import {
-	addMapObject,
 	addMapObjects,
 	clearAllMapObjects,
 	clearMapObjects,
 	getMapObjects
 } from "@/lib/mapObjects/mapObjectsState.svelte.js";
 import { type Bounds, getBounds } from "@/lib/mapObjects/mapBounds";
-import type {
-	MapData,
-	MapObjectType,
-	MinorMapObjectType
-} from "@/lib/types/mapObjectData/mapObjects";
+import type { MapObjectType, MinorMapObjectType } from "@/lib/types/mapObjectData/mapObjects";
 import { getUserSettings } from "@/lib/services/userSettings.svelte.js";
 import type { AllFilters, FilterS2Cell } from "@/lib/features/filters/filters";
 import { updateFeatures } from "@/lib/map/featuresGen.svelte";
@@ -24,14 +19,6 @@ export type MapObjectRequestData = Bounds & { filter: AllFilters };
 
 export function getMapObjectId(type: MapObjectType, id: string) {
 	return type + "-" + id;
-}
-
-export function makeMapObject(data: MapData, type: MapObjectType): MapData {
-	data.type = type;
-	data.mapId = getMapObjectId(type, data.id);
-	addMapObject(data);
-
-	return data;
 }
 
 export function clearMap() {

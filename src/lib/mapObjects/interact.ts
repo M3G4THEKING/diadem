@@ -7,10 +7,14 @@ import { getMapObjects } from '@/lib/mapObjects/mapObjectsState.svelte.js';
 import { getCurrentSelectedData, setCurrentSelectedData } from '@/lib/mapObjects/currentSelectedState.svelte';
 
 import { setIsContextMenuOpen } from '@/lib/ui/contextmenu.svelte.js';
+import { updateAllMapObjects } from '@/lib/mapObjects/updateMapObject';
 
 export function closePopup() {
 	setCurrentSelectedData(null);
 	setCurrentPath();
+
+	// call this to remove selected data (if needed)
+	updateAllMapObjects().then()
 
 	const title = document.head.querySelector('title');
 	if (title) title.innerText = getConfig().general.mapName;

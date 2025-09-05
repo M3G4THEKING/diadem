@@ -23,10 +23,11 @@
 	import DebugMenu from '@/components/map/DebugMenu.svelte';
 	import { hasLoadedFeature, LoadedFeature } from '@/lib/services/initialLoad.svelte.js';
 	import { openToast } from '@/lib/ui/toasts.svelte.js';
-	import { getMapObjects } from '@/lib/mapObjects/mapObjectsState.svelte';
+	import { addMapObjects, getMapObjects } from '@/lib/mapObjects/mapObjectsState.svelte';
 	import MarkerCurrentLocation from '@/components/map/MarkerCurrentLocation.svelte';
 	import MarkerContextMenu from '@/components/map/MarkerContextMenu.svelte';
 	import { getCurrentScoutData } from '@/lib/features/scout.svelte.js';
+	import { Coords } from '@/lib/utils/coordinates';
 
 	let map: maplibre.Map | undefined = $state(undefined);
 	const initialMapPosition = JSON.parse(JSON.stringify(getUserSettings().mapPosition));
@@ -50,39 +51,38 @@
 	// update initial map objects only once every required part has been loaded
 	let isInitUpdatedMapObjects = false;
 	$effect(() => {
-		const map = getMap()
+		const map = getMap();
 		if (
 			!isInitUpdatedMapObjects &&
 			map
 			&& hasLoadedFeature(LoadedFeature.REMOTE_LOCALE, LoadedFeature.MASTER_FILE, LoadedFeature.ICON_SETS, LoadedFeature.USER_DETAILS)
 		) {
-			const directLink = getDirectLinkObject();
-			const directLinkData = directLink?.data
+			const directLinkData = getDirectLinkObject();
 
-			if (directLinkData && directLinkData.lat && directLinkData.lon) {
-				getUserSettings().mapPosition.center.lat = directLinkData.lat;
-				getUserSettings().mapPosition.center.lng = directLinkData.lon;
-				getUserSettings().mapPosition.zoom = 18;
-				updateUserSettings();
+			if (directLinkData) {
+				if (directLinkData.id) {
+					addMapObjects([directLinkData], directLinkData.type)
+					openPopup(directLinkData)
 
-				map.setCenter({ lat: directLinkData.lat, lng: directLinkData.lon });
-				map.setZoom(18);
+					if (!map.getBounds().contains(Coords.infer(directLinkData).maplibre())) {
+						getUserSettings().mapPosition.center.lat = directLinkData.lat;
+						getUserSettings().mapPosition.center.lng = directLinkData.lon;
+						getUserSettings().mapPosition.zoom = 18;
+						updateUserSettings();
+
+						map.setCenter({ lat: directLinkData.lat, lng: directLinkData.lon });
+						map.setZoom(18);
+					}
+				} else {
+					openToast(m.direct_link_not_found({ type: m['pogo_' + directLinkData.type]() }), 5000);
+				}
+
 			}
 
 			isInitUpdatedMapObjects = true;
 			updateAllMapObjects(false)
 				.then(() => {
-					resetUpdateMapObjectsInterval()
-
-					if (directLinkData) {
-						const allData = getMapObjects()[getMapObjectId(directLinkData.type, directLinkData.id)]
-						if (directLink.unavailable || !allData) {
-							openToast(m.direct_link_not_found({ type: m['pogo_' + directLinkData.type]() }), 5000);
-						} else if (allData) {
-							console.debug(allData)
-							openPopup(allData)
-						}
-					}
+					resetUpdateMapObjectsInterval();
 				})
 				.catch(e => console.error(e));
 		}

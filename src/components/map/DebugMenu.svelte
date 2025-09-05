@@ -21,7 +21,7 @@
 		if (getUserSettings().showDebugMenu) {
 			map.addControl(frameRateControl);
 			map.on('moveend', onMoveEndDebug);
-		} else {
+		} else if (map.hasControl(frameRateControl)) {
 			map.removeControl(frameRateControl)
 			map.off('moveend', onMoveEndDebug);
 		}

@@ -45,7 +45,7 @@
 	"popup_no_iv_scanned": "No IV scanned",
 	"pogo_pokestop": "Pokéstop",
 	"pogo_gym": "Gym",
-	"direct_link_not_found": "{type} either disappeared or isn't in filter list",
+	"direct_link_not_found": "{type} disappeared",
 	"context_menu_copy_coordinates": "Copy coordinates",
 	"context_menu_navigate_here": "Navigate here",
 	"context_menu_scout_location": "Scout location",

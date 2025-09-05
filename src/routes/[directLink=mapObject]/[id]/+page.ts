@@ -4,9 +4,9 @@ import { setDirectLinkObject } from "@/lib/features/directLinks.svelte.js";
 
 export const ssr = true;
 
-export const load: PageLoad = async ({ params, fetch, data }) => {
+export const load: PageLoad = async ({ data }) => {
 	if (browser) {
-		setDirectLinkObject(params.id, params.directLink, data);
+		setDirectLinkObject(data);
 	}
 	return data;
 };
