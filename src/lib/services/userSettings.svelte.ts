@@ -3,17 +3,17 @@ import type { MapObjectType } from "@/lib/types/mapObjectData/mapObjects";
 import type {
 	FilterCategory,
 	FilterContest,
-	FilterGymMajor,
+	FilterGym,
 	FilterGymPlain,
 	FilterInvasion,
 	FilterLure,
 	FilterPokemon,
-	FilterPokestopMajor,
+	FilterPokestop,
 	FilterPokestopPlain,
 	FilterQuest,
 	FilterRaid,
 	FilterS2Cell,
-	FilterStationMajor
+	FilterStation
 } from "@/lib/features/filters/filters";
 import { getUserDetails } from "@/lib/services/user/userDetails.svelte.js";
 
@@ -44,16 +44,9 @@ export type UserSettings = {
 	mapIconSize: number;
 	filters: {
 		pokemonMajor: FilterPokemon;
-		pokestopMajor: FilterPokestopMajor;
-		pokestopPlain: FilterPokestopPlain;
-		quest: FilterQuest;
-		invasion: FilterInvasion;
-		contest: FilterContest;
-		lure: FilterLure;
-		gymMajor: FilterGymMajor;
-		gymPlain: FilterGymPlain;
-		raid: FilterRaid;
-		stationMajor: FilterStationMajor;
+		pokestopMajor: FilterPokestop;
+		gymMajor: FilterGym;
+		stationMajor: FilterStation;
 		s2cell: FilterS2Cell;
 	};
 };
@@ -85,20 +78,41 @@ export function getDefaultUserSettings(): UserSettings {
 		showDebugMenu: false,
 		mapIconSize: 1,
 		filters: {
-			pokemonMajor: { category: "pokemonMajor", type: "all" },
-			pokestopMajor: { category: "pokestopMajor", type: "all" },
-			pokestopPlain: { category: "pokestopPlain", type: "all" },
-			quest: { category: "quest", type: "all" },
-			invasion: { category: "invasion", type: "all" },
-			contest: { category: "contest", type: "all" },
-			lure: { category: "lure", type: "all" },
-			gymMajor: { category: "gymMajor", type: "all" },
-			gymPlain: { category: "gymPlain", type: "all" },
-			raid: { category: "raid", type: "all" },
-			stationMajor: { category: "stationMajor", type: "all" },
-			s2cell: { category: "s2cell", type: "none", filters: { levels: [15] } }
+			pokemonMajor: { category: "pokemonMajor", ...defaultFilter() },
+			pokestopMajor: {
+				category: "pokestopMajor",
+				...defaultFilter(),
+				pokestopPlain: { category: "pokestopPlain", ...defaultFilter() },
+				quest: { category: "quest", ...defaultFilter() },
+				invasion: { category: "invasion", ...defaultFilter() },
+				contest: { category: "contest", ...defaultFilter() },
+				kecleon: { category: "kecleon", ...defaultFilter() },
+				goldPokestop: { category: "goldPokestop", ...defaultFilter() },
+				lure: { category: "lure", ...defaultFilter() },
+			},
+			gymMajor: {
+				category: "gymMajor",
+				...defaultFilter(),
+				gymPlain: { category: "gymPlain", ...defaultFilter() },
+				raid: { category: "raid", ...defaultFilter() },
+			},
+			stationMajor: {
+				category: "stationMajor",
+				...defaultFilter(),
+				stationPlain: { category: "stationPlain", ...defaultFilter() },
+				maxBattle: { category: "maxBattle", ...defaultFilter() },
+			},
+			s2cell: { category: "s2cell", ...defaultFilter() }
 		}
 	};
+}
+
+function defaultFilter() {
+	return {
+		enabled: true,
+		ignoreFilters: false,
+		filters: []
+	}
 }
 
 export function getDefaultIconSet(type: MapObjectType) {

@@ -7,7 +7,7 @@ import {
 import { type Bounds, getBounds } from "@/lib/mapObjects/mapBounds";
 import type { MapObjectType, MinorMapObjectType } from "@/lib/types/mapObjectData/mapObjects";
 import { getUserSettings } from "@/lib/services/userSettings.svelte.js";
-import type { AllFilters, FilterS2Cell } from "@/lib/features/filters/filters";
+import type { AnyFilter, FilterS2Cell } from "@/lib/features/filters/filters";
 import { updateFeatures } from "@/lib/map/featuresGen.svelte";
 import { clearS2Cells, updateS2CellGeojson } from "@/lib/mapObjects/s2cells.svelte.js";
 import { updateWeather } from "@/lib/mapObjects/weather.svelte";
@@ -15,7 +15,7 @@ import { hasFeatureAnywhere } from "@/lib/services/user/checkPerm";
 import { getUserDetails } from "@/lib/services/user/userDetails.svelte";
 import { allMapObjectTypes, allMinorMapTypes } from "@/lib/mapObjects/mapObjectTypes";
 
-export type MapObjectRequestData = Bounds & { filter: AllFilters };
+export type MapObjectRequestData = Bounds & { filter: AnyFilter };
 
 export function getMapObjectId(type: MapObjectType, id: string) {
 	return type + "-" + id;
@@ -35,21 +35,21 @@ export async function updateMapObject(
 	if (!hasFeatureAnywhere(getUserDetails().permissions, type)) return;
 
 	const startTime = performance.now();
-	let filter: AllFilters | undefined = undefined;
+	let filter: AnyFilter | undefined = undefined;
 
 	if (type === "pokemon") {
 		filter = getUserSettings().filters.pokemonMajor;
 	} else if (type === "pokestop") {
-		filter = getUserSettings().filters.pokestopPlain;
+		filter = getUserSettings().filters.pokestopMajor;
 	} else if (type === "gym") {
-		filter = getUserSettings().filters.gymPlain;
+		filter = getUserSettings().filters.gymMajor;
 	} else if (type === "station") {
 		filter = getUserSettings().filters.stationMajor;
 	} else if (type === "s2cell") {
 		filter = getUserSettings().filters.s2cell;
 	}
 
-	if ((!filter || filter.type === "none") && type !== "s2cell") {
+	if ((!filter || !filter.enabled) && type !== "s2cell") {
 		clearMapObjects(type);
 		updateFeatures(getMapObjects());
 		return;

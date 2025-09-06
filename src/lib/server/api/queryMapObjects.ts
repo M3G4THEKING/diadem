@@ -1,43 +1,62 @@
 import { query } from "@/lib/server/db/external/internalQuery";
 import type { Bounds } from "@/lib/mapObjects/mapBounds";
 import type {
-	AllFilters,
+	AnyFilter,
 	FilterGymPlain,
 	FilterPokemon,
-	FilterPokestopPlain,
-	FilterStationMajor
+	FilterStation
 } from "@/lib/features/filters/filters";
 import { getMultiplePokemon } from "@/lib/server/api/golbatApi";
 import type { MapData, MapObjectType } from "@/lib/types/mapObjectData/mapObjects";
+import type { GolbatPokemonQuery } from "@/lib/server/api/queries";
+import { LIMIT_POKEMON } from "@/lib/constants";
+import { queryPokestops } from "@/lib/server/api/queryPokestops";
 
-export async function queryMapObjects(type: MapObjectType, bounds: Bounds, filter: AllFilters) {
-	let result: { error: undefined | string, result: MapData[] } = { error: "Internal Error", result: [] }
+export async function queryMapObjects(type: MapObjectType, bounds: Bounds, filter: AnyFilter) {
+	let result: { error: undefined | string; result: MapData[] } = {
+		error: "Internal Error",
+		result: []
+	};
 
 	if (type === "pokemon") {
-		result = await queryPokemon(bounds, filter)
+		result = await queryPokemon(bounds, filter);
 	} else if (type === "gym") {
-		result = await queryGyms(bounds, filter)
+		result = await queryGyms(bounds, filter);
 	} else if (type === "pokestop") {
-		result = await queryPokestops(bounds, filter)
+		result = await queryPokestops(bounds, filter);
 	} else if (type === "station") {
-		result = await queryStations(bounds, filter)
+		result = await queryStations(bounds, filter);
 	}
 
-	return result
+	return result;
 }
 
 async function queryPokemon(bounds: Bounds, filter: FilterPokemon) {
-	let golbatFilters = [
-		{
-			pokemon: []
-		}
-	];
+	let golbatQuries: GolbatPokemonQuery[];
+	if (filter.filters && (filter.filters?.length ?? 0) > 0) {
+		golbatQuries = filter.filters
+			.filter((filter) => filter.enabled)
+			.map((filter) => {
+				const query: GolbatPokemonQuery = {};
+				if (filter.pokemon) query.pokemon = filter.pokemon;
+				if (filter.iv) query.iv = filter.iv;
+				if (filter.ivAtk) query.atk_iv = filter.ivAtk;
+				if (filter.ivDef) query.def_iv = filter.ivDef;
+				if (filter.ivSta) query.sta_iv = filter.ivSta;
+				if (filter.level) query.level = filter.level;
+				if (filter.cp) query.cp = filter.cp;
+				if (filter.gender) query.gender = filter.gender;
+				if (filter.size) query.size = filter.size;
+				if (filter.pvpRankLittle) query.pvp_little = filter.pvpRankLittle;
+				if (filter.pvpRankGreat) query.pvp_great = filter.pvpRankGreat;
+				if (filter.pvpRankUltra) query.pvp_ultra = filter.pvpRankUltra;
 
-	if (filter.type === "filtered") {
-		golbatFilters = [
+				return query;
+			});
+	} else {
+		golbatQuries = [
 			{
-				pokemon: [],
-				iv: { min: 100, max: 100 }
+				pokemon: []
 			}
 		];
 	}
@@ -51,25 +70,13 @@ async function queryPokemon(bounds: Bounds, filter: FilterPokemon) {
 			latitude: bounds.maxLat,
 			longitude: bounds.maxLon
 		},
-		limit: 500000,
-		filters: golbatFilters
+		limit: LIMIT_POKEMON,
+		filters: golbatQuries
 	};
 
 	const response = await getMultiplePokemon(body);
 	const results = await response.json();
 	return { result: results, error: undefined };
-}
-
-async function queryPokestops(bounds: Bounds, filter: FilterPokestopPlain) {
-	return await query(
-		"SELECT * FROM pokestop " +
-			"LEFT JOIN incident ON incident.pokestop_id = pokestop.id " +
-			"WHERE lat BETWEEN ? AND ? " +
-			"AND lon BETWEEN ? AND ? " +
-			"AND deleted = 0 " +
-			"LIMIT 10000",
-		[bounds.minLat, bounds.maxLat, bounds.minLon, bounds.maxLon]
-	);
 }
 
 async function queryGyms(bounds: Bounds, filter: FilterGymPlain) {
@@ -83,7 +90,7 @@ async function queryGyms(bounds: Bounds, filter: FilterGymPlain) {
 	);
 }
 
-async function queryStations(bounds: Bounds, filter: FilterStationMajor) {
+async function queryStations(bounds: Bounds, filter: FilterStation) {
 	return await query(
 		"SELECT * FROM station " +
 			"WHERE lat BETWEEN ? AND ? " +

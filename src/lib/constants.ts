@@ -68,3 +68,8 @@ export const AVAILABLE_LANGUAGES = [
 		value: "de"
 	}
 ]
+
+export const LIMIT_POKEMON = 500000
+export const LIMIT_POKESTOP = 10000
+export const LIMIT_GYM = 10000
+export const LIMIT_STATION = 10000

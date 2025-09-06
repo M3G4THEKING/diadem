@@ -1,129 +1,148 @@
-export type FilterCategory = "pokemonMajor"
+import type {
+	FiltersetGymPlain,
+	FiltersetInvasion,
+	FiltersetLure,
+	FiltersetMaxBattle,
+	FiltersetPokemon,
+	FiltersetPokestopPlain,
+	FiltersetQuest,
+	FiltersetRaid,
+	FiltersetS2Cell,
+	FiltersetStationPlain
+} from "@/lib/features/filters/filtersets";
+
+export type FilterCategory =
+	| "pokemonMajor"
 	| "pokestopMajor"
 	| "pokestopPlain"
 	| "quest"
 	| "invasion"
 	| "contest"
+	| "kecleon"
+	| "goldPokestop"
 	| "lure"
 	| "gymMajor"
 	| "gymPlain"
 	| "raid"
 	| "stationMajor"
-	| "s2cell"
+	| "stationPlain"
+	| "maxBattle"
+	| "s2cell";
 
-export type AllFilters = FilterPokemon
-	| FilterPokestopMajor
+export type AnyFilter =
+	| FilterPokemon
+	| FilterPokestop
 	| FilterPokestopPlain
 	| FilterQuest
 	| FilterInvasion
 	| FilterContest
+	| FilterKecleon
+	| FilterGoldPokestop
 	| FilterLure
-	| FilterGymMajor
+	| FilterGym
 	| FilterGymPlain
 	| FilterRaid
-	| FilterStationMajor
-	| FilterS2Cell
+	| FilterStation
+	| FilterStationPlain
+	| FilterMaxBattle
+	| FilterS2Cell;
 
-export type FilterTypeBool = "all" | "none"
-export type FilterType = "all" | "none" | "filtered"
+export type FilterTypeBool = "all" | "none";
+export type FilterType = "all" | "none" | "filtered";
 
-type minMax = {
-	min?: number
-	max?: number
+type BaseFilter = {
+	category: FilterCategory
+	enabled: boolean;
+	ignoreFilters: boolean;
 }
 
-export type FilterPokemon = {
-	category: "pokemonMajor"
-	type: FilterType
-	filters?: {
-		title: string
-		enabled: boolean
-		icon: any
-		pokemon?: { id?: number, form?: number }
-		iv?: minMax
-		cp?: minMax
-		ivAtk?: minMax
-		ivDef?: minMax
-		ivSta?: minMax
-		level?: minMax
-		gender?: minMax
-		size?: minMax
-		pvpRankLittle?: minMax
-		pvpRankGreat?: minMax
-		pvpRankUltra?: minMax
-	}[]
-}
+export type FilterPokemon = BaseFilter & {
+	category: "pokemonMajor";
+	filters: FiltersetPokemon[];
+};
 
-export type FilterPokestopMajor = {
-	category: "pokestopMajor"
-	type: FilterTypeBool
-}
+export type FilterPokestop = BaseFilter & {
+	category: "pokestopMajor";
+	pokestopPlain: FilterPokestopPlain;
+	quest: FilterQuest;
+	invasion: FilterInvasion;
+	contest: FilterContest;
+	kecleon: FilterKecleon
+	goldPokestop: FilterGoldPokestop
+	lure: FilterLure;
+	filters: never[];
+};
 
-export type FilterPokestopPlain = {
-	category: "pokestopPlain"
-	type: FilterTypeBool
-	// sponsored, power up level, ar scan eligible, has image/name/description
-}
+export type FilterPokestopPlain = BaseFilter & {
+	category: "pokestopPlain";
+	filters: FiltersetPokestopPlain[]
+};
 
-export type FilterQuest = {
-	category: "quest"
-	type: FilterType
-	filters?: {
+export type FilterQuest = BaseFilter & {
+	category: "quest";
+	filters: FiltersetQuest[]
+};
 
-	}
-}
+export type FilterInvasion = BaseFilter & {
+	category: "invasion";
+	filters: FiltersetInvasion[]
+};
 
-export type FilterInvasion = {
-	category: "invasion"
-	type: FilterType
-	filters?: {
+export type FilterContest = BaseFilter & {
+	category: "contest";
+	filters: never[]
+};
 
-	}
-}
+export type FilterKecleon = BaseFilter & {
+	category: "kecleon";
+	filters: never[]
+};
 
-export type FilterContest = {
-	category: "contest"
-	type: FilterType
-	filters?: {
+export type FilterGoldPokestop = BaseFilter & {
+	category: "goldPokestop";
+	filters: never[]
+};
 
-	}
-}
+export type FilterLure = BaseFilter & {
+	category: "lure";
+	filters: FiltersetLure[]
+};
 
-export type FilterLure = {
-	category: "lure"
-	type: FilterType
-	filters?: {
+export type FilterGym = BaseFilter & {
+	category: "gymMajor";
+	gymPlain: FilterGymPlain,
+	raid: FilterRaid,
+	filters: never[]
+};
 
-	}
-}
+export type FilterGymPlain = BaseFilter & {
+	category: "gymPlain";
+	filters: FiltersetGymPlain[];
+};
 
-export type FilterGymMajor = {
-	category: "gymMajor"
-	type: FilterTypeBool
-}
+export type FilterRaid = BaseFilter & {
+	category: "raid";
+	filters: FiltersetRaid[]
+};
 
-export type FilterGymPlain = {
-	category: "gymPlain"
-	type: FilterTypeBool
-}
+export type FilterStation = BaseFilter & {
+	category: "stationMajor";
+	stationPlain: FilterStationPlain,
+	maxBattle: FilterMaxBattle,
+	filters: never[]
+};
 
-export type FilterRaid = {
-	category: "raid"
-	type: FilterType
-	filters?: {
+export type FilterStationPlain = BaseFilter & {
+	category: "stationPlain";
+	filters: FiltersetStationPlain[];
+};
 
-	}
-}
+export type FilterMaxBattle = BaseFilter & {
+	category: "maxBattle";
+	filters: FiltersetMaxBattle[]
+};
 
-export type FilterStationMajor = {
-	category: "stationMajor"
-	type: FilterTypeBool
-}
-
-export type FilterS2Cell = {
-	category: "s2cell"
-	type: FilterTypeBool
-	filters?: {
-		levels: number[]
-	}
-}
+export type FilterS2Cell = BaseFilter & {
+	category: "s2cell";
+	filters: FiltersetS2Cell[]
+};

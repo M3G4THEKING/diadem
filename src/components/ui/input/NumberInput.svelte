@@ -1,20 +1,20 @@
 <script lang="ts">
-	import { getUserSettings } from '@/lib/services/userSettings.svelte.js';
 	import Input from '@/components/ui/input/Input.svelte';
 	import MenuTitle from '@/components/menus/MenuTitle.svelte';
+	import type { HTMLInputAttributes } from 'svelte/elements';
 
 	let {
 		onchange,
 		value,
 		title,
-		description = "",
+		description = '',
 		...rest
 	}: {
-		onchange: (e: Event & {target: HTMLInputElement}) => void,
+		onchange: (e: Event & { target: HTMLInputElement }) => void,
 		value: number,
 		title: string,
 		description?: string,
-	} = $props()
+	} & HTMLInputAttributes = $props();
 </script>
 
 <div

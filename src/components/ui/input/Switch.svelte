@@ -3,7 +3,7 @@
 
 	let {
 		class: class_ = "",
-		checked = false,
+		checked = $bindable(),
 		...rest
 	} = $props()
 

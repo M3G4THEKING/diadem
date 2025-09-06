@@ -116,7 +116,7 @@ export function updateSelected(currentSelected: MapData | null) {
 }
 
 export function updateFeatures(mapObjects: MapObjectsStateType) {
-	console.log("running updateFeatures");
+	console.debug("running updateFeatures");
 
 	// TODO perf: only update if needed by storing a id: hash table
 	// TODO perf: when currentSelected is updated, only update what's needed and not the whole array
@@ -124,8 +124,8 @@ export function updateFeatures(mapObjects: MapObjectsStateType) {
 
 	const startTime = performance.now();
 
-	const showQuests = getUserSettings().filters.quest.type !== "none";
-	const showInvasions = getUserSettings().filters.invasion.type !== "none";
+	const showQuests = getUserSettings().filters.pokestopMajor.quest.enabled;
+	const showInvasions = getUserSettings().filters.pokestopMajor.invasion.enabled;
 
 	const iconSets = getCurrentUiconSetDetailsAllTypes();
 	const timestamp = currentTimestamp();
@@ -207,7 +207,7 @@ export function updateFeatures(mapObjects: MapObjectsStateType) {
 
 			let index = 0;
 			if (showInvasions) {
-				for (const incident of obj.incident) {
+				for (const incident of obj?.incident ?? []) {
 					if (!incident.id || !isIncidentInvasion(incident) || incident.expiration < timestamp) {
 						continue;
 					}

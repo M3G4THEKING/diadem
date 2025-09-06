@@ -1,9 +1,10 @@
 <script lang="ts">
+	import type { HTMLInputAttributes } from 'svelte/elements';
 
 	let {
 		class: class_ = "",
 		...rest
-	} = $props()
+	}: HTMLInputAttributes = $props()
 </script>
 
 <input

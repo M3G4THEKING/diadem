@@ -60,9 +60,6 @@ export function clearS2Cells() {
 
 export function updateS2CellGeojson(data: { filter: FilterS2Cell } & Bounds) {
 	let levels: number[] = [];
-	if (data.filter.type === 'all') {
-		levels = data.filter.filters?.levels ?? [];
-	}
 
 	const zoom = getMap()?.getZoom() ?? 0;
 
