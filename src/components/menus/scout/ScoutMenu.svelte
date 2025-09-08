@@ -2,7 +2,7 @@
 	import { getConfig } from '@/lib/services/config/config';
 	import * as m from '@/lib/paraglide/messages';
 	import Card from '@/components/ui/Card.svelte';
-	import Slider from '@/components/ui/input/Slider.svelte';
+	import SliderSteps from '@/components/ui/input/SliderSteps.svelte';
 	import MenuTitle from '@/components/menus/MenuTitle.svelte';
 	import Button from '@/components/ui/input/Button.svelte';
 	import { onDestroy, onMount } from 'svelte';
@@ -92,7 +92,7 @@
 <Card class="py-4 px-2 mt-2">
 	<div class="flex flex-col gap-2">
 		<MenuTitle title={m.scout_area_size()} />
-		<Slider
+		<SliderSteps
 			value={size}
 			onchange={updatePoints}
 			steps={[0, 1, 2]}

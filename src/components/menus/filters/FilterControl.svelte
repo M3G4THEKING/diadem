@@ -9,7 +9,7 @@
 	import { slide } from 'svelte/transition';
 	import Filterset from '@/components/menus/filters/Filterset.svelte';
 	import type { FiltersetPokemon } from '@/lib/features/filters/filtersets';
-	import FilterViewModal from '@/components/menus/filters/filterview/FilterViewModal.svelte';
+	import FiltersetModal from '@/components/menus/filters/filterset/FiltersetModal.svelte';
 	import { openModal } from '@/lib/ui/modal.svelte.js';
 
 	let {
@@ -50,7 +50,7 @@
 	}
 </script>
 
-<FilterViewModal />
+<FiltersetModal />
 
 <div
 	class="py-2 pr-4 pl-0"
@@ -78,7 +78,7 @@
 			</Button>
 		{/if}
 
-		{#if isFilterable && !hasAnyFilterset}
+		{#if isFilterable && !hasAnyFilterset && isEnabled}
 			<Button class="ml-1" variant="outline" size="sm" onclick={placeholderAddFilter}>
 				<FunnelPlus size="14" />
 <!--				<span>Filter</span>-->

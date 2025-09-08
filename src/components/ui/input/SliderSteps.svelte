@@ -24,20 +24,20 @@
 		onValueChange={onchange}
 	>
 		{#snippet children({ tickItems })}
-		  <span
-			  class="relative h-2 w-full grow cursor-pointer overflow-hidden rounded-full bg-accent"
-		  >
-			<Slider.Range class="bg-foreground absolute h-full z-1" />
-		  </span>
+		  	<span
+			  	class="relative h-2 w-full grow cursor-pointer overflow-hidden rounded-full bg-accent"
+		  	>
+				<Slider.Range class="bg-foreground absolute h-full z-1" />
+		  	</span>
 			<Slider.Thumb
 				index={0}
 				class="border-border-input bg-background focus-visible:ring-foreground dark:bg-foreground z-5 focus-visible:outline-hidden data-active:scale-90 transition-transform block size-6 cursor-pointer rounded-full border transition-colors focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50"
 			/>
 			{#each tickItems as { index, value } (index)}
-<!--				<Slider.Tick-->
-<!--					{index}-->
-<!--					class="bg-accent h-4 w-2 rounded-full self-start"-->
-<!--				/>-->
+				<!--				<Slider.Tick-->
+				<!--					{index}-->
+				<!--					class="bg-accent h-4 w-2 rounded-full self-start"-->
+				<!--				/>-->
 				<Slider.TickLabel
 					position="bottom"
 					{index}

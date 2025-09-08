@@ -7,7 +7,7 @@
 	import { getConfig } from '@/lib/services/config/config';
 	import MenuCard from '@/components/menus/MenuCard.svelte';
 	import VerticalRadioGroupItem from '@/components/ui/input/VerticalRadioGroupItem.svelte';
-	import Slider from '@/components/ui/input/Slider.svelte';
+	import SliderSteps from '@/components/ui/input/SliderSteps.svelte';
 	import Toggle from '@/components/ui/input/Toggle.svelte';
 	import Select from '@/components/ui/input/Select.svelte';
 	import MenuGeneric from '@/components/menus/MenuGeneric.svelte';
@@ -98,7 +98,7 @@
 	</MenuGeneric>
 
 	<MenuGeneric title={m.settings_icon_size()}>
-		<Slider
+		<SliderSteps
 			value={getUserSettings().mapIconSize}
 			onchange={value => onSettingsChange("mapIconSize", value)}
 			steps={[0.75, 1, 1.25, 1.5]}
