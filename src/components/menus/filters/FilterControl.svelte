@@ -11,6 +11,9 @@
 	import type { FiltersetPokemon } from '@/lib/features/filters/filtersets';
 	import FiltersetModal from '@/components/menus/filters/filterset/FiltersetModal.svelte';
 	import { openModal } from '@/lib/ui/modal.svelte.js';
+	import PokemonFilterset from '@/components/menus/filters/modals/PokemonFilterset.svelte';
+	import PlainPokestopFilterset from '@/components/menus/filters/modals/PlainPokestopFilterset.svelte';
+	import QuestFilterset from '@/components/menus/filters/modals/QuestFilterset.svelte';
 
 	let {
 		category,
@@ -35,8 +38,12 @@
 	let hasAnyFilterset: boolean = $derived((filter?.filters?.length ?? 0) > 0);
 
 	function placeholderAddFilter() {
+		if (category !== 'pokemonMajor') {
+			openModal('filtersetQuest');
+			return
+		}
+
 		openModal("filtersetPokemon")
-		if (category !== 'pokemonMajor') return;
 		const newFilter: FiltersetPokemon = {
 			id: '1',
 			title: '100% IV',
@@ -50,7 +57,9 @@
 	}
 </script>
 
-<FiltersetModal />
+<PokemonFilterset isInEdit={false} />
+<PlainPokestopFilterset isInEdit={false} />
+<QuestFilterset isInEdit={false} />
 
 <div
 	class="py-2 pr-4 pl-0"

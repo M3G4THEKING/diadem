@@ -25,10 +25,6 @@
 		&& !getUserDetails().details
 	)
 
-	function onmapclick() {
-		resetMap()
-	}
-
 	$effect(() => {
 		// When opening a popup on mobile while in a menu, close the menu
 		if (getCurrentSelectedData() && !isMenuSidebar()) {

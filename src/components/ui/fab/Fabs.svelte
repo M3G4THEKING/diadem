@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { getMap, resetMap } from '@/lib/map/map.svelte';
-	import { openModal } from '@/lib/ui/modal.svelte.js';
+	import { isAnyModalOpen, openModal } from '@/lib/ui/modal.svelte.js';
 	import Search from '@/components/ui/search/Search.svelte';
 	import BaseFab from '@/components/ui/fab/BaseFab.svelte';
 	import LocateFab from '@/components/ui/fab/LocateFab.svelte';
@@ -28,7 +28,7 @@
 	);
 
 	function handleKeydown(e: KeyboardEvent) {
-		if (e.key === 'k' && (e.metaKey || e.ctrlKey) && isSearchAllowed) {
+		if (e.key === 'k' && (e.metaKey || e.ctrlKey) && isSearchAllowed && !isAnyModalOpen()) {
 			e.preventDefault();
 			openModal("search");
 		}

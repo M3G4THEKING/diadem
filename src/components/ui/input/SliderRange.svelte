@@ -23,7 +23,7 @@
 </script>
 
 <div class="py-3 px-1">
-	<div class="flex w-full mb-2 items-center">
+	<div class="flex w-full mb-3 items-center">
 		<span class="font-semibold text-base">
 			{title}
 		</span>
