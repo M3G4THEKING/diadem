@@ -2,7 +2,7 @@
 	import { getConfig } from '@/lib/services/config/config';
 	import * as m from '@/lib/paraglide/messages';
 	import Card from '@/components/ui/Card.svelte';
-	import SliderSteps from '@/components/ui/input/SliderSteps.svelte';
+	import SliderSteps from '@/components/ui/input/slider/SliderSteps.svelte';
 	import MenuTitle from '@/components/menus/MenuTitle.svelte';
 	import Button from '@/components/ui/input/Button.svelte';
 	import { onDestroy, onMount } from 'svelte';

@@ -3,8 +3,9 @@
 	import { Pencil } from 'lucide-svelte';
 	import { fly } from 'svelte/transition';
 	import type { Snippet } from 'svelte';
-	import { isFilterPageTransitionReverse } from '@/lib/ui/filtersetPages.svelte';
+	import { isFilterPageTransitionReverse } from '@/lib/features/filters/filtersetPages.svelte.js';
 	import Button from '@/components/ui/input/Button.svelte';
+	import { getCurrentSelectedFilterset } from '@/lib/features/filters/manageFilters.svelte';
 
 	let {
 		overview
@@ -27,11 +28,11 @@
 				class="rounded-full bg-accent size-10 border flex items-center justify-center relative"
 			>
 			<span class="text-lg">
-				💯
+				{getCurrentSelectedFilterset()?.data.icon}
 			</span>
 			</div>
 			<div class="flex items-center gap-2 text-base">
-				<b>Filter Title</b>
+				<b>{getCurrentSelectedFilterset()?.data.title}</b>
 			</div>
 			<Pencil class="ml-auto" size="14" />
 

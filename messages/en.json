@@ -176,5 +176,6 @@
     "range_min": "{x}+",
     "range_max": "≤{x}",
     "rank_x": "Rank {rank}",
-    "x_percentage": "{x}%"
+    "x_percentage": "{x}%",
+    "count_genders": "{count} genders"
 }

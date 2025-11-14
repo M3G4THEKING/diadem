@@ -1,8 +1,13 @@
-<script lang="ts">
+<script lang="ts" generics="T extends AnyFilterset">
 	import Button from '@/components/ui/input/Button.svelte';
 	import { ChevronRight } from 'lucide-svelte';
 	import type { Snippet } from 'svelte';
-	import { filtersetPageEditAttribute, setCurrentAttributePage } from '@/lib/ui/filtersetPages.svelte';
+	import {
+		filtersetPageEditAttribute,
+		type FiltersetSnippet,
+		setCurrentAttributePage
+	} from '@/lib/features/filters/filtersetPages.svelte.js';
+	import type { AnyFilterset } from '@/lib/features/filters/filtersets';
 
 	let {
 		label,
@@ -10,7 +15,7 @@
 		children = undefined
 	}: {
 		label: string,
-		page: Snippet,
+		page: FiltersetSnippet<T>,
 		children?: Snippet
 	} = $props();
 

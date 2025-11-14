@@ -16,9 +16,9 @@
 	import { getUserDetails } from '@/lib/services/user/userDetails.svelte';
 	import Metadata from '@/components/utils/Metadata.svelte';
 	import FilterSection from '@/components/menus/filters/FilterSection.svelte';
-	import PokemonFilterset from '@/components/menus/filters/modals/PokemonFilterset.svelte';
-	import PlainPokestopFilterset from '@/components/menus/filters/modals/PlainPokestopFilterset.svelte';
-	import QuestFilterset from '@/components/menus/filters/modals/QuestFilterset.svelte';
+	import PokemonFilterset from '@/components/menus/filters/filterset/pokemon/PokemonFilterset.svelte';
+	import PlainPokestopFilterset from '@/components/menus/filters/filterset/plainPokestop/PlainPokestopFilterset.svelte';
+	import QuestFilterset from '@/components/menus/filters/filterset/quest/QuestFilterset.svelte';
 
 	let test: boolean = $state(false);
 
@@ -88,9 +88,9 @@
 <!--	</SelectGroup>-->
 <!--{/snippet}-->
 
-<PokemonFilterset isInEdit={false} isNew={false} />
-<PlainPokestopFilterset isInEdit={false} />
-<QuestFilterset isInEdit={false} />
+<PokemonFilterset />
+<PlainPokestopFilterset />
+<QuestFilterset />
 
 <div class="mt-2 space-y-2 mb-0.5" style="container-name: menu; container-type: inline-size">
 	<FilterSection

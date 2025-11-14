@@ -1,4 +1,4 @@
-export type AnyFilterst =
+export type AnyFilterset =
 	| FiltersetPokemon
 	| FiltersetPokestopPlain
 	| FiltersetQuest
@@ -33,7 +33,7 @@ export type FiltersetPokemon = BaseFilterset & {
 	ivDef?: MinMax;
 	ivSta?: MinMax;
 	level?: MinMax;
-	gender?: MinMax;
+	gender?: number[];
 	size?: MinMax;
 	pvpRankLittle?: MinMax;
 	pvpRankGreat?: MinMax;

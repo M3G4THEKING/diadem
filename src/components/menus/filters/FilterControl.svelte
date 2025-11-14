@@ -1,19 +1,12 @@
 <script lang="ts">
 	import { ChevronDown, FunnelPlus } from 'lucide-svelte';
 	import type { AnyFilter, FilterCategory } from '@/lib/features/filters/filters';
-	import { getUserSettings, updateUserSettings } from '@/lib/services/userSettings.svelte.js';
-	import { updateAllMapObjects } from '@/lib/mapObjects/updateMapObject';
 	import Switch from '@/components/ui/input/Switch.svelte';
 	import Button from '@/components/ui/input/Button.svelte';
 
 	import { slide } from 'svelte/transition';
 	import Filterset from '@/components/menus/filters/Filterset.svelte';
-	import type { FiltersetPokemon } from '@/lib/features/filters/filtersets';
-	import FiltersetModal from '@/components/menus/filters/filterset/FiltersetModal.svelte';
 	import { openModal } from '@/lib/ui/modal.svelte.js';
-	import PokemonFilterset from '@/components/menus/filters/modals/PokemonFilterset.svelte';
-	import PlainPokestopFilterset from '@/components/menus/filters/modals/PlainPokestopFilterset.svelte';
-	import QuestFilterset from '@/components/menus/filters/modals/QuestFilterset.svelte';
 
 	let {
 		category,
@@ -44,16 +37,6 @@
 		}
 
 		openModal("filtersetPokemon")
-		const newFilter: FiltersetPokemon = {
-			id: '1',
-			title: '100% IV',
-			icon: '💯',
-			enabled: true,
-			iv: { min: 100, max: 100}
-		};
-		getUserSettings().filters['pokemonMajor'].filters = [newFilter];
-		updateUserSettings();
-		updateAllMapObjects().then();
 	}
 </script>
 

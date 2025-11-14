@@ -9,12 +9,14 @@
 		modalType,
 		class: class_ = "",
 		title = undefined,
-		children
+		children,
+		onopenchange = undefined
 	}: {
 		modalType: ModalType,
 		class?: string,
 		title?: Snippet,
 		children?: Snippet
+		onopenchange?: Dialog.RootProps["onOpenChange"]
 	} = $props();
 
 	function isOpen() {
@@ -30,7 +32,7 @@
 	}
 </script>
 
-<Dialog.Root bind:open={isOpen, setIsOpen}>
+<Dialog.Root bind:open={isOpen, setIsOpen} onOpenChange={onopenchange}>
 	<Dialog.Portal>
 		<Dialog.Overlay
 			class="data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 fixed inset-0 z-50 backdrop-blur-[1px] backdrop-brightness-95 transition-all"

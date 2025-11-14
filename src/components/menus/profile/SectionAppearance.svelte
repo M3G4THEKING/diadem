@@ -6,14 +6,14 @@
 	import { onMapStyleChange, onSettingsChange, onThemeChange } from '@/lib/services/settings';
 	import { getConfig } from '@/lib/services/config/config';
 	import MenuCard from '@/components/menus/MenuCard.svelte';
-	import VerticalRadioGroupItem from '@/components/ui/input/VerticalRadioGroupItem.svelte';
-	import SliderSteps from '@/components/ui/input/SliderSteps.svelte';
+	import SliderSteps from '@/components/ui/input/slider/SliderSteps.svelte';
 	import Toggle from '@/components/ui/input/Toggle.svelte';
 	import Select from '@/components/ui/input/Select.svelte';
 	import MenuGeneric from '@/components/menus/MenuGeneric.svelte';
-	import RadioGroup from '@/components/ui/input/RadioGroup.svelte';
+	import RadioGroup from '@/components/ui/input/selectgroup/RadioGroup.svelte';
 	import { MapLibre } from 'svelte-maplibre';
 	import { AVAILABLE_LANGUAGES } from '@/lib/constants';
+	import SelectGroupItem from '@/components/ui/input/selectgroup/SelectGroupItem.svelte';
 
 	type Language = {
 		label: string
@@ -55,18 +55,18 @@
 			onValueChange={onThemeChange}
 			class="self-center"
 		>
-			<VerticalRadioGroupItem class="p-4" value="false">
+			<SelectGroupItem class="p-4" value="false">
 				<Sun size="20" />
 				{m.theme_light()}
-			</VerticalRadioGroupItem>
-			<VerticalRadioGroupItem class="p-4" value="null">
+			</SelectGroupItem>
+			<SelectGroupItem class="p-4" value="null">
 				<Cloud size="20" />
 				{m.theme_system()}
-			</VerticalRadioGroupItem>
-			<VerticalRadioGroupItem class="p-4" value="true">
+			</SelectGroupItem>
+			<SelectGroupItem class="p-4" value="true">
 				<Moon size="20" />
 				{m.theme_dark()}
-			</VerticalRadioGroupItem>
+			</SelectGroupItem>
 		</RadioGroup>
 	</MenuGeneric>
 
@@ -78,7 +78,7 @@
 			class="self-center"
 		>
 			{#each getConfig().mapStyles as mapStyle (mapStyle.id)}
-				<VerticalRadioGroupItem class="overflow-hidden" value={mapStyle.id}>
+				<SelectGroupItem class="overflow-hidden" value={mapStyle.id}>
 					<MapLibre
 						center={[9.979, 53.563]}
 						zoom={12}
@@ -92,7 +92,7 @@
 							{mapStyle.name}
 						</span>
 
-				</VerticalRadioGroupItem>
+				</SelectGroupItem>
 			{/each}
 		</RadioGroup>
 	</MenuGeneric>

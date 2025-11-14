@@ -37,7 +37,7 @@
 </script>
 
 <div
-	class="pl-2 rounded-sm  border w-fit flex items-stretch attribute-chip"
+	class="pl-2 rounded-sm border w-fit flex items-stretch attribute-chip"
 	class:pr-2={isEmpty}
 	style="--color-attr-chip-border: var({actualColor.border}); --color-attr-chip-bg: var({actualColor.bg}); --color-attr-chip-text: var({actualColor.text});"
 >

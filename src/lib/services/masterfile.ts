@@ -21,6 +21,51 @@ export function getMasterPokemon(pokemonId: string | number): MasterPokemon | un
 	return masterFile.pokemon["" + pokemonId]
 }
 
+const blacklistBasePokemon = [
+	412, 413,	// burmy
+	421,		// cherrim
+	422, 423,   // shellos
+	669,		// flabebe
+	676,		// furfrou
+	710, 711,	// pumpkaboo
+	741,		// oricorio
+]
+const blacklistForms = [
+	25,			// pikachu
+	327,		// spinda
+	664, 665,	// scatterbug
+]
+
+export function getSpawnablePokemon(): {pokemon_id: number, form: number}[] {
+	const allPokemon: {pokemon_id: number, form: number}[] = []
+
+	for (const [strPokemonId, pokemon] of Object.entries(masterFile.pokemon)) {
+		if (pokemon.legendary || pokemon.mythical || pokemon.ultraBeast) continue
+
+		const pokemonId = Number(strPokemonId)
+		if (!pokemon.unreleased && !blacklistBasePokemon.includes(pokemonId)) {
+			allPokemon.push({ pokemon_id: pokemonId, form: 0 })
+		}
+
+		// specific pokemon to ignore the forms of
+		if (blacklistForms.includes(pokemonId)) continue
+
+		for (const [formId, form] of Object.entries(pokemon.forms)) {
+			if (
+				form.name !== "Normal"
+				&& !form.name.includes("Costume")
+				&& !form.name.includes("20")  // gets rid of year-specific forms
+				&& !(form.isCostume ?? false)
+				&& !form.unreleased
+			) {
+				allPokemon.push({ pokemon_id: pokemonId, form: Number(formId) })
+			}
+		}
+	}
+
+	return allPokemon
+}
+
 export function getMasterWeather(weatherId: string | number | undefined): MasterWeather | undefined {
 	if (weatherId === undefined) return undefined
 

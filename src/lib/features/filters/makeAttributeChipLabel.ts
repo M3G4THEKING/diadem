@@ -1,6 +1,7 @@
 import type { MinMax, Pokemon } from "@/lib/features/filters/filtersets";
 import { mPokemon } from '@/lib/services/ingameLocale';
 import * as m from '@/lib/paraglide/messages';
+import { getGenderLabel } from '@/lib/utils/pokemonUtils';
 
 export function makeAttributeRangeLabel(value: MinMax | undefined = undefined, min: number, max: number, minLabel: any = undefined, maxLabel: any = undefined) {
 	if (!minLabel) minLabel = value?.min ?? min

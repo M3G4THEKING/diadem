@@ -1,15 +1,19 @@
 export type MasterPokemon = {
-	[key: string]
 	name: string
+	forms: { [key: string]: MasterPokemon }
+	isCostume?: boolean
+	unreleased?: boolean
+	legendary: boolean
+	mythical: boolean
+	ultraBeast: boolean
 }
 
 export type MasterWeather = {
-	[key: string]
 	name: string
 	types: number[]
 }
 
 export type MasterFile = {
-	pokemon: MasterPokemon
-	weather: MasterWeather
+	pokemon: { [key: string]: MasterPokemon }
+	weather: { [key: string]: MasterWeather }
 }

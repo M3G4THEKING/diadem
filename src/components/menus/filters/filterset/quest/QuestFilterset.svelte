@@ -4,7 +4,7 @@
 	import Attribute from '@/components/menus/filters/filterset/Attribute.svelte';
 	import AttributesOverview from '@/components/menus/filters/filterset/AttributesOverview.svelte';
 	import PageAttribute from '@/components/menus/filters/filterset/PageAttribute.svelte';
-	import SliderRange from '@/components/ui/input/SliderRange.svelte';
+	import SliderRange from '@/components/ui/input/slider/SliderRange.svelte';
 
 	let {
 		isInEdit
@@ -15,20 +15,19 @@
 </script>
 
 <FiltersetModal
-	modalType="filtersetPlainPokestop"
-	modalTitle="Plain Pokestop Filter"
+	modalType="filtersetQuest"
+	modalTitle="Quest Filter"
 	{isInEdit}
 	initialPage={isInEdit ? "overview" : "new"}
 >
 	{#snippet overview()}
 		<AttributesOverview>
 			<Attribute
-				label="Species"
+				label="AR Quests"
 			>
-				<AttributeChip
-					label="3 Pokemon"
-					color="yellow"
-				/>
+				<div>
+					both
+				</div>
 				{#snippet page()}
 					<PageAttribute>
 						<div>test</div>
@@ -38,66 +37,7 @@
 		</AttributesOverview>
 		<AttributesOverview>
 			<Attribute
-				label="IVs"
-			>
-				<AttributeChip
-					label="97%+"
-					color="yellow"
-				/>
-				{#snippet page()}
-					<PageAttribute>
-						<SliderRange
-							min={0}
-							max={100}
-							title="IV %"
-							valueMin={95}
-							valueMax={100}
-						/>
-						<SliderRange
-							min={0}
-							max={15}
-							title="Attack IV"
-							valueMin={0}
-							valueMax={15}
-						/>
-						<SliderRange
-							min={0}
-							max={15}
-							title="Defense IV"
-							valueMin={0}
-							valueMax={15}
-						/>
-						<SliderRange
-							min={0}
-							max={15}
-							title="Stamina IV"
-							valueMin={0}
-							valueMax={15}
-						/>
-					</PageAttribute>
-				{/snippet}
-			</Attribute>
-			<Attribute
-				label="CP"
-			>
-				<AttributeChip
-					label="50-1500"
-					color="yellow"
-				/>
-				{#snippet page()}
-					<PageAttribute>
-						<SliderRange
-							min={0}
-							max={5000}
-							title="CP"
-							valueMin={50}
-							valueMax={1500}
-						/>
-					</PageAttribute>
-				{/snippet}
-			</Attribute>
-			<Attribute
-				label="Level"
+				label="Pokemon"
 			>
 				<AttributeChip
 					label="Any"
@@ -105,76 +45,89 @@
 				/>
 				{#snippet page()}
 					<PageAttribute>
-						<SliderRange
-							min={1}
-							max={50}
-							title="Level"
-							valueMin={1}
-							valueMax={50}
-						/>
+						<div></div>
 					</PageAttribute>
 				{/snippet}
 			</Attribute>
-		</AttributesOverview>
+			<Attribute
+				label="Items"
+			>
+				<AttributeChip
+					label="Any"
+					color="muted"
+				/>
+				{#snippet page()}
+					<PageAttribute>
+						<div></div>
+					</PageAttribute>
+				{/snippet}
+			</Attribute>
+			<Attribute
+				label="Mega Energy"
+			>
+				<AttributeChip
+					label="Any"
+					color="muted"
+				/>
+				{#snippet page()}
+					<PageAttribute>
+						<div></div>
+					</PageAttribute>
+				{/snippet}
+			</Attribute>
+			<Attribute
+				label="Candy XL"
+			>
+				<AttributeChip
+					label="Any"
+					color="muted"
+				/>
+				{#snippet page()}
+					<PageAttribute>
+						<div></div>
+					</PageAttribute>
+				{/snippet}
+			</Attribute>
+			<Attribute
+				label="Candy"
+			>
+				<AttributeChip
+					label="Any"
+					color="muted"
+				/>
+				{#snippet page()}
+					<PageAttribute>
+						<div></div>
+					</PageAttribute>
+				{/snippet}
+			</Attribute>
+			<Attribute
+				label="Stardust"
+			>
+				<AttributeChip
+					label="Any"
+					color="muted"
+				/>
+				{#snippet page()}
+					<PageAttribute>
+						<div></div>
+					</PageAttribute>
+				{/snippet}
+			</Attribute>
+			<Attribute
+				label="XP"
+			>
+				<AttributeChip
+					label="Any"
+					color="muted"
+				/>
+				{#snippet page()}
+					<PageAttribute>
+						<div></div>
+					</PageAttribute>
+				{/snippet}
+			</Attribute>
 
-		<AttributesOverview>
-			<Attribute
-				label="Little League"
-			>
-				<AttributeChip
-					label="Any"
-					color="muted"
-				/>
-				{#snippet page()}
-					<PageAttribute>
-						<SliderRange
-							min={1}
-							max={100}
-							title="Little League Rank"
-							valueMin={0}
-							valueMax={100}
-						/>
-					</PageAttribute>
-				{/snippet}
-			</Attribute>
-			<Attribute
-				label="Great League"
-			>
-				<AttributeChip
-					label="Any"
-					color="muted"
-				/>
-				{#snippet page()}
-					<PageAttribute>
-						<SliderRange
-							min={1}
-							max={100}
-							title="Great League Rank"
-							valueMin={0}
-							valueMax={100}
-						/>
-					</PageAttribute>
-				{/snippet}
-			</Attribute>
-			<Attribute
-				label="Ultra League"
-			>
-				<AttributeChip
-					label="Rank 1-15"
-					color="yellow"
-				/>
-				{#snippet page()}
-					<PageAttribute>
-						<SliderRange
-							min={1}
-							max={100}
-							title="Ultra League Rank"
-							valueMin={1}
-							valueMax={15}
-						/>
-					</PageAttribute>
-				{/snippet}
-			</Attribute>
 		</AttributesOverview>
 	{/snippet}
 </FiltersetModal>

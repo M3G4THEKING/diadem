@@ -1,31 +1,42 @@
 import type { Snippet } from "svelte";
 import { FiniteStateMachine } from "runed";
-import { closeModal, type ModalType } from "@/lib/ui/modal.svelte";
-import { addOrUpdateFilterset, editFiltersetNoCommit } from '@/lib/features/filters/manageFilters';
+import { closeModal, type ModalType } from "@/lib/ui/modal.svelte.js";
+import { saveCurrentSelectedAttribute, saveSelectedFilterset } from '@/lib/features/filters/manageFilters.svelte.js';
+import type { AnyFilterset } from '@/lib/features/filters/filtersets';
 
-export type FiltersetPage = "new" | "overview" | "attribute";
-type PageEvents = "newFilter" | "save" | "close" | "reset" | "editAttribute";
+export type FiltersetPage = "base" | "new" | "overview" | "attribute";
+export type FiltersetSnippet<T extends AnyFilterset> = Snippet<[T]>
+type PageEvents = "newFilter" | "save" | "close" | "reset" | "editAttribute" | "edit" | "select";
 
 export let isFilterPageTransitionReverse = false
-let attributePageDetails: { snippet?: Snippet, label?: string } = $state({
+let attributePageDetails: { snippet?: FiltersetSnippet<AnyFilterset>, label?: string } = $state({
 	snippet: undefined,
 	label: undefined
 });
 
 const pageStates = new FiniteStateMachine<FiltersetPage, PageEvents>("new", {
+	base: {
+		edit: 'overview',
+		close: "new",
+		save: (modalType: ModalType) => {
+			saveSelectedFilterset()
+			closeModal(modalType)
+		}
+	},
 	new: {
 		_enter: () => {
 			isFilterPageTransitionReverse = false
 		},
 		newFilter: "overview",
-		reset: "new"
+		reset: "new",
+		select: "base"
 	},
 	overview: {
 		close: "new",
 		reset: "new",
 		editAttribute: "attribute",
 		save: (modalType: ModalType) => {
-			addOrUpdateFilterset()
+			saveSelectedFilterset()
 			closeModal(modalType)
 		}
 	},
@@ -36,7 +47,7 @@ const pageStates = new FiniteStateMachine<FiltersetPage, PageEvents>("new", {
 		close: "overview",
 		reset: "new",
 		save: () => {
-			editFiltersetNoCommit()
+			saveCurrentSelectedAttribute()
 			return "overview"
 		}
 	}
@@ -66,8 +77,11 @@ export function getCurrentFiltersetPage() {
 	return pageStates.current;
 }
 
-export function setCurrentAttributePage(snippet: Snippet, label: string) {
-	attributePageDetails = { snippet, label };
+export function setCurrentAttributePage<T extends AnyFilterset>(snippet: FiltersetSnippet<T>, label: string) {
+	attributePageDetails = {
+		snippet: snippet as FiltersetSnippet<AnyFilterset>,
+		label
+	};
 }
 
 export function getCurrentAttributePage() {

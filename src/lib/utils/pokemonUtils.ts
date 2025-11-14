@@ -1,5 +1,14 @@
 import { POKEMON_MIN_RANK } from "@/lib/constants";
 import type { PokemonData } from "@/lib/types/mapObjectData/pokemon";
+import * as m from '@/lib/paraglide/messages';
+
+export const pokemonSizes = {
+	1: "XXS",
+	2: "XS",
+	3: "M",
+	4: "XL",
+	5: "XXL"
+}
 
 export function hasTimer(data: PokemonData) {
 	return data.expire_timestamp && data.expire_timestamp_verified;
@@ -22,13 +31,15 @@ export function showUltra(data: PokemonData) {
 }
 
 export function getPokemonSize(size: number) {
-	return (
-		{
-			1: "XXS",
-			2: "XS",
-			3: "M",
-			4: "XL",
-			5: "XXL"
-		}[size] ?? "?"
-	);
+	return pokemonSizes[size] ?? "?"
+}
+
+export function getGenderLabel(gender: number) {
+	if (gender === 1) {
+		return m.pokemon_gender_male()
+	} else if (gender === 2) {
+		return m.pokemon_gender_female()
+	} else {
+		return m.pokemon_gender_neutral()
+	}
 }

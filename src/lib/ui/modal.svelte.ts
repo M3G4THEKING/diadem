@@ -2,7 +2,7 @@ import {
 	clearUpdateMapObjectsInterval,
 	resetUpdateMapObjectsInterval
 } from "@/lib/map/mapObjectsInterval";
-import { filtersetPageReset } from '@/lib/ui/filtersetPages.svelte';
+import { filtersetPageReset } from '@/lib/features/filters/filtersetPages.svelte.js';
 
 export type OpenModals = {
 	search: boolean

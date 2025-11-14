@@ -10,28 +10,37 @@
 		filtersetPageSave,
 		getCurrentAttributePage,
 		getCurrentFiltersetPage
-	} from '@/lib/ui/filtersetPages.svelte';
+	} from '@/lib/features/filters/filtersetPages.svelte.js';
 	import FiltersetButtons from '@/components/menus/filters/filterset/FiltersetButtons.svelte';
-	import type { ModalType } from '@/lib/ui/modal.svelte';
-	import { type Snippet } from 'svelte';
+	import { closeModal, type ModalType } from '@/lib/ui/modal.svelte';
+	import { onDestroy, type Snippet } from 'svelte';
 	import Button from '@/components/ui/input/Button.svelte';
+	import {
+		existsCurrentSelectedFilterset, getCurrentSelectedFilterset,
+		resetCurrentSelectedFilterset
+	} from '@/lib/features/filters/manageFilters.svelte';
+	import PageBase from '@/components/menus/filters/filterset/PageBase.svelte';
 
 	let {
 		modalType,
 		modalTitle,
 		overview,
 		initialPage,
-		isInEdit
+		height = 130
 	}: {
 		modalType: ModalType
 		modalTitle: string
 		overview: Snippet
 		initialPage: FiltersetPage
-		isInEdit: boolean
+		height?: number
 	} = $props();
 
+	function onopenchange(opened: boolean) {
+		if (!opened) resetCurrentSelectedFilterset()
+	}
+
 	function onsave() {
-		filtersetPageSave(modalType);
+		filtersetPageSave(modalType)
 	}
 
 	function oncancel() {
@@ -39,11 +48,11 @@
 	}
 
 	function ondelete() {
-		if (!isInEdit) return;
+		if (!existsCurrentSelectedFilterset()) return;
 	}
 </script>
 
-<Modal {modalType} class="max-h-screen">
+<Modal {modalType} {onopenchange} class="max-h-screen">
 	{#snippet title()}
 		<p class="pb-2 pl-5 pt-3 font-semibold text-base">
 			<span>
@@ -56,21 +65,24 @@
 			{/if}
 		</p>
 	{/snippet}
-	<div class="px-4 py-2 w-128 max-w-full h-130 overflow-hidden ">
+	<div
+		class="px-4 py-2 w-128 max-w-full overflow-hidden"
+		style:height="min(calc(100vh - 4rem), {height / 4}rem)"
+	>
 		<div class="relative h-full">
 			{#if getCurrentFiltersetPage() === "new"}
 				<PageNewFilterset />
+			{:else if getCurrentFiltersetPage() === "base"}
+				<PageBase />
 			{:else if getCurrentFiltersetPage() === "overview"}
 				<PageOverview {overview} />
 			{:else if getCurrentFiltersetPage() === "attribute" && getCurrentAttributePage().snippet}
-				<PageAttribute>
-					{@render getCurrentAttributePage().snippet?.()}
-				</PageAttribute>
+				<PageAttribute />
 			{/if}
 
 			{#if getCurrentFiltersetPage() !== "new"}
 				<FiltersetButtons
-					showDelete={isInEdit}
+					showDelete={existsCurrentSelectedFilterset()}
 					{oncancel}
 					{onsave}
 					{ondelete}

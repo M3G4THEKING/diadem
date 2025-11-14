@@ -3,7 +3,8 @@
 	import { fly } from 'svelte/transition';
 	import { CirclePlus, Pencil } from 'lucide-svelte';
 	import type { FiltersetPokemon } from '@/lib/features/filters/filtersets';
-	import { filtersetPageNew } from '@/lib/ui/filtersetPages.svelte';
+	import { filtersetPageNew } from '@/lib/features/filters/filtersetPages.svelte.js';
+	import { getNewFilterset, setCurrentSelectedFilterset } from '@/lib/features/filters/manageFilters.svelte';
 
 	const placeholderFilter: FiltersetPokemon = {
 		id: '1',
@@ -14,6 +15,7 @@
 	};
 
 	function onnew() {
+		setCurrentSelectedFilterset("pokemonMajor", getNewFilterset())
 		filtersetPageNew()
 	}
 </script>
@@ -22,7 +24,10 @@
 	class="w-full absolute top-0 h-full pb-20"
 	transition:fly={{duration: 100, x: -80}}
 >
-	<Button variant="secondary" size="lg" class="w-full" onclick={onnew}>
+	<Button
+		variant="secondary" size="lg" class="w-full"
+		onclick={onnew}
+	>
 		<CirclePlus size="18" />
 		<span>
 			Create new
@@ -30,16 +35,13 @@
 	</Button>
 
 
-	<div class="flex items-center gap-4 mt-2 mb-1">
+	<div class="flex items-center gap-4 my-3">
 		<div class="bg-border h-px w-full"></div>
-		<span class="text-muted-foreground text-sm">or</span>
+		<span class="text-muted-foreground text-sm whitespace-nowrap">or select suggested filter</span>
 		<div class="bg-border h-px w-full"></div>
 	</div>
 
-	<div class="overflow-y-auto h-full overflow-y-auto">
-		<p class="text-sm mb-2">
-			Select suggested filter
-		</p>
+	<div class="overflow-y-auto h-full -mx-4 px-4">
 		<div class="flex flex-col gap-1">
 			{#each [1,1,1,1,1,1,1,1,1] as _}
 				<Button class="w-full flex gap-1 items-center justify-start rounded-md py-2 h-12 m-0! pl-4 pr-2" size="" variant="outline">
