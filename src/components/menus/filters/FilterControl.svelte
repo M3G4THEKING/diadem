@@ -33,7 +33,7 @@
 	let hasAnyFilterset: boolean = $derived((filter?.filters?.length ?? 0) > 0);
 
 	function placeholderAddFilter() {
-		if (category !== 'pokemonMajor') {
+		if (category !== 'pokemon') {
 			openModal('filtersetQuest');
 			return
 		}

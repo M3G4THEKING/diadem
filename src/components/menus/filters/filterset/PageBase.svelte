@@ -40,7 +40,7 @@
 	</div>
 
 	{#if filterset?.data}
-		{#if filterset.category === "pokemonMajor"}
+		{#if filterset.category === "pokemon"}
 			<!--@ts-ignore-->
 			<PokemonAttributeOverview data={filterset.data} />
 		{/if}

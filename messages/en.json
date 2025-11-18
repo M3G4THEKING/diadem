@@ -177,5 +177,7 @@
     "range_max": "≤{x}",
     "rank_x": "Rank {rank}",
     "x_percentage": "{x}%",
-    "count_genders": "{count} genders"
+    "count_genders": "{count} genders",
+    "pokemon_filter": "Pokémon Filter",
+    "pokemon_size": "Size"
 }

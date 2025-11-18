@@ -9,7 +9,7 @@
 	} from '@/lib/features/filters/filtersetPages.svelte';
 	import {
 		deleteCurrentSelectedFilterset,
-		existsCurrentSelectedFilterset, getCurrentSelectedFiltersetEncoded,
+		existsCurrentSelectedFilterset, getCurrentSelectedFilterset, getCurrentSelectedFiltersetEncoded,
 		getCurrentSelectedFiltersetInEdit
 	} from '@/lib/features/filters/filtersetPageData.svelte';
 	import { backupShareUrl, canBackupShare, canNativeShare, hasClipboardWrite } from '@/lib/utils/device';
@@ -31,7 +31,12 @@
 	}
 
 	function getShareUrl() {
-		return window.location.origin + "/filter/" + getCurrentSelectedFiltersetEncoded()
+		const filterset = getCurrentSelectedFilterset()
+		if (filterset) {
+			return `${window.location.origin}/filter/${filterset.category}/${getCurrentSelectedFiltersetEncoded()}`
+		} else {
+			return window.location.origin
+		}
 	}
 </script>
 
@@ -75,7 +80,7 @@
 
 	{#if
 		getCurrentFiltersetPage() !== "new"
-		&& !(getCurrentSelectedFiltersetInEdit() && getCurrentFiltersetPage() === "base")
+		&& !((existsCurrentSelectedFilterset()) && getCurrentFiltersetPage() === "base")
 	}
 		<Button class="" variant="secondary" onclick={() => filtersetPageClose(modalType)}>
 			Cancel

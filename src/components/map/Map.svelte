@@ -26,7 +26,10 @@
 	import MarkerContextMenu from '@/components/map/MarkerContextMenu.svelte';
 	import { getCurrentScoutData } from '@/lib/features/scout.svelte.js';
 	import { Coords } from '@/lib/utils/coordinates';
-	import { isAnyModalOpen } from '@/lib/ui/modal.svelte.js';
+	import { isAnyModalOpen, openModal } from '@/lib/ui/modal.svelte.js';
+	import { getCurrentSelectedFilterset } from '@/lib/features/filters/filtersetPageData.svelte';
+	import { filtersetPageReset } from '@/lib/features/filters/filtersetPages.svelte';
+	import { openMenu } from '@/lib/ui/menus.svelte';
 
 	let map: maplibre.Map | undefined = $state(undefined);
 	const initialMapPosition = JSON.parse(JSON.stringify(getUserSettings().mapPosition));
@@ -57,7 +60,6 @@
 			&& hasLoadedFeature(LoadedFeature.REMOTE_LOCALE, LoadedFeature.MASTER_FILE, LoadedFeature.ICON_SETS, LoadedFeature.USER_DETAILS)
 		) {
 			const directLinkData = getDirectLinkObject();
-
 			if (directLinkData) {
 				if (directLinkData.id) {
 					addMapObjects([directLinkData], directLinkData.type)
@@ -75,7 +77,12 @@
 				} else {
 					openToast(m.direct_link_not_found({ type: m['pogo_' + directLinkData.type]() }), 5000);
 				}
+			}
 
+			if (getCurrentSelectedFilterset()?.isShared) {
+				openMenu("filters")
+				filtersetPageReset()
+				tick().then(() => openModal("filtersetPokemon"))
 			}
 
 			isInitUpdatedMapObjects = true;

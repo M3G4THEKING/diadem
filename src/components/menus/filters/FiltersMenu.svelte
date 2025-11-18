@@ -96,7 +96,7 @@
 	<FilterSection
 		requiredPermission="pokemon"
 		title="Pokémon"
-		category="pokemonMajor"
+		category="pokemon"
 	/>
 
 	<FilterSection

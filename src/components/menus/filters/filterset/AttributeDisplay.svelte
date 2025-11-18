@@ -8,7 +8,7 @@
 		value = undefined,
 		children = undefined
 	}: {
-		class: string
+		class?: string
 		label: string
 		value?: string
 		children?: Snippet

@@ -20,7 +20,7 @@
 	variant="outline"
 	size="lg"
 	onclick={() => {
-		setCurrentSelectedFilterset("pokemonMajor", filter, true)
+		setCurrentSelectedFilterset("pokemon", filter, true)
 		filtersetPageReset()
 		openModal("filtersetPokemon")
 	}}

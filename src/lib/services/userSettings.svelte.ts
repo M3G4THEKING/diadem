@@ -43,7 +43,7 @@ export type UserSettings = {
 	languageTag: string | "auto";
 	mapIconSize: number;
 	filters: {
-		pokemonMajor: FilterPokemon;
+		pokemon: FilterPokemon;
 		pokestopMajor: FilterPokestop;
 		gymMajor: FilterGym;
 		stationMajor: FilterStation;
@@ -78,7 +78,7 @@ export function getDefaultUserSettings(): UserSettings {
 		showDebugMenu: false,
 		mapIconSize: 1,
 		filters: {
-			pokemonMajor: { category: "pokemonMajor", ...defaultFilter() },
+			pokemon: { category: "pokemon", ...defaultFilter() },
 			pokestopMajor: {
 				category: "pokestopMajor",
 				...defaultFilter(),

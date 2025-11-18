@@ -13,8 +13,6 @@ import { hasFortActiveLure } from '@/lib/utils/pokestopUtils';
 import { GYM_SLOTS, isFortOutdated } from "@/lib/utils/gymUtils";
 import { allMapObjectTypes } from '@/lib/mapObjects/mapObjectTypes';
 
-export type GetIconFunc<T extends MapData> = (data: Partial<T>, iconSet: string) => string
-
 export const DEFAULT_UICONS = "_internal_default";
 const DEFAULT_URL = "https://raw.githubusercontent.com/WatWowMap/wwm-uicons/main/"
 

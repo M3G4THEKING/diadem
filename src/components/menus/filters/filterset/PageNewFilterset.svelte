@@ -53,7 +53,7 @@
 					size=""
 					variant="outline"
 					onclick={() => {
-						setCurrentSelectedFilterset("pokemonMajor", placeholderFilter, false)
+						setCurrentSelectedFilterset("pokemon", placeholderFilter, false)
 						filtersetPageSelect()
 					}}
 				>

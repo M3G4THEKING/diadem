@@ -38,7 +38,7 @@ export async function updateMapObject(
 	let filter: AnyFilter | undefined = undefined;
 
 	if (type === "pokemon") {
-		filter = getUserSettings().filters.pokemonMajor;
+		filter = getUserSettings().filters.pokemon;
 	} else if (type === "pokestop") {
 		filter = getUserSettings().filters.pokestopMajor;
 	} else if (type === "gym") {

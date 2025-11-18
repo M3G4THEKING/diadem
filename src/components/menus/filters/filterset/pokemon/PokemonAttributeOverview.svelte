@@ -3,7 +3,7 @@
 	import {
 		getAttributeLabelCp,
 		getAttributeLabelIvProduct,
-		getAttributeLabelIvValues, getAttributeLabelLevel, getAttributeLabelSize
+		getAttributeLabelIvValues, getAttributeLabelLevel, getAttributeLabelRank, getAttributeLabelSize
 	} from '@/lib/features/filters/pokemonFilterUtils';
 	import AttributeDisplay from '@/components/menus/filters/filterset/AttributeDisplay.svelte';
 	import * as m from "@/lib/paraglide/messages";
@@ -54,16 +54,16 @@
 		<AttributeDisplay label={m.level()} value={getAttributeLabelLevel(data.level)} />
 	{/if}
 	{#if data.pvpRankLittle}
-		<AttributeDisplay label={m.little_league()} value={getAttributeLabelLevel(data.pvpRankLittle)} />
+		<AttributeDisplay label={m.little_league()} value={getAttributeLabelRank(data.pvpRankLittle)} />
 	{/if}
 	{#if data.pvpRankGreat}
-		<AttributeDisplay label={m.great_league()} value={getAttributeLabelLevel(data.pvpRankGreat)} />
+		<AttributeDisplay label={m.great_league()} value={getAttributeLabelRank(data.pvpRankGreat)} />
 	{/if}
 	{#if data.pvpRankUltra}
-		<AttributeDisplay label={m.ultra_league()} value={getAttributeLabelLevel(data.pvpRankUltra)} />
+		<AttributeDisplay label={m.ultra_league()} value={getAttributeLabelRank(data.pvpRankUltra)} />
 	{/if}
 	{#if data.size}
-		<AttributeDisplay label="Size" value={getAttributeLabelSize(data.size)} />
+		<AttributeDisplay label={m.pokemon_size()} value={getAttributeLabelSize(data.size)} />
 	{/if}
 	{#if data.gender}
 		<AttributeDisplay

@@ -12,7 +12,7 @@ import type {
 } from "@/lib/features/filters/filtersets";
 
 export type FilterCategory =
-	| "pokemonMajor"
+	| "pokemon"
 	| "pokestopMajor"
 	| "pokestopPlain"
 	| "quest"
@@ -59,7 +59,7 @@ type BaseFilter = {
 };
 
 export type FilterPokemon = BaseFilter & {
-	category: "pokemonMajor";
+	category: "pokemon";
 	filters: FiltersetPokemon[];
 };
 

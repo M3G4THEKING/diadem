@@ -1,4 +1,4 @@
-import type { PageLoad } from "./$types";
+import type { PageServerLoad } from "./$types";
 import { getConfig, setConfig } from "@/lib/services/config/config";
 import { initAllIconSets } from "@/lib/services/uicons.svelte";
 import { loadRemoteLocale } from "@/lib/services/ingameLocale";
@@ -8,7 +8,7 @@ import { makeMapObject } from "@/lib/mapObjects/makeMapObject";
 
 export const ssr = true;
 
-export const load: PageLoad = async ({ params, fetch }) => {
+export const load: PageServerLoad = async ({ params, fetch }) => {
 	const configResponse = await fetch("/api/config");
 	setConfig(await configResponse.json());
 

@@ -3,16 +3,18 @@ import type { AnyFilterset, BaseFilterset } from "@/lib/features/filters/filters
 import type { AnyFilter, FilterCategory } from "@/lib/features/filters/filters";
 import { getUserSettings, updateUserSettings } from "@/lib/services/userSettings.svelte";
 import { updateAllMapObjects } from '@/lib/mapObjects/updateMapObject';
+import { FiltersetPokemonSchema } from '@/lib/features/filters/filtersetSchemas';
 
 let filtersetPageData: {
 	category: FilterCategory,
 	selectedAttribute: AnyFilterset | undefined,
 	inEdit: boolean,
+	isShared: boolean,
 	data: AnyFilterset
 } | undefined = $state(undefined)
 
-export function setCurrentSelectedFilterset(category: FilterCategory, data: AnyFilterset, inEdit: boolean) {
-	filtersetPageData = { category, data, inEdit, selectedAttribute: undefined }
+export function setCurrentSelectedFilterset(category: FilterCategory, data: AnyFilterset, inEdit: boolean, isShared: boolean = false) {
+	filtersetPageData = { category, data, inEdit, isShared, selectedAttribute: undefined }
 }
 
 export function resetCurrentSelectedFilterset() {
@@ -103,9 +105,15 @@ export function getCurrentSelectedFiltersetEncoded() {
 	return btoa(encodeURIComponent(jsonStr))
 }
 
-export function decodeFilterset(str: string) {
+export function decodeFilterset(category: FilterCategory | string, str: string) {
 	const decoded: AnyFilterset = JSON.parse(decodeURIComponent(atob(str)))
-	// TODO: check if object is ok (i.e. with zod)
 	decoded.id = crypto.randomUUID()
-	return decoded
+
+	let safe: AnyFilterset | undefined = undefined
+
+	if (category === "pokemon") {
+		safe = FiltersetPokemonSchema.safeParse(decoded)?.data
+	}
+
+	return safe
 }
