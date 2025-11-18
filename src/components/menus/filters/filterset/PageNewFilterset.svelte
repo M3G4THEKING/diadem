@@ -9,17 +9,84 @@
 		getFiltersetPageTransition
 	} from '@/lib/features/filters/filtersetPages.svelte.js';
 	import { getNewFilterset, setCurrentSelectedFilterset } from '@/lib/features/filters/filtersetPageData.svelte.js';
+	import * as m from '@/lib/paraglide/messages';
+	import { filterTitle } from '@/lib/features/filters/filtersetUtils';
 
-	const placeholderFilter: FiltersetPokemon = {
-		id: crypto.randomUUID(),
-		title: '100% IV',
-		icon: '💯',
-		enabled: true,
-		iv: { min: 100, max: 100}
-	};
+	const premadeFiltersets: FiltersetPokemon[] = [
+		{
+			id: crypto.randomUUID(),
+			icon: '💯',
+			title: {
+				message: 'filter_template_hundo',
+				title: undefined
+			},
+			enabled: true,
+			iv: { min: 100, max: 100 }
+		},
+		{
+			id: crypto.randomUUID(),
+			icon: '',
+			title: {
+				message: 'filter_template_rank1_great',
+				title: undefined
+			},
+			enabled: true,
+			pvpRankGreat: { min: 1, max: 1 }
+		},
+		{
+			id: crypto.randomUUID(),
+			icon: '',
+			title: {
+				message: 'filter_template_rank1_ultra',
+				title: undefined
+			},
+			enabled: true,
+			pvpRankGreat: { min: 1, max: 1 }
+		},
+		{
+			id: crypto.randomUUID(),
+			icon: '🗑️',
+			title: {
+				message: 'filter_template_nundo',
+				title: undefined
+			},
+			enabled: true,
+			iv: { min: 0, max: 0 }
+		},
+		{
+			id: crypto.randomUUID(),
+			icon: '📏',
+			title: {
+				message: 'filter_template_xxl',
+				title: undefined
+			},
+			enabled: true,
+			size: { min: 5, max: 5 }
+		},
+		{
+			id: crypto.randomUUID(),
+			icon: '',
+			title: {
+				message: 'filter_template_unown',
+				title: undefined
+			},
+			enabled: true,
+			pokemon: Array.from({ length: 28 }, (_, i) => i + 1).map(i => ({ pokemon_id: 201, form: i }))
+		},
+		{
+			id: crypto.randomUUID(),
+			icon: '',
+			title: {
+				message: 'filter_template_sea_trio',
+				title: undefined
+			},
+			enabled: true,
+			pokemon: [ { pokemon_id: 480, form: 0 }, { pokemon_id: 481, form: 0 }, { pokemon_id: 482, form: 0 } ]
+		},
+	];
 
 	function onnew() {
-		filtersetPageNew()
+		filtersetPageNew();
 	}
 </script>
 
@@ -47,18 +114,18 @@
 
 	<div class="overflow-y-auto h-full -mx-4 px-4">
 		<div class="flex flex-col gap-1">
-			{#each [1,1,1,1,1,1,1,1,1] as _}
+			{#each premadeFiltersets as filterset}
 				<Button
 					class="w-full flex gap-1 items-center justify-start rounded-md py-2 h-12 m-0! pl-4 pr-2"
 					size=""
 					variant="outline"
 					onclick={() => {
-						setCurrentSelectedFilterset("pokemon", placeholderFilter, false)
+						setCurrentSelectedFilterset("pokemon", filterset, false)
 						filtersetPageSelect()
 					}}
 				>
-					<span>{placeholderFilter.icon}</span>
-					<span>{placeholderFilter.title}</span>
+					<span>{filterset.icon}</span>
+					<span>{filterTitle(filterset)}</span>
 				</Button>
 			{/each}
 		</div>

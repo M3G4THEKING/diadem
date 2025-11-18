@@ -1,3 +1,5 @@
+import * as m from '@/lib/paraglide/messages';
+
 export type AnyFilterset =
 	| FiltersetPokemon
 	| FiltersetPokestopPlain
@@ -12,7 +14,10 @@ export type AnyFilterset =
 
 type BaseFilterset = {
 	id: string;
-	title: string;
+	title: {
+		title: string | undefined
+		message: keyof typeof m
+	};
 	enabled: boolean;
 	icon: any;
 };
@@ -22,7 +27,8 @@ type MinMax = {
 	max: number;
 };
 
-c
+type Pokemon = { pokemon_id: number; form: number };
+type QuestReward = { id: string; amount?: MinMax };
 
 export type FiltersetPokemon = BaseFilterset & {
 	pokemon?: Pokemon[];

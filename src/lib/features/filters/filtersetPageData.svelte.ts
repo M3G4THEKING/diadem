@@ -121,7 +121,10 @@ export function toggleFiltersetEnabled(category: FilterCategory, id: string) {
 export function getNewFilterset(): BaseFilterset {
 	return {
 		id: crypto.randomUUID(),
-		title: "?",
+		title: {
+			message: "pokemon_filter",
+			title: undefined
+		},
 		icon: "💯",
 		enabled: true
 	};

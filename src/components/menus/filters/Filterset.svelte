@@ -10,6 +10,7 @@
 		toggleFiltersetEnabled
 	} from '@/lib/features/filters/filtersetPageData.svelte';
 	import { filtersetPageReset } from '@/lib/features/filters/filtersetPages.svelte';
+	import { filterTitle } from '@/lib/features/filters/filtersetUtils';
 
 	let {
 		filter
@@ -34,7 +35,7 @@
 		class:opacity-50={!filter.enabled}
 	>
 		<span>{filter.icon}</span>
-		<span>{filter.title}</span>
+		<span>{filterTitle(filter)}</span>
 	</div>
 	<!--	<Button class="flex-1 justify-start rounded-md py-2 h-12 m-0! pl-4 pr-2" size="" variant="ghost">-->
 	<!--		<span>{filter.icon}</span>-->

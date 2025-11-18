@@ -13,6 +13,7 @@
 	import { mPokemon } from '@/lib/services/ingameLocale';
 	import { onMount } from 'svelte';
 	import { goto } from '$app/navigation';
+	import { filterTitle } from '@/lib/features/filters/filtersetUtils';
 
 	let { data }: PageProps = $props();
 
@@ -25,7 +26,7 @@
 			title += m.pokemon_filter()
 		}
 
-		if (title && data.filterset?.title) title += " | " + data.filterset.title
+		if (title) title += " | " + filterTitle(data.filterset)
 
 		return title
 	})

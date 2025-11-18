@@ -3,6 +3,7 @@
 	import { getFiltersetPageTransition } from '@/lib/features/filters/filtersetPages.svelte';
 	import { getCurrentSelectedFilterset } from '@/lib/features/filters/filtersetPageData.svelte';
 	import PokemonAttributeOverview from '@/components/menus/filters/filterset/pokemon/PokemonAttributeOverview.svelte';
+	import { filterTitle } from '@/lib/features/filters/filtersetUtils';
 
 	const filterset = getCurrentSelectedFilterset();
 </script>
@@ -19,7 +20,7 @@
 			{getCurrentSelectedFilterset()?.data.icon}
 		</span>
 		<span class="text-lg font-semibold">
-			{getCurrentSelectedFilterset()?.data.title}
+			{filterTitle(getCurrentSelectedFilterset()?.data)}
 		</span>
 	</div>
 

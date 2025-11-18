@@ -11,6 +11,7 @@
 	import { getCurrentSelectedFilterset } from '@/lib/features/filters/filtersetPageData.svelte.js';
 	import * as m from '@/lib/paraglide/messages';
 	import EditDetails from '@/components/menus/filters/filterset/EditDetails.svelte';
+	import { filterTitle } from '@/lib/features/filters/filtersetUtils';
 
 	let {
 		overview
@@ -45,7 +46,7 @@
 			</span>
 			</div>
 			<div class="flex items-center gap-2 text-base">
-				<b>{getCurrentSelectedFilterset()?.data.title}</b>
+				<b>{filterTitle(getCurrentSelectedFilterset()?.data)}</b>
 			</div>
 			<Pencil class="ml-auto" size="14" />
 

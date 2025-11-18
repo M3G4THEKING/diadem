@@ -4,6 +4,7 @@
 	import TextInput from '@/components/ui/input/TextInput.svelte';
 	import Button from '@/components/ui/input/Button.svelte';
 	import MenuTitle from '@/components/menus/MenuTitle.svelte';
+	import { filterTitle } from '@/lib/features/filters/filtersetUtils';
 
 	let {
 		data
@@ -29,6 +30,8 @@
 
 <TextInput
 	title="Name"
-	value={data.title}
-	onchange={e => data.title = e.target?.value ?? ""}
+	value={filterTitle(data)}
+	onchange={e => {
+		data.title.title = e.target?.value ?? ""
+	}}
 />

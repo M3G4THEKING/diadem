@@ -181,5 +181,14 @@
     "pokemon_filter": "Pokémon Filter",
     "pokemon_size": "Size",
     "details": "Details",
-    "shared_pokemon_filter": "Shared Pokémon Filter"
+    "shared_pokemon_filter": "Shared Pokémon Filter",
+    "unknown_filter": "Unknown Filter",
+    "filter_template_hundo": "100% IV",
+    "filter_template_nundo": "0% IV",
+    "filter_template_rank1_great": "Rank 1 Great League",
+    "filter_template_rank1_ultra": "Rank 1 Ultra League",
+    "filter_template_xxl_magikarp": "XXL Magikarp",
+    "filter_template_xxl": "All XXL",
+    "filter_template_unown": "Unown",
+    "filter_template_sea_trio": "Sea Trio"
 }
