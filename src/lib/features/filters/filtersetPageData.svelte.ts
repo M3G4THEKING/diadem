@@ -43,7 +43,11 @@ export function existsCurrentSelectedFilterset() {
 }
 
 export function getCurrentSelectedFiltersetInEdit() {
-	return filtersetPageData?.inEdit || false;
+	return filtersetPageData?.inEdit ?? false;
+}
+
+export function getCurrentSelectedFiltersetIsShared() {
+	return filtersetPageData?.isShared ?? false;
 }
 
 export function saveSelectedFilterset() {

@@ -180,5 +180,6 @@
     "count_genders": "{count} genders",
     "pokemon_filter": "Pokémon Filter",
     "pokemon_size": "Size",
-    "details": "Details"
+    "details": "Details",
+    "shared_pokemon_filter": "Shared Pokémon Filter"
 }

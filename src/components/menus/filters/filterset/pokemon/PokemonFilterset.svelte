@@ -12,7 +12,7 @@
 	} from '@/lib/features/filters/makeAttributeChipLabel';
 	import {
 		existsCurrentSelectedFilterset,
-		getCurrentSelectedFilterset, getCurrentSelectedFiltersetInEdit
+		getCurrentSelectedFilterset, getCurrentSelectedFiltersetInEdit, getCurrentSelectedFiltersetIsShared
 	} from '@/lib/features/filters/filtersetPageData.svelte.js';
 	import * as m from '@/lib/paraglide/messages';
 	import { getGenderLabel, getPokemonSize, pokemonSizes } from '@/lib/utils/pokemonUtils';
@@ -30,15 +30,27 @@
 		getAttributeLabelLevel, getAttributeLabelRank,
 		pokemonBounds
 	} from '@/lib/features/filters/pokemonFilterUtils';
+	import { getCurrentFiltersetPage } from '@/lib/features/filters/filtersetPages.svelte';
 
 	let data: FiltersetPokemon | undefined = $derived(getCurrentSelectedFilterset()?.data) as | FiltersetPokemon | undefined;
+
+	let modalTitle = $derived.by(() => {
+		if (getCurrentSelectedFiltersetIsShared()) return m.shared_pokemon_filter()
+		if (!getCurrentSelectedFiltersetInEdit()) {
+			return m.filterset_title_new_pokemon()
+		} else {
+			if (getCurrentFiltersetPage() === "base") {
+				return m.pokemon_filter()
+			} else {
+				return m.filterset_title_edit_pokemon()
+			}
+		}
+	})
 </script>
 
 <FiltersetModal
 	modalType="filtersetPokemon"
-	modalTitle={getCurrentSelectedFiltersetInEdit()
-		? m.filterset_title_edit_pokemon()
-		: m.filterset_title_new_pokemon()}
+	{modalTitle}
 	height={134}
 >
 	{#snippet overview()}

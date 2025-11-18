@@ -24,7 +24,7 @@
 </script>
 
 <div
-	class="w-full absolute top-0 h-full pb-20"
+	class="w-full absolute top-0 pb-20"
 	in:fly={getFiltersetPageTransition().in}
 	out:fly={getFiltersetPageTransition().out}
 >
@@ -63,7 +63,4 @@
 			{/each}
 		</div>
 	</div>
-
-
-
 </div>

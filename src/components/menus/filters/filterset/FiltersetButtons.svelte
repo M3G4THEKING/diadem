@@ -67,7 +67,7 @@
 		{/if}
 
 		<Button
-			class={!getCurrentSelectedFiltersetInEdit() ? "mr-auto" : ""}
+			class={!existsCurrentSelectedFilterset() ? "mr-auto" : ""}
 			variant={existsCurrentSelectedFilterset() ? "default" : "secondary"}
 			onclick={() => filtersetPageEdit()}
 		>

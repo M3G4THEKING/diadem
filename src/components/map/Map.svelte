@@ -27,7 +27,10 @@
 	import { getCurrentScoutData } from '@/lib/features/scout.svelte.js';
 	import { Coords } from '@/lib/utils/coordinates';
 	import { isAnyModalOpen, openModal } from '@/lib/ui/modal.svelte.js';
-	import { getCurrentSelectedFilterset } from '@/lib/features/filters/filtersetPageData.svelte';
+	import {
+		getCurrentSelectedFilterset,
+		getCurrentSelectedFiltersetIsShared
+	} from '@/lib/features/filters/filtersetPageData.svelte';
 	import { filtersetPageReset } from '@/lib/features/filters/filtersetPages.svelte';
 	import { openMenu } from '@/lib/ui/menus.svelte';
 
@@ -79,7 +82,7 @@
 				}
 			}
 
-			if (getCurrentSelectedFilterset()?.isShared) {
+			if (getCurrentSelectedFiltersetIsShared()) {
 				openMenu("filters")
 				filtersetPageReset()
 				tick().then(() => openModal("filtersetPokemon"))

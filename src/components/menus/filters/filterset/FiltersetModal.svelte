@@ -36,18 +36,16 @@
 
 <Modal {modalType} class="max-h-screen">
 	{#snippet title()}
-		{#if !(getCurrentFiltersetPage() === "base" && getCurrentSelectedFiltersetInEdit())}
-			<p class="pb-2 pl-5 pt-3 font-semibold text-base">
-				<span>
-					{modalTitle}
+		<p class="pb-2 pl-5 pt-3 font-semibold text-base">
+			<span>
+				{modalTitle}
+			</span>
+			{#if getCurrentAttributePage().label && getCurrentFiltersetPage() === "attribute"}
+				<span class="font-normal">
+					/ {getCurrentAttributePage().label}
 				</span>
-				{#if getCurrentAttributePage().label && getCurrentFiltersetPage() === "attribute"}
-					<span class="font-normal">
-						/ {getCurrentAttributePage().label}
-					</span>
-				{/if}
-			</p>
-		{/if}
+			{/if}
+		</p>
 	{/snippet}
 	<div
 		class="px-4 py-2 w-128 max-w-full overflow-hidden"

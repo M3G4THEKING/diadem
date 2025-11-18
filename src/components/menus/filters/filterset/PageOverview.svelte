@@ -24,7 +24,7 @@
 {/snippet}
 
 <div
-	class="w-full absolute top-0 h-[calc(100%-3rem)] overflow-y-auto"
+	class="w-full absolute top-0 overflow-y-auto"
 	in:fly={getFiltersetPageTransition().in}
 	out:fly={getFiltersetPageTransition().out}
 >
