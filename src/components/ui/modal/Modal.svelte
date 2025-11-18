@@ -44,7 +44,7 @@
 			{#if title}
 				<Dialog.Title>
 					{@render title()}
-					<CloseButton class="fixed right-1 top-1" onclick={() => closeModal(modalType)} />
+					<CloseButton class="fixed right-1 top-1 z-50" onclick={() => closeModal(modalType)} />
 				</Dialog.Title>
 			{/if}
 			{@render children?.()}

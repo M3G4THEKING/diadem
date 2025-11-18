@@ -179,5 +179,6 @@
     "x_percentage": "{x}%",
     "count_genders": "{count} genders",
     "pokemon_filter": "Pokémon Filter",
-    "pokemon_size": "Size"
+    "pokemon_size": "Size",
+    "details": "Details"
 }

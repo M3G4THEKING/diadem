@@ -4,10 +4,13 @@
 	import { fly } from 'svelte/transition';
 	import type { Snippet } from 'svelte';
 	import {
-		getFiltersetPageTransition,
+		filtersetPageEditAttribute,
+		getFiltersetPageTransition, setCurrentAttributePage
 	} from '@/lib/features/filters/filtersetPages.svelte.js';
 	import Button from '@/components/ui/input/Button.svelte';
 	import { getCurrentSelectedFilterset } from '@/lib/features/filters/filtersetPageData.svelte.js';
+	import * as m from '@/lib/paraglide/messages';
+	import EditDetails from '@/components/menus/filters/filterset/EditDetails.svelte';
 
 	let {
 		overview
@@ -15,6 +18,10 @@
 		overview: Snippet
 	} = $props();
 </script>
+
+{#snippet editDetailsPage(thisData)}
+	<EditDetails data={thisData} />
+{/snippet}
 
 <div
 	class="w-full absolute top-0 h-[calc(100%-3rem)] overflow-y-auto"
@@ -25,7 +32,10 @@
 		<Button
 			class="w-full! h-full! justify-start py-3! px-4! gap-4"
 			variant="ghost"
-
+			onclick={() => {
+				setCurrentAttributePage(editDetailsPage, m.details());
+				filtersetPageEditAttribute()
+			}}
 		>
 			<div
 				class="rounded-full bg-accent size-10 border flex items-center justify-center relative"
