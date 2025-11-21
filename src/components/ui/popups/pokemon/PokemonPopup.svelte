@@ -36,8 +36,12 @@
 	import Metadata from '@/components/utils/Metadata.svelte';
 
 	let { mapId } : { mapId: string } = $props()
-	let data: PokemonData = $derived(getMapObjects()[mapId] as PokemonData ?? getCurrentSelectedData() as PokemonData)
-	$inspect(data)
+	let data: PokemonData = $derived.by(() => {
+		return {
+			...getMapObjects()[mapId] as PokemonData ?? getCurrentSelectedData() as PokemonData,
+			shiny: false
+		}
+	})
 
 	// let masterPokemon: MasterPokemon | undefined = $derived(getMasterPokemon(data.pokemon_id))
 

@@ -1,84 +1,111 @@
 <script lang="ts">
 	import Button from '@/components/ui/input/Button.svelte';
 	import { fly } from 'svelte/transition';
-	import { CirclePlus, Pencil } from 'lucide-svelte';
+	import { CirclePlus } from 'lucide-svelte';
 	import type { FiltersetPokemon } from '@/lib/features/filters/filtersets';
 	import {
 		filtersetPageNew,
 		filtersetPageSelect,
 		getFiltersetPageTransition
 	} from '@/lib/features/filters/filtersetPages.svelte.js';
-	import { getNewFilterset, setCurrentSelectedFilterset } from '@/lib/features/filters/filtersetPageData.svelte.js';
-	import * as m from '@/lib/paraglide/messages';
+	import { setCurrentSelectedFilterset } from '@/lib/features/filters/filtersetPageData.svelte.js';
 	import { filterTitle } from '@/lib/features/filters/filtersetUtils';
+	import FiltersetIcon from '@/lib/features/filters/FiltersetIcon.svelte';
+	import { IconCategory, IconFeature } from '@/lib/features/filters/icons';
+	import { League } from '@/lib/services/uicons.svelte';
 
 	const premadeFiltersets: FiltersetPokemon[] = [
 		{
 			id: crypto.randomUUID(),
-			icon: '💯',
+			icon: {
+				emoji: '💯'
+			},
 			title: {
 				message: 'filter_template_hundo',
-				title: undefined
 			},
 			enabled: true,
 			iv: { min: 100, max: 100 }
 		},
 		{
 			id: crypto.randomUUID(),
-			icon: '',
+			icon: {
+				uicon: {
+					category: IconCategory.FEATURES,
+					params: {
+						feature: IconFeature.LEAGUE,
+						league: League.GREAT
+					}
+				}
+			},
 			title: {
 				message: 'filter_template_rank1_great',
-				title: undefined
 			},
 			enabled: true,
 			pvpRankGreat: { min: 1, max: 1 }
 		},
 		{
 			id: crypto.randomUUID(),
-			icon: '',
+			icon: {
+				uicon: {
+					category: IconCategory.FEATURES,
+					params: {
+						feature: IconFeature.LEAGUE,
+						league: League.ULTRA
+					}
+				}
+			},
 			title: {
 				message: 'filter_template_rank1_ultra',
-				title: undefined
 			},
 			enabled: true,
 			pvpRankGreat: { min: 1, max: 1 }
 		},
 		{
 			id: crypto.randomUUID(),
-			icon: '🗑️',
+			icon: {
+				emoji: '🗑️'
+			},
 			title: {
 				message: 'filter_template_nundo',
-				title: undefined
 			},
 			enabled: true,
 			iv: { min: 0, max: 0 }
 		},
 		{
 			id: crypto.randomUUID(),
-			icon: '📏',
+			icon: {
+				emoji: '📏'
+			},
 			title: {
 				message: 'filter_template_xxl',
-				title: undefined
 			},
 			enabled: true,
 			size: { min: 5, max: 5 }
 		},
 		{
 			id: crypto.randomUUID(),
-			icon: '',
+			icon: {
+				uicon: {
+					category: IconCategory.POKEMON,
+					params: { pokemon_id: 201, form: 6 }
+				}
+			},
 			title: {
 				message: 'filter_template_unown',
-				title: undefined
 			},
 			enabled: true,
 			pokemon: Array.from({ length: 28 }, (_, i) => i + 1).map(i => ({ pokemon_id: 201, form: i }))
 		},
 		{
 			id: crypto.randomUUID(),
-			icon: '',
+			icon: {
+				uicon: {
+					category: IconCategory.POKEMON,
+					params: { pokemon_id: 480, form: 0 }
+				}
+			},
 			title: {
 				message: 'filter_template_sea_trio',
-				title: undefined
 			},
 			enabled: true,
 			pokemon: [ { pokemon_id: 480, form: 0 }, { pokemon_id: 481, form: 0 }, { pokemon_id: 482, form: 0 } ]
@@ -116,7 +143,7 @@
 		<div class="flex flex-col gap-1">
 			{#each premadeFiltersets as filterset}
 				<Button
-					class="w-full flex gap-1 items-center justify-start rounded-md py-2 h-12 m-0! pl-4 pr-2"
+					class="w-full flex gap-2 items-center justify-start rounded-md py-2 h-12 m-0! pl-4 pr-2"
 					size=""
 					variant="outline"
 					onclick={() => {
@@ -124,7 +151,7 @@
 						filtersetPageSelect()
 					}}
 				>
-					<span>{filterset.icon}</span>
+					<FiltersetIcon {filterset} size={5} />
 					<span>{filterTitle(filterset)}</span>
 				</Button>
 			{/each}

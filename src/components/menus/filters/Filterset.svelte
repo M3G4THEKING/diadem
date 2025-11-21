@@ -11,6 +11,7 @@
 	} from '@/lib/features/filters/filtersetPageData.svelte';
 	import { filtersetPageReset } from '@/lib/features/filters/filtersetPages.svelte';
 	import { filterTitle } from '@/lib/features/filters/filtersetUtils';
+	import FiltersetIcon from '@/lib/features/filters/FiltersetIcon.svelte';
 
 	let {
 		filter
@@ -31,10 +32,10 @@
 >
 
 	<div
-		class="flex-1 flex gap-1 items-center justify-start rounded-md py-2 h-12 m-0! pr-2"
+		class="flex-1 flex gap-2 items-center justify-start rounded-md py-2 h-12 m-0! pr-2"
 		class:opacity-50={!filter.enabled}
 	>
-		<span>{filter.icon}</span>
+		<FiltersetIcon filterset={filter} size={5} />
 		<span>{filterTitle(filter)}</span>
 	</div>
 	<!--	<Button class="flex-1 justify-start rounded-md py-2 h-12 m-0! pl-4 pr-2" size="" variant="ghost">-->

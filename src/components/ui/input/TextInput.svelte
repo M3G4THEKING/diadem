@@ -18,7 +18,7 @@
 </script>
 
 <div
-	class="py-3 px-4 w-full text-left rounded-md gap-2"
+	class="py-3 w-full text-left rounded-md gap-2"
 >
 	<MenuTitle {title} {description} />
 

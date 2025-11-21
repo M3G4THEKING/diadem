@@ -4,6 +4,7 @@ import { env } from '$env/dynamic/private';
 function getHeaders() {
 	return {
 		"Authorization": getServerConfig().golbat.auth,
+		"X-Golbat-Secret": getServerConfig().golbat.secret
 	}
 }
 

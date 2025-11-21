@@ -4,6 +4,7 @@
 	import { getCurrentSelectedFilterset } from '@/lib/features/filters/filtersetPageData.svelte';
 	import PokemonAttributeOverview from '@/components/menus/filters/filterset/pokemon/PokemonAttributeOverview.svelte';
 	import { filterTitle } from '@/lib/features/filters/filtersetUtils';
+	import FiltersetIcon from '@/lib/features/filters/FiltersetIcon.svelte';
 
 	const filterset = getCurrentSelectedFilterset();
 </script>
@@ -16,9 +17,7 @@
 	<div
 		class="flex gap-4 items-center px-2 mt-4"
 	>
-		<span class="text-xl">
-			{getCurrentSelectedFilterset()?.data.icon}
-		</span>
+		<FiltersetIcon filterset={getCurrentSelectedFilterset()?.data} size={8} />
 		<span class="text-lg font-semibold">
 			{filterTitle(getCurrentSelectedFilterset()?.data)}
 		</span>

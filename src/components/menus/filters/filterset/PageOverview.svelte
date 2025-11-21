@@ -12,6 +12,7 @@
 	import * as m from '@/lib/paraglide/messages';
 	import EditDetails from '@/components/menus/filters/filterset/EditDetails.svelte';
 	import { filterTitle } from '@/lib/features/filters/filtersetUtils';
+	import FiltersetIcon from '@/lib/features/filters/FiltersetIcon.svelte';
 
 	let {
 		overview
@@ -41,9 +42,7 @@
 			<div
 				class="rounded-full bg-accent size-10 border flex items-center justify-center relative"
 			>
-			<span class="text-lg">
-				{getCurrentSelectedFilterset()?.data.icon}
-			</span>
+			<FiltersetIcon filterset={getCurrentSelectedFilterset()?.data} size={5} />
 			</div>
 			<div class="flex items-center gap-2 text-base">
 				<b>{filterTitle(getCurrentSelectedFilterset()?.data)}</b>

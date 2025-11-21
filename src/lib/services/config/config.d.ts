@@ -80,7 +80,8 @@ export type ClientConfig = {
 export type ServerConfig = {
 	golbat: {
 		url: string
-		auth: string
+		auth?: string
+		secret?: string
 	}
 	dragonite: {
 		url: string

@@ -1,4 +1,5 @@
-import * as m from '@/lib/paraglide/messages';
+import * as m from "@/lib/paraglide/messages";
+import type { IconCategory } from "@/lib/features/filters/icons";
 
 export type AnyFilterset =
 	| FiltersetPokemon
@@ -10,16 +11,22 @@ export type AnyFilterset =
 	| FiltersetRaid
 	| FiltersetStationPlain
 	| FiltersetMaxBattle
-	| FiltersetS2Cell
+	| FiltersetS2Cell;
 
 type BaseFilterset = {
 	id: string;
 	title: {
-		title: string | undefined
-		message: keyof typeof m
+		title?: string;
+		message: keyof typeof m;
 	};
 	enabled: boolean;
-	icon: any;
+	icon: {
+		emoji?: string;
+		uicon?: {
+			category: IconCategory;
+			params: { [key: string]: any };
+		};
+	};
 };
 
 type MinMax = {
@@ -59,43 +66,41 @@ export type FiltersetQuest = BaseFilterset & {
 	megaResource?: QuestReward[];
 	stardust?: MinMax;
 	xp?: MinMax;
-	candy?: QuestReward[]
-	xlCandy?: QuestReward[]
+	candy?: QuestReward[];
+	xlCandy?: QuestReward[];
 };
 
 export type FiltersetInvasion = BaseFilterset & {
-	characters?: number[]
-}
+	characters?: number[];
+};
 
 export type FiltersetLure = BaseFilterset & {
-	items: number[]
-}
+	items: number[];
+};
 
 export type FiltersetGymPlain = BaseFilterset & {
 	isSponsored?: boolean;
 	powerUpLevel?: MinMax;
 	isArScanEligible?: boolean;
 	hasDetatils?: boolean;
-	defenderAmount?: MinMax
+	defenderAmount?: MinMax;
 };
 
 export type FiltersetRaid = BaseFilterset & {
-	levels?: number[]
-	bosses?: Pokemon[]
-	hatchState?: "egg" | "boss" | "all"
+	levels?: number[];
+	bosses?: Pokemon[];
+	hatchState?: "egg" | "boss" | "all";
 };
 
-export type FiltersetStationPlain = BaseFilterset & {
-
-}
+export type FiltersetStationPlain = BaseFilterset & {};
 
 export type FiltersetMaxBattle = BaseFilterset & {
-	levels?: number[]
-	bosses?: Pokemon[]
-	isActive?: boolean
-	hasGmax?: boolean
-}
+	levels?: number[];
+	bosses?: Pokemon[];
+	isActive?: boolean;
+	hasGmax?: boolean;
+};
 
 export type FiltersetS2Cell = BaseFilterset & {
-	level?: number
-}
+	level?: number;
+};

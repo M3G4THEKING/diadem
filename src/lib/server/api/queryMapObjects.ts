@@ -33,9 +33,9 @@ export async function queryMapObjects(type: MapObjectType, bounds: Bounds, filte
 
 async function queryPokemon(bounds: Bounds, filter: FilterPokemon) {
 	let golbatQuries: GolbatPokemonQuery[];
-	if (filter.filters && (filter.filters?.length ?? 0) > 0) {
-		golbatQuries = filter.filters
-			.filter((filter) => filter.enabled)
+	const enabledFilters = filter.filters?.filter(f => f.enabled) ?? []
+	if (enabledFilters.length > 0) {
+		golbatQuries = enabledFilters
 			.map((filter) => {
 				const query: GolbatPokemonQuery = {};
 				if (filter.pokemon) query.pokemon = filter.pokemon.map(p => {

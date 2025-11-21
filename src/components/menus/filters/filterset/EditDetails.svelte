@@ -5,6 +5,7 @@
 	import Button from '@/components/ui/input/Button.svelte';
 	import MenuTitle from '@/components/menus/MenuTitle.svelte';
 	import { filterTitle } from '@/lib/features/filters/filtersetUtils';
+	import FiltersetIcon from '@/lib/features/filters/FiltersetIcon.svelte';
 
 	let {
 		data
@@ -14,7 +15,7 @@
 	$inspect(data)
 </script>
 
-<MenuTitle title="Icon" class="mx-4" />
+<MenuTitle title="Icon" />
 <div class="flex justify-center">
 	<div>
 
@@ -22,7 +23,7 @@
 			class="rounded-full! size-20! text-4xl! bg-muted ring-border ring-2 ring-offset-4"
 			variant="ghost"
 		>
-			{data.icon}
+			<FiltersetIcon filterset={data} size={10} />
 		</Button>
 	</div>
 </div>

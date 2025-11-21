@@ -129,7 +129,7 @@ export function getIconGym(data: Partial<GymData>, iconSet: string = getUserSett
 }
 
 export function getIconStation(data: Partial<StationData>, iconSet: string = getUserSettings().uiconSet.station.id) {
-	return iconSets[iconSet].station(data.start_time < currentTimestamp())
+	return iconSets[iconSet].station((data.start_time ?? 0) < currentTimestamp())
 }
 
 export function getIconInvasion(data: Incident) {
@@ -206,4 +206,15 @@ export function getIconType(type: number) {
 
 export function getIconContest() {
 	return iconSets[DEFAULT_UICONS].misc("showcase")
+}
+
+export enum League {
+	LITTLE = 500,
+	GREAT = 1500,
+	ULTRA = 2500,
+	MASTER = 9000
+}
+
+export function getIconLeague(league: League) {
+	return iconSets[DEFAULT_UICONS].misc(league)
 }
