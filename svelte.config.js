@@ -11,6 +11,12 @@ const config = {
 			serviceWorker: 'src/lib/serviceWorker/index.ts'
 		}
 	},
+
+	compilerOptions: {
+		experimental: {
+			async: true
+		}
+	}
 };
 
 export default config;

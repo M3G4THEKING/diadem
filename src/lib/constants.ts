@@ -46,6 +46,11 @@ export const DISCORD_REFRESH_INTERVAL = 60 * 60 * 24
 export const PERMISSION_UPDATE_INTERVAL = 5 * 60
 
 /**
+ * How long to keep a shiny rate for a pokemon (in seconds)
+ */
+export const SHINY_RATE_CACHE_DURATION = 60 * 60
+
+/**
  * The radius in which a bot can see wild pokemon, in meters
  */
 export const RADIUS_POKEMON = 70

@@ -14,3 +14,14 @@ export type GolbatPokemonQuery = {
 	pvp_great?: MinMax;
 	pvp_ultra?: MinMax;
 };
+
+export type ShinyRateRequest = {
+	pokemonId: number
+	formId: number
+}
+
+export type ShinyRateResponse = {
+	shinies: number
+	total: number
+	days: number
+}

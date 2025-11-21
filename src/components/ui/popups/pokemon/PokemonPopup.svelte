@@ -18,7 +18,7 @@
 		Ruler,
 		Search,
 		SearchCheck,
-		SearchX,
+		SearchX, Sparkles,
 		Swords,
 		Trophy,
 		Venus
@@ -34,21 +34,23 @@
 	import { getCurrentSelectedData } from '@/lib/mapObjects/currentSelectedState.svelte';
 	import { getPokemonSize, getRank, hasTimer, showGreat, showLittle, showUltra } from '@/lib/utils/pokemonUtils';
 	import Metadata from '@/components/utils/Metadata.svelte';
+	import { getCachedShinyRate, getShinyRate } from '@/lib/features/shinyRate';
+	import type { ShinyRateResponse } from '@/lib/server/api/queries';
 
-	let { mapId } : { mapId: string } = $props()
+	let { mapId }: { mapId: string } = $props();
 	let data: PokemonData = $derived.by(() => {
 		return {
 			...getMapObjects()[mapId] as PokemonData ?? getCurrentSelectedData() as PokemonData,
 			shiny: false
-		}
-	})
+		};
+	});
 
 	// let masterPokemon: MasterPokemon | undefined = $derived(getMasterPokemon(data.pokemon_id))
 
-	</script>
+</script>
 
 <svelte:head>
-	<Metadata title={mPokemon(data)}/>
+	<Metadata title={mPokemon(data)} />
 </svelte:head>
 
 {#snippet timer()}
@@ -92,11 +94,11 @@
 		<IconValue Icon={ChartSpline}>
 			{#if data.cp !== null}
 				<span class="font-semibold">
-					{m.pogo_cp({cp: data.cp})}
+					{m.pogo_cp({ cp: data.cp })}
 				</span>
 			{/if}
 			{#if data.level !== null}
-				({m.pogo_level({level: data.level})})
+				({m.pogo_level({ level: data.level })})
 			{/if}
 		</IconValue>
 	{/if}
@@ -174,25 +176,58 @@
 			{@render basicInfo()}
 		</div>
 
+		<!-- TODO: shiny rates. i don't fully understand how to best do this -->
+		<!--{@const cachedShinyRate = getCachedShinyRate(data.pokemon_id, data.form ?? 0)}-->
+		<!--{#if cachedShinyRate}-->
+		<!--	<IconValue Icon={Sparkles}>-->
+		<!--		{m.shiny_rate()}:-->
+		<!--		<b>-->
+		<!--			1:{(cachedShinyRate.total / cachedShinyRate.shinies).toFixed(1)}-->
+		<!--		</b>-->
+		<!--	</IconValue>-->
+		<!--{:else if cachedShinyRate === false}-->
+		<!--	{#await getShinyRate(data.pokemon_id, data.form ?? 0) then rate}-->
+		<!--		{#if rate}-->
+		<!--			<IconValue Icon={Sparkles}>-->
+		<!--				{m.shiny_rate()}:-->
+		<!--				<b>-->
+		<!--					1:{(rate.total / rate.shinies).toFixed(1)}-->
+		<!--				</b>-->
+		<!--			</IconValue>-->
+		<!--		{/if}-->
+		<!--	{/await}-->
+		<!--{/if}-->
+
+
+		<!--{shinyRate}-->
+		<!--{#if shinyRate}-->
+		<!--	<IconValue Icon={Sparkles}>-->
+		<!--		{m.shiny_rate()}:-->
+		<!--		<b>-->
+		<!--			1:{(shinyRate.total / shinyRate.shinies).toFixed(1)}-->
+		<!--		</b>-->
+		<!--	</IconValue>-->
+		<!--{/if}-->
+
 		{#if showLittle(data) || showGreat(data) || showUltra(data)}
-		PVP Rankings:
-		<div class="mb-3 space-y-1">
-			{#each (data.pvp?.little ?? []) as entry}
-				{#if (entry.rank ?? 100000) <= POKEMON_MIN_RANK}
-					<PvpEntry data={entry} league="little" />
-				{/if}
-			{/each}
-			{#each data.pvp?.great ?? [] as entry}
-				{#if (entry.rank ?? 100000) <= POKEMON_MIN_RANK}
-					<PvpEntry data={entry} league="great" />
-				{/if}
-			{/each}
-			{#each (data.pvp?.ultra ?? []) as entry}
-				{#if (entry.rank ?? 100000) <= POKEMON_MIN_RANK}
-					<PvpEntry data={entry} league="ultra" />
-				{/if}
-			{/each}
-		</div>
+			PVP Rankings:
+			<div class="mb-3 space-y-1">
+				{#each (data.pvp?.little ?? []) as entry}
+					{#if (entry.rank ?? 100000) <= POKEMON_MIN_RANK}
+						<PvpEntry data={entry} league="little" />
+					{/if}
+				{/each}
+				{#each data.pvp?.great ?? [] as entry}
+					{#if (entry.rank ?? 100000) <= POKEMON_MIN_RANK}
+						<PvpEntry data={entry} league="great" />
+					{/if}
+				{/each}
+				{#each (data.pvp?.ultra ?? []) as entry}
+					{#if (entry.rank ?? 100000) <= POKEMON_MIN_RANK}
+						<PvpEntry data={entry} league="ultra" />
+					{/if}
+				{/each}
+			</div>
 		{/if}
 
 		{#if data.strong}
@@ -249,12 +284,16 @@
 
 		{#if data.first_seen_timestamp !== data.updated}
 			<IconValue Icon={SearchCheck}>
-				{m.last_seen()}: <b><Countdown expireTime={data.updated} /></b>
+				{m.last_seen()}: <b>
+				<Countdown expireTime={data.updated} />
+			</b>
 			</IconValue>
 		{/if}
 
 		<IconValue Icon={Search}>
-			{m.first_seen()}:  <b><Countdown expireTime={data.first_seen_timestamp} /></b>
+			{m.first_seen()}: <b>
+			<Countdown expireTime={data.first_seen_timestamp} />
+		</b>
 		</IconValue>
 
 	{/snippet}

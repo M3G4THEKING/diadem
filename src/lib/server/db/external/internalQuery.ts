@@ -4,12 +4,12 @@ import { getDbUri } from '@/lib/services/config/dbUri.server';
 
 const connection = mysql.createPool(getDbUri(getServerConfig().db));
 
-export async function query(
+export async function query<T extends mysql.QueryResult>(
 	sql: string,
 	values: any | undefined = undefined
 ): Promise<{
 	error?: string;
-	result: mysql.QueryResult;
+	result: T;
 }> {
 	let result: mysql.QueryResult = [];
 	let error: string | undefined = undefined;
