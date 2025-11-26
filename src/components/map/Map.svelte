@@ -136,7 +136,10 @@
 
 		<GeoJSON
 			id="mapObjects"
-			data={getMapObjectsGeoJson()}
+			data={{
+				type: 'FeatureCollection',
+				features: []
+			}}
 		>
 			<SymbolLayer
 				id="mapObjectsLayer"

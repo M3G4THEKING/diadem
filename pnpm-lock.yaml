@@ -68,8 +68,8 @@ importers:
         specifier: ^1.43.6
         version: 1.43.6
       svelte-maplibre:
-        specifier: 1.2.0
-        version: 1.2.0(svelte@5.43.14)
+        specifier: 1.2.5
+        version: 1.2.5(svelte@5.43.14)
       tailwind-merge:
         specifier: ^2.5.5
         version: 2.6.0
@@ -2066,8 +2066,8 @@ packages:
   '@types/jsonwebtoken@9.0.9':
     resolution: {integrity: sha512-uoe+GxEuHbvy12OUQct2X9JenKM3qAscquYymuQN4fMWG9DBQtykrQEFcAbVACF7qaLw9BePSodUL0kquqBJpQ==}
 
-  '@types/leaflet@1.9.20':
-    resolution: {integrity: sha512-rooalPMlk61LCaLOvBF2VIf9M47HgMQqi5xQ9QRi7c8PkdIe0WrIi5IxXUXQjAdL0c+vcQ01mYWbthzmp9GHWw==}
+  '@types/leaflet@1.9.21':
+    resolution: {integrity: sha512-TbAd9DaPGSnzp6QvtYngntMZgcRk+igFELwR2N99XZn7RXUdKgsXMR+28bUO0rPsWp8MIu/f47luLIQuSLYv/w==}
 
   '@types/mapbox__point-geometry@0.1.4':
     resolution: {integrity: sha512-mUWlSxAmYLfwnRBmgYV86tgYmMIICX4kza8YnE/eIlywGe2XoOxlpVnXWwir92xRLjwyarqwpu2EJKD2pk0IUA==}
@@ -3177,8 +3177,8 @@ packages:
       svelte: ^4.0.0 || ^5.0.0-next.0
       typescript: '>=5.0.0'
 
-  svelte-maplibre@1.2.0:
-    resolution: {integrity: sha512-JKYzL0glnqCJ7LwkdDAMb3jdZdFl8ZDHEZyc043BV624kG9ZVaXlIPgjb8sNktqx1D0rQBNrYNt5rR4XszNCiQ==}
+  svelte-maplibre@1.2.5:
+    resolution: {integrity: sha512-Uklcbi6inW9GA0MuSusbXmFr/MQPmXrjuP8hS1+yFX3ySvCQ477tsM3I7Jo/fUDK3XAxFSIHW6hZfucnM3kXwQ==}
     peerDependencies:
       '@deck.gl/core': ^9
       '@deck.gl/layers': ^9
@@ -5776,7 +5776,7 @@ snapshots:
       '@types/ms': 2.1.0
       '@types/node': 18.19.100
 
-  '@types/leaflet@1.9.20':
+  '@types/leaflet@1.9.21':
     dependencies:
       '@types/geojson': 7946.0.16
 
@@ -6615,7 +6615,7 @@ snapshots:
 
   pmtiles@3.2.1:
     dependencies:
-      '@types/leaflet': 1.9.20
+      '@types/leaflet': 1.9.21
       fflate: 0.8.2
 
   point-in-polygon-hao@1.2.4:
@@ -6862,7 +6862,7 @@ snapshots:
     transitivePeerDependencies:
       - picomatch
 
-  svelte-maplibre@1.2.0(svelte@5.43.14):
+  svelte-maplibre@1.2.5(svelte@5.43.14):
     dependencies:
       d3-geo: 3.1.1
       dequal: 2.0.3

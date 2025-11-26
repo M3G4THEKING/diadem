@@ -2,19 +2,18 @@ import type { FeatureCollection, Point, Polygon } from 'geojson';
 import { type Feature, type IconProperties } from '@/lib/map/featuresGen.svelte';
 import { getMap } from '@/lib/map/map.svelte';
 import type { S2CellFeature, S2CellProperties } from '@/lib/mapObjects/s2cells.svelte.js';
-import { getLoadedImages } from '@/lib/map/loadedImages.svelte';
+import { getLoadedImages, setLoadedImage } from '@/lib/map/loadedImages.svelte';
 
-let mapObjectsGeoJson: FeatureCollection<Point, IconProperties> = $state({
+let mapObjectsGeoJson: FeatureCollection<Point, IconProperties> = {
 	type: 'FeatureCollection',
 	features: []
-});
+};
 
 let sessionImageUrls: string[] = [];
 
 export function updateMapObjectsGeoJson(features: Feature[]) {
 	mapObjectsGeoJson = { type: 'FeatureCollection', features };
-	// @ts-ignore
-	// getMap()?.getSource('mapObjects')?.setData(mapObjectsGeoJson);
+	getMap()?.getSource('mapObjects')?.setData(mapObjectsGeoJson);
 	Promise.all(
 		mapObjectsGeoJson.features.map((f) => {
 			return addMapImage(f.properties?.imageUrl);
@@ -41,7 +40,7 @@ async function addMapImage(url: string) {
 	if (!imageData) {
 		const image = await map.loadImage(url);
 		imageData = image.data;
-		getLoadedImages()[url] = imageData;
+		setLoadedImage(url, imageData)
 	}
 
 	map.addImage(url, imageData);
