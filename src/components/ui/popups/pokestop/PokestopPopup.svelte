@@ -24,7 +24,7 @@
 		hasFortActiveLure,
 		isIncidentContest,
 		isIncidentInvasion,
-		isIncidentKecleon
+		isIncidentKecleon, shouldDisplayIncidient, shouldDisplayLure
 	} from '@/lib/utils/pokestopUtils';
 	import { isFortOutdated } from '@/lib/utils/gymUtils';
 
@@ -37,7 +37,7 @@
 </svelte:head>
 
 {#snippet lureSection()}
-	{#if hasFortActiveLure(data)}
+	{#if shouldDisplayLure(data)}
 		<PokestopSection>
 			<div class="w-7 h-7 shrink-0">
 				<ImagePopup
@@ -62,7 +62,7 @@
 
 {#snippet incidentSection(expanded: boolean)}
 	{#each data.incident as incident}
-		{#if incident.id && incident.expiration > currentTimestamp()}
+		{#if incident.id && incident.expiration > currentTimestamp() && shouldDisplayIncidient(incident)}
 			{#if isIncidentInvasion(incident)}
 				<PokestopSection>
 					<div class="w-7 h-7 shrink-0">

@@ -7,8 +7,13 @@ import type {
 import { mAlignment, mGeneration, mItem, mPokemon, mType } from "@/lib/services/ingameLocale";
 import * as m from "@/lib/paraglide/messages";
 import { currentTimestamp } from "@/lib/utils/currentTimestamp";
+import { getUserSettings } from '@/lib/services/userSettings.svelte';
 
 export const CONTEST_SLOTS = 200;
+export const INCIDENT_DISPLAY_GOLD = 7
+export const INCIDENT_DISPLAY_KECLEON = 8
+export const INCIDENT_DISPLAY_CONTEST = 9
+export const INCIDENT_DISPLAYS_INVASION = [1, 2, 3]
 
 export function parseQuestReward(reward?: string | null) {
 	return JSON.parse(reward ?? "[]")[0] as QuestReward | undefined;
@@ -26,15 +31,19 @@ export function hasFortActiveLure(data: Partial<PokestopData>) {
 }
 
 export function isIncidentInvasion(incident: Incident) {
-	return [1, 2, 3].includes(incident.display_type);
+	return INCIDENT_DISPLAYS_INVASION.includes(incident.display_type);
+}
+
+export function isIncidentGold(incident: Incident) {
+	return incident.display_type === INCIDENT_DISPLAY_GOLD
 }
 
 export function isIncidentKecleon(incident: Incident) {
-	return incident.display_type === 8;
+	return incident.display_type === INCIDENT_DISPLAY_KECLEON;
 }
 
 export function isIncidentContest(incident: Incident) {
-	return incident.display_type === 9;
+	return incident.display_type === INCIDENT_DISPLAY_CONTEST;
 }
 
 export function getRewardText(reward: QuestReward) {
@@ -126,4 +135,40 @@ export function getContestText(data: PokestopData) {
 	}
 
 	return metric({ name })
+}
+
+export function shouldDisplayIncidient(incident: Incident) {
+	const pokestopFilters = getUserSettings().filters.pokestopMajor
+	if (!pokestopFilters.enabled) return false
+
+	if (pokestopFilters.goldPokestop.enabled && isIncidentGold(incident)) return true
+	if (pokestopFilters.contest.enabled && isIncidentContest(incident)) return true
+	if (pokestopFilters.kecleon.enabled && isIncidentKecleon(incident)) return true
+
+	if (pokestopFilters.invasion.enabled && isIncidentInvasion(incident)) {
+		const invasionFilters = pokestopFilters.invasion.filters.filter(f => f.enabled)
+		if (invasionFilters.length === 0) return true
+		// TODO invasion filter display filters
+	}
+
+	return false
+}
+
+export function shouldDisplayQuest(reward: QuestReward) {
+	const pokestopFilters = getUserSettings().filters.pokestopMajor
+	if (!pokestopFilters.enabled || !pokestopFilters.quest.enabled) return false
+
+	// TODO quest display filters
+
+	return true
+}
+
+export function shouldDisplayLure(data: Partial<PokestopData>) {
+	if (!hasFortActiveLure(data)) return false
+	const pokestopFilters = getUserSettings().filters.pokestopMajor
+	if (!pokestopFilters.enabled || !pokestopFilters.lure.enabled) return false
+
+	const lureFilters = pokestopFilters.lure.filters.filter(f => f.enabled)
+	if (lureFilters.length === 0) return true
+	return lureFilters.some(f => f.items.includes(data?.lure_id ?? 0))
 }

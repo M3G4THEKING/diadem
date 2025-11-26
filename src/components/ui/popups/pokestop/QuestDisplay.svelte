@@ -9,7 +9,7 @@
 	import { CircleAlert, Clock } from 'lucide-svelte';
 
 	import { timestampToLocalTime } from '@/lib/utils/timestampToLocalTime';
-	import { getArTag, getRewardText, parseQuestReward } from '@/lib/utils/pokestopUtils';
+	import { getArTag, getRewardText, parseQuestReward, shouldDisplayQuest } from '@/lib/utils/pokestopUtils';
 
 	let {
 		expanded,
@@ -35,7 +35,7 @@
 	});
 </script>
 
-{#if questTarget}
+{#if questTarget && reward && shouldDisplayQuest(reward)}
 	<PokestopSection>
 		<div class="w-7 h-7 shrink-0">
 			{#if reward}

@@ -20,7 +20,7 @@ import { updateMapObjectsGeoJson } from "@/lib/map/featuresManage.svelte";
 
 import { currentTimestamp } from "@/lib/utils/currentTimestamp";
 import { getStationPokemon } from "@/lib/utils/stationUtils";
-import { isIncidentInvasion } from "@/lib/utils/pokestopUtils";
+import { isIncidentInvasion, shouldDisplayIncidient, shouldDisplayQuest } from "@/lib/utils/pokestopUtils";
 import { getRaidPokemon } from "@/lib/utils/gymUtils";
 import { allMapObjectTypes } from '@/lib/mapObjects/mapObjectTypes';
 
@@ -169,6 +169,9 @@ export function updateFeatures(mapObjects: MapObjectsStateType) {
 				const questModifiers = getModifiers(userIconSet, "quest");
 				if (obj.alternative_quest_target && obj.alternative_quest_rewards) {
 					const reward = JSON.parse(obj.alternative_quest_rewards)[0];
+
+					if (!shouldDisplayQuest(reward)) continue
+
 					const mapId = obj.mapId + "-altquest-" + obj.alternative_quest_timestamp;
 
 					subFeatures.push(
@@ -187,6 +190,9 @@ export function updateFeatures(mapObjects: MapObjectsStateType) {
 				}
 				if (obj.quest_target && obj.quest_rewards) {
 					const reward = JSON.parse(obj.quest_rewards)[0];
+
+					if (!shouldDisplayQuest(reward)) continue
+
 					const mapId = obj.mapId + "-quest-" + obj.quest_timestamp;
 
 					subFeatures.push(
@@ -211,6 +217,7 @@ export function updateFeatures(mapObjects: MapObjectsStateType) {
 					if (!incident.id || !isIncidentInvasion(incident) || incident.expiration < timestamp) {
 						continue;
 					}
+					if (!shouldDisplayIncidient(incident)) continue
 
 					const mapId = obj.mapId + "-incident-" + incident.id;
 					const invasionModifiers = getModifiers(userIconSet, "invasion");

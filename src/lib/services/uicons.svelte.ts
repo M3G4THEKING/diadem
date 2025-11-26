@@ -8,8 +8,12 @@ import type { Incident, PokestopData, QuestReward } from '@/lib/types/mapObjectD
 import type { StationData } from '@/lib/types/mapObjectData/station';
 import type { GymData } from '@/lib/types/mapObjectData/gym';
 
-import { currentTimestamp } from '@/lib/utils/currentTimestamp';
-import { hasFortActiveLure } from '@/lib/utils/pokestopUtils';
+import { currentTimestamp } from "@/lib/utils/currentTimestamp";
+import {
+	hasFortActiveLure,
+	shouldDisplayIncidient,
+	shouldDisplayLure
+} from "@/lib/utils/pokestopUtils";
 import { GYM_SLOTS, isFortOutdated } from "@/lib/utils/gymUtils";
 import { allMapObjectTypes } from '@/lib/mapObjects/mapObjectTypes';
 
@@ -89,13 +93,13 @@ export function getIconPokemon(data: Partial<PokemonData>, iconSet: string = get
 export function getIconPokestop(data: Partial<PokestopData>, iconSet: string = getUserSettings().uiconSet.pokestop.id) {
 	// maybe this is not the right location for these modifations. can be moved later
 	let lureId = 0
-	if (hasFortActiveLure(data)) {
+	if (shouldDisplayLure(data)) {
 		lureId = data.lure_id ?? 0
 	}
 
 	let displayType: boolean | number = false
 	for (const incident of data.incident ?? []) {
-		if (incident.display_type && incident.expiration > currentTimestamp()) {
+		if (shouldDisplayIncidient(incident) && incident.display_type && incident.expiration > currentTimestamp()) {
 			displayType = incident.display_type
 			break
 		}

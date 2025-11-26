@@ -18,7 +18,9 @@ export function updateMapObjectsGeoJson(features: Feature[]) {
 		mapObjectsGeoJson.features.map((f) => {
 			return addMapImage(f.properties?.imageUrl);
 		})
-	).then();
+	).then(() => {
+		getMap()?.getSource('mapObjects')?.setData(mapObjectsGeoJson);
+	});
 }
 
 export function clearSessionImageUrls() {
