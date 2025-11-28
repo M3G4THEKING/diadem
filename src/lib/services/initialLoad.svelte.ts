@@ -7,6 +7,7 @@ import { browser } from "$app/environment";
 import { getUserSettings, getUserSettingsFromServer } from "@/lib/services/userSettings.svelte.js";
 import { loadRemoteLocale } from "@/lib/services/ingameLocale";
 import { resolveLanguageTag } from "@/lib/services/i18n";
+import { loadMasterStats } from "@/lib/features/masterStats.svelte";
 
 export enum LoadedFeature {
 	ICON_SETS = "iconSets",
@@ -15,7 +16,8 @@ export enum LoadedFeature {
 	SUPPORTED_FEATURES = "supportedFeatures",
 	USER_DETAILS = "userDetails",
 	REMOTE_LOCALE = "remoteLocale",
-	SERVER_USER_SETTINGS = "serverUserSettings"
+	SERVER_USER_SETTINGS = "serverUserSettings",
+	MASTER_STATS = "masterStats"
 }
 
 let loadedFeatures: LoadedFeature[] = $state([]);
@@ -54,11 +56,12 @@ export async function load() {
 		loadingWrapper(loadMasterFile(), LoadedFeature.MASTER_FILE),
 		loadingWrapper(loadKojiGeofences(), LoadedFeature.KOJI),
 		loadingWrapper(updateSupportedFeatures(), LoadedFeature.SUPPORTED_FEATURES),
+		loadingWrapper(loadMasterStats(), LoadedFeature.MASTER_STATS),
 		loadingWrapper(updateUserDetails(), LoadedFeature.USER_DETAILS),
 		loadingWrapper(
 			loadRemoteLocale(resolveLanguageTag(getUserSettings().languageTag)),
 			LoadedFeature.REMOTE_LOCALE
-		)
+		),
 	]);
 
 	if (browser) {

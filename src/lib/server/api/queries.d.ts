@@ -15,13 +15,27 @@ export type GolbatPokemonQuery = {
 	pvp_ultra?: MinMax;
 };
 
-export type ShinyRateRequest = {
-	pokemonId: number
-	formId: number
+export type PokemonStatEntry = {
+	shiny?: {
+		shinies: number
+		total: number
+		days: number
+	}
+	spawns?: {
+		count: number
+		days: number
+	}
 }
 
-export type ShinyRateResponse = {
-	shinies: number
-	total: number
+export type TotalPokemonStats = {
+	count: number
 	days: number
+}
+
+export type MasterStats = {
+	totalPokemon: TotalPokemonStats
+	pokemon: {
+		[key: string]: PokemonStatEntry // key format: "pokemonId-formId"
+	}
+	generatedAt: number
 }

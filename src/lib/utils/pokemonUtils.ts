@@ -1,5 +1,5 @@
-import { POKEMON_MIN_RANK } from "@/lib/constants";
-import type { PokemonData } from "@/lib/types/mapObjectData/pokemon";
+import { POKEMON_MIN_RANK } from '@/lib/constants';
+import type { PokemonData } from '@/lib/types/mapObjectData/pokemon';
 import * as m from '@/lib/paraglide/messages';
 
 export const pokemonSizes = {
@@ -42,4 +42,14 @@ export function getGenderLabel(gender: number) {
 	} else {
 		return m.pokemon_gender_neutral()
 	}
+}
+export function getRarityLabel(count: number, totalSpawns: number) {
+	if (totalSpawns === 0) return m.rarity_legendary();
+	const ratio = count / totalSpawns;
+	if (ratio > 0.01) return m.rarity_common();
+	if (ratio > 0.001) return m.rarity_uncommon();
+	if (ratio > 0.0001) return m.rarity_rare();
+	if (ratio > 0.00001) return m.rarity_very_rare();
+	if (ratio > 0.000001) return m.rarity_extremely_rare();
+	return m.rarity_legendary();
 }

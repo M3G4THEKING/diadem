@@ -197,5 +197,11 @@
     "quest_filter": "Quest Filter",
     "shared_quest_filter": "Shared Quest Filter",
     "new_quest_filter": "New Quest Filter",
-    "edit_quest_filter": "Edit Quest Filter"
+    "edit_quest_filter": "Edit Quest Filter",
+    "rarity_common": "Common",
+    "rarity_uncommon": "Unommon",
+    "rarity_rare": "Rare",
+    "rarity_very_rare": "Very Rare",
+    "rarity_extremely_rare": "Extremely Rare",
+    "rarity_legendary": "Off the charts"
 }

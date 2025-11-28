@@ -12,39 +12,49 @@
 		CircleSmall,
 		Clock,
 		ClockAlert,
+		Crown,
 		LibraryBig,
 		MapPinX,
 		Mars,
 		Ruler,
 		Search,
 		SearchCheck,
-		SearchX, Sparkles,
+		SearchX,
+		Sparkles,
 		Swords,
 		Trophy,
-		Venus,
-		Crown
+		Venus
 	} from 'lucide-svelte';
 	import IconValue from '@/components/ui/popups/common/IconValue.svelte';
 	import * as m from '@/lib/paraglide/messages';
-	import { getConfig } from '@/lib/services/config/config';
 	import { mMove, mPokemon, mWeather } from '@/lib/services/ingameLocale';
 	import TimeWithCountdown from '@/components/ui/popups/common/TimeWithCountdown.svelte';
 	import { getMapObjects } from '@/lib/mapObjects/mapObjectsState.svelte.js';
 	import { POKEMON_MIN_RANK } from '@/lib/constants';
 	import PvpEntry from '@/components/ui/popups/pokemon/PvpEntry.svelte';
 	import { getCurrentSelectedData } from '@/lib/mapObjects/currentSelectedState.svelte';
-	import { getPokemonSize, getRank, hasTimer, showGreat, showLittle, showUltra } from '@/lib/utils/pokemonUtils';
+	import {
+		getPokemonSize,
+		getRank,
+		getRarityLabel,
+		hasTimer,
+		showGreat,
+		showLittle,
+		showUltra
+	} from '@/lib/utils/pokemonUtils';
 	import Metadata from '@/components/utils/Metadata.svelte';
-	import { getCachedShinyRate, getShinyRate } from '@/lib/features/shinyRate';
-	import type { ShinyRateResponse } from '@/lib/server/api/queries';
+	import { getPokemonStats as getMasterPokemonStats, type PokemonStats } from '@/lib/features/masterStats.svelte';
 	import Button from '@/components/ui/input/Button.svelte';
+	import { formatNumber, formatNumberCompact, formatRatio } from '@/lib/utils/numberFormat';
 
 	let { mapId }: { mapId: string } = $props();
 	let data: PokemonData = $derived(getMapObjects()[mapId] as PokemonData ?? getCurrentSelectedData() as PokemonData);
 
 	// let masterPokemon: MasterPokemon | undefined = $derived(getMasterPokemon(data.pokemon_id))
 
-</script>
+	let stats: PokemonStats | undefined = $derived(getMasterPokemonStats(data.pokemon_id, data.form ?? 0));
+
+	</script>
 
 <svelte:head>
 	<Metadata title={mPokemon(data)} />
@@ -169,29 +179,42 @@
 	{/snippet}
 
 	{#snippet content()}
-		<div class="rounded-sm bg-accent text-accent-foreground border border-border px-4 -mx-4 pt-3 pb-4 mb-2 mt-3">
-			<p class="text-xs mb-2">
-				Stats · Last 7 days · Total seen: 50,300 ·
-				<Button variant="link" size="sm" class="p-0! m-0! h-fit! text-xs! underline">
-					See more
-				</Button>
-			</p>
-			<IconValue Icon={Sparkles}>
-				{m.shiny_rate()}:
-				<b>
-					1:503.5
-				</b>
-			</IconValue>
-			<IconValue Icon={Crown}>
-				Rarity:
-				<b>
-					Common
-				</b>
-				<span>
-					(1:60,000)
-				</span>
-			</IconValue>
-		</div>
+		{#if stats && stats.entry}
+			{@const entry = stats.entry}
+			<div class="rounded-sm bg-accent text-accent-foreground border border-border px-4 -mx-4 pt-3 pb-3.5 mb-2 mt-3">
+				<p class="text-xs mb-2">
+					Stats · Last {formatNumber(stats.total.days)} days
+					· Total seen: {formatNumberCompact(entry?.shiny?.total ?? entry?.spawns?.count)}
+<!--					·-->
+<!--					<Button variant="link" size="sm" class="p-0! m-0! h-fit! text-xs! underline">-->
+<!--						See more-->
+<!--					</Button>-->
+				</p>
+				{#if entry.shiny && entry.shiny.shinies > 0}
+					<IconValue Icon={Sparkles}>
+						{m.shiny_rate()}:
+						<b>
+							{formatRatio(entry.shiny.shinies, entry.shiny.total)}
+						</b>
+					</IconValue>
+				{:else}
+					<IconValue Icon={Sparkles}>
+						No Shiny found
+					</IconValue>
+				{/if}
+				{#if entry.spawns && entry.spawns.count > 0}
+					<IconValue Icon={Crown}>
+						Rarity:
+						<b>
+							{getRarityLabel(entry.spawns.count, stats.total.count)}
+						</b>
+						<span>
+							({formatRatio(entry.spawns.count, stats.total.count)})
+						</span>
+					</IconValue>
+				{/if}
+			</div>
+		{/if}
 
 		<div class="mb-3">
 			{@render basicInfo()}
@@ -233,17 +256,17 @@
 		{#if showLittle(data) || showGreat(data) || showUltra(data)}
 			PVP Rankings:
 			<div class="mb-3 space-y-1">
-				{#each (data.pvp?.little ?? []) as entry}
+				{#each (data.pvp?.little ?? []) as entry (entry.rank)}
 					{#if (entry.rank ?? 100000) <= POKEMON_MIN_RANK}
 						<PvpEntry data={entry} league="little" />
 					{/if}
 				{/each}
-				{#each data.pvp?.great ?? [] as entry}
+				{#each data.pvp?.great ?? [] as entry (entry.rank)}
 					{#if (entry.rank ?? 100000) <= POKEMON_MIN_RANK}
 						<PvpEntry data={entry} league="great" />
 					{/if}
 				{/each}
-				{#each (data.pvp?.ultra ?? []) as entry}
+				{#each (data.pvp?.ultra ?? []) as entry (entry.rank)}
 					{#if (entry.rank ?? 100000) <= POKEMON_MIN_RANK}
 						<PvpEntry data={entry} league="ultra" />
 					{/if}
