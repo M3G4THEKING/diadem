@@ -5,7 +5,7 @@ import {
 	getMapObjects
 } from "@/lib/mapObjects/mapObjectsState.svelte.js";
 import { type Bounds, getBounds } from "@/lib/mapObjects/mapBounds";
-import type { MapObjectType, MinorMapObjectType } from "@/lib/types/mapObjectData/mapObjects";
+import type { MapData, MapObjectType, MinorMapObjectType } from '@/lib/types/mapObjectData/mapObjects';
 import { getUserSettings } from "@/lib/services/userSettings.svelte.js";
 import type { AnyFilter, FilterS2Cell } from "@/lib/features/filters/filters";
 import { updateFeatures } from "@/lib/map/featuresGen.svelte";
@@ -14,6 +14,7 @@ import { updateWeather } from "@/lib/mapObjects/weather.svelte";
 import { hasFeatureAnywhere } from "@/lib/services/user/checkPerm";
 import { getUserDetails } from "@/lib/services/user/userDetails.svelte";
 import { allMapObjectTypes, allMinorMapTypes } from "@/lib/mapObjects/mapObjectTypes";
+import type { MapObjectResponse } from '@/lib/server/api/queryMapObjects';
 
 export type MapObjectRequestData = Bounds & { filter: AnyFilter };
 
@@ -67,14 +68,14 @@ export async function updateMapObject(
 
 	const fetchStart = performance.now();
 	const response = await fetch("/api/" + type, { method: "POST", body: JSON.stringify(body) });
-	const data = await response.json();
-	console.debug("updateMapObject | fetch took " + (performance.now() - fetchStart) + "ms");
 
-	if (!data) return;
-	if (data.error) {
-		console.error("Error while fetching " + type + ": " + data.error);
-		return;
+	if (!response.ok) {
+		console.error(`Error while fetching ${type}: ${response.status}`)
+		return
 	}
+
+	const data: MapObjectResponse<MapData> = await response.json();
+	console.debug("updateMapObject | fetch took " + (performance.now() - fetchStart) + "ms");
 
 	// const startTime = performance.now()
 	// const mapObjects = getMapObjectsSnapshot()
@@ -95,7 +96,7 @@ export async function updateMapObject(
 		);
 	}
 
-	if (!data.result) {
+	if (!data.data) {
 		return;
 	}
 
@@ -107,7 +108,7 @@ export async function updateMapObject(
 		// 	// mapObjects[mapObject.mapId] = mapObject
 		// 	makeMapObject(mapObject, type);
 		// }
-		addMapObjects(data.result, type);
+		addMapObjects(data.data, type, data.examined);
 		// setMapObjectState(mapObjects)
 		console.debug("updateMapObject | addMapObjects took " + (performance.now() - makeStart) + "ms");
 	} catch (e) {

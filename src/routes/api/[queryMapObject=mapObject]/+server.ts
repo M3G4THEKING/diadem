@@ -1,4 +1,4 @@
-import { json } from "@sveltejs/kit";
+import { error, json } from "@sveltejs/kit";
 import { checkFeatureInBounds, hasFeatureAnywhere } from "@/lib/services/user/checkPerm";
 
 import { noPermResult } from "@/lib/server/api/results";
@@ -13,5 +13,11 @@ export async function POST({ request, locals, params }) {
 	const type = params.queryMapObject as MapObjectType;
 	const bounds = checkFeatureInBounds(locals.perms, params.queryMapObject, data);
 
-	return json(await queryMapObjects(type, bounds, data.filter));
+	const queried = await queryMapObjects(type, bounds, data.filter)
+
+	if (queried.error) {
+		error(queried.error)
+	}
+
+	return json(queried.result);
 }

@@ -65,7 +65,7 @@
 			const directLinkData = getDirectLinkObject();
 			if (directLinkData) {
 				if (directLinkData.id) {
-					addMapObjects([directLinkData], directLinkData.type)
+					addMapObjects([directLinkData], directLinkData.type, 1)
 					openPopup(directLinkData)
 
 					if (!map.getBounds().contains(Coords.infer(directLinkData).maplibre())) {

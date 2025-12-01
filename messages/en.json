@@ -208,5 +208,6 @@
     "last_x_days": "Last {days} days",
     "total_seen": "Total seen",
     "no_shiny": "No shiny",
-    "rarity": "Rarity"
+    "rarity": "Rarity",
+    "showing_showing_of_examined": "Showing {showing} of {examined}"
 }

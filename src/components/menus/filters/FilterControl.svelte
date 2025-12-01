@@ -11,12 +11,18 @@
 	import { getNewFilterset, setCurrentSelectedFilterset } from '@/lib/features/filters/filtersetPageData.svelte';
 	import { getUserSettings, updateUserSettings } from '@/lib/services/userSettings.svelte';
 	import { updateAllMapObjects } from '@/lib/mapObjects/updateMapObject';
+	import * as m from '@/lib/paraglide/messages';
+	import { getMapObjectCounts } from '@/lib/mapObjects/mapObjectsState.svelte';
+	import type { MapObjectType } from '@/lib/types/mapObjectData/mapObjects';
+	import { formatNumberCompact } from '@/lib/utils/numberFormat';
+	import { tick } from 'svelte';
 
 	let {
 		category,
 		title,
 		onEnabledChange,
 		filter,
+		mapObject = undefined,
 		filterModal = undefined,
 		isExpandable = false,
 		isFilterable = true,
@@ -26,6 +32,7 @@
 		title: string,
 		onEnabledChange: (thisCategory: FilterCategory, value: boolean) => void,
 		filter: AnyFilter,
+		mapObject?: MapObjectType | undefined,
 		filterModal?: ModalType | undefined,
 		isExpandable?: boolean,
 		isFilterable?: boolean,
@@ -52,7 +59,7 @@
 			(filterset) => ({ ...filterset, enabled: shouldEnable })
 		);
 		updateUserSettings();
-		updateAllMapObjects().then();
+		tick().then(() => updateAllMapObjects().then());
 	}
 </script>
 
@@ -68,12 +75,17 @@
 				<p class="font-semibold text-base">
 					{title}
 				</p>
-				{#if isEnabled && isFilterable}
-					{#if hasAnyFilterset}
+				{#if isEnabled}
+					{#if mapObject}
+						{@const counts = getMapObjectCounts(mapObject)}
 						<p class="text-sm text-muted-foreground font-semibold">
-							Showing 12 of 267
+							{m.showing_showing_of_examined({
+								showing: formatNumberCompact(counts.showing),
+								examined: formatNumberCompact(counts.examined)
+							})}
 						</p>
-					{:else}
+					{/if}
+					{#if isFilterable}
 						<Button class="-ml-2" variant="ghost" size="sm" onclick={onAddFilter}>
 							<FunnelPlus size="14" />
 							<span>Add {title} filter</span>
@@ -84,19 +96,30 @@
 
 		{:else}
 			<Button
-				class="flex items-center justify-start! gap-1 flex-1"
+				class="flex-col items-start! h-fit"
 				variant="ghost"
 				onclick={() => expanded = !expanded}
 			>
-				<span class="font-semibold text-base">
-					{title}
-				</span>
-				{#if isExpandable}
-					<ChevronDown size="20" />
-				{:else}
-					<FunnelPlus class="ml-1" size="14" />
+				<div class="flex items-center justify-start! h-fit! gap-1 flex-1">
+					<p class="font-semibold text-base">
+						{title}
+					</p>
+					{#if isExpandable}
+						<ChevronDown size="20" />
+					{/if}
+				</div>
+
+				{#if isEnabled && mapObject}
+					{@const counts = getMapObjectCounts(mapObject)}
+					<p class="text-sm text-muted-foreground font-semibold">
+						{m.showing_showing_of_examined({
+							showing: formatNumberCompact(counts.showing),
+							examined: formatNumberCompact(counts.examined)
+						})}
+					</p>
 				{/if}
 			</Button>
+
 		{/if}
 		<!--		<span class="text-sm text-muted-foreground">67</span>-->
 

@@ -78,6 +78,7 @@
 			{category}
 			{isFilterable}
 			{filterModal}
+			{mapObject}
 			onEnabledChange={onEnabledChange}
 			isExpandable={subCategories.length > 0}
 			filter={getUserSettings().filters[category]}

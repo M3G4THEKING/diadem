@@ -8,7 +8,7 @@ export type GolbatPokemonQuery = {
 	sta_iv?: MinMax;
 	level?: MinMax;
 	cp?: MinMax;
-	gender?: MinMax;
+	gender?: number[];
 	size?: MinMax;
 	pvp_little?: MinMax;
 	pvp_great?: MinMax;

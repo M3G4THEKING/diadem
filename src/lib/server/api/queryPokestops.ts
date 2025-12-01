@@ -16,6 +16,7 @@ import {
 	INCIDENT_DISPLAY_KECLEON,
 	INCIDENT_DISPLAYS_INVASION
 } from "@/lib/utils/pokestopUtils";
+import type { PokestopData } from '@/lib/types/mapObjectData/pokestop';
 
 export async function queryPokestops(bounds: Bounds, filter: FilterPokestop) {
 	let sqlQuery = "" +
@@ -60,7 +61,6 @@ export async function queryPokestops(bounds: Bounds, filter: FilterPokestop) {
 		}
 	}
 
-
 	if (conditions.length > 0) {
 		sqlQuery += "AND ("
 		sqlQuery += conditions.join(" OR ")
@@ -68,7 +68,7 @@ export async function queryPokestops(bounds: Bounds, filter: FilterPokestop) {
 	}
 
 	sqlQuery += `LIMIT ${LIMIT_POKESTOP}`
-	return await query(sqlQuery, values);
+	return await query<PokestopData[]>(sqlQuery, values);
 }
 
 export async function queryPokestopsOld(bounds: Bounds, filter: FilterPokestop) {

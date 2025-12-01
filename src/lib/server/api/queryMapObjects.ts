@@ -13,54 +13,76 @@ import type { MapData, MapObjectType } from "@/lib/types/mapObjectData/mapObject
 import type { GolbatPokemonQuery } from "@/lib/server/api/queries";
 import { LIMIT_GYM, LIMIT_POKEMON, LIMIT_STATION } from "@/lib/constants";
 import { queryPokestops } from "@/lib/server/api/queryPokestops";
-import type { PokemonData } from '@/lib/types/mapObjectData/pokemon';
+import type { PokemonData } from "@/lib/types/mapObjectData/pokemon";
+import { error } from "@sveltejs/kit";
+import type { GymData } from "@/lib/types/mapObjectData/gym";
+import type { StationData } from "@/lib/types/mapObjectData/station";
 
-export async function queryMapObjects(type: MapObjectType, bounds: Bounds, filter: AnyFilter) {
-	let result: { error: undefined | string; result: MapData[] } = {
-		error: "Internal Error",
-		result: []
-	};
+export type MapObjectResponse<Data extends MapData> = {
+	examined: number;
+	data: Data[];
+};
+
+export type WrappedMapObjectResponse<Data extends MapData> = {
+	result: MapObjectResponse<Data>;
+	error: number | undefined;
+};
+
+export async function queryMapObjects<Data extends MapData>(
+	type: MapObjectType,
+	bounds: Bounds,
+	filter: AnyFilter
+): Promise<WrappedMapObjectResponse<Data>> {
+	let dbResponse: { result: Data[], error?: string } | undefined = undefined
 
 	if (type === "pokemon" && filter.enabled) {
-		result = await queryPokemon(bounds, filter as FilterPokemon);
+		return await queryPokemon(bounds, filter as FilterPokemon);
 	} else if (type === "gym" && filter.enabled) {
-		result = await queryGyms(bounds, filter as FilterGym);
+		dbResponse = await queryGyms(bounds, filter as FilterGym);
 	} else if (type === "pokestop" && filter.enabled) {
-		result = await queryPokestops(bounds, filter as FilterPokestop);
+		dbResponse = await queryPokestops(bounds, filter as FilterPokestop);
 	} else if (type === "station" && filter.enabled) {
-		result = await queryStations(bounds, filter as FilterStation);
+		dbResponse = await queryStations(bounds, filter as FilterStation);
+	} else {
+		return { result: { examined: 0, data: [] }, error: 404 };
 	}
 
-	return result;
+	if (!dbResponse || dbResponse.error) {
+		return { result: { examined: 0, data: [] }, error: 500 };
+	}
+	return { result: { examined: 0, data: dbResponse?.result ?? [] }, error: undefined };
 }
 
-async function queryPokemon(bounds: Bounds, filter: FilterPokemon) {
+async function queryPokemon(
+	bounds: Bounds,
+	filter: FilterPokemon
+): Promise<WrappedMapObjectResponse<PokemonData>> {
 	let golbatQuries: GolbatPokemonQuery[];
-	const enabledFilters = filter.filters?.filter(f => f.enabled) ?? []
+	const enabledFilters = filter.filters?.filter((f) => f.enabled) ?? [];
 	if (enabledFilters.length > 0) {
-		golbatQuries = enabledFilters
-			.map((filter) => {
-				const query: GolbatPokemonQuery = {};
-				if (filter.pokemon) query.pokemon = filter.pokemon.map(p => {
-					const obj: { id: number; form?: number } = { id: p.pokemon_id }
-					if (p.form) obj.form = p.form
+		golbatQuries = enabledFilters.map((filter) => {
+			const query: GolbatPokemonQuery = {};
+			if (filter.pokemon)
+				query.pokemon = filter.pokemon.map((p) => {
+					const obj: { id: number; form?: number } = { id: p.pokemon_id };
+					if (p.form) obj.form = p.form;
 
-					return obj
+					return obj;
 				});
-				if (filter.iv) query.iv = filter.iv;
-				if (filter.ivAtk) query.atk_iv = filter.ivAtk;
-				if (filter.ivDef) query.def_iv = filter.ivDef;
-				if (filter.ivSta) query.sta_iv = filter.ivSta;
-				if (filter.level) query.level = filter.level;
-				if (filter.cp) query.cp = filter.cp;
-				if (filter.gender) query.gender = filter.gender;
-				if (filter.size) query.size = filter.size;
-				if (filter.pvpRankLittle) query.pvp_little = filter.pvpRankLittle;
-				if (filter.pvpRankGreat) query.pvp_great = filter.pvpRankGreat;
-				if (filter.pvpRankUltra) query.pvp_ultra = filter.pvpRankUltra;
+			if (filter.iv) query.iv = filter.iv;
+			if (filter.ivAtk) query.atk_iv = filter.ivAtk;
+			if (filter.ivDef) query.def_iv = filter.ivDef;
+			if (filter.ivSta) query.sta_iv = filter.ivSta;
+			if (filter.level) query.level = filter.level;
+			if (filter.cp) query.cp = filter.cp;
+			if (filter.gender) query.gender = filter.gender;
+			if (filter.size) query.size = filter.size;
+			if (filter.pvpRankLittle) query.pvp_little = filter.pvpRankLittle;
+			if (filter.pvpRankGreat) query.pvp_great = filter.pvpRankGreat;
+			if (filter.pvpRankUltra) query.pvp_ultra = filter.pvpRankUltra;
 
-				return query;
-			});
+			return query;
+		});
 	} else {
 		golbatQuries = [
 			{
@@ -82,33 +104,49 @@ async function queryPokemon(bounds: Bounds, filter: FilterPokemon) {
 		filters: golbatQuries
 	};
 
-	const response = await getMultiplePokemon(body);
-	const results: PokemonData[] = await response.json();
-	for (const pokemon of results) {
-		pokemon.shiny = false
-		pokemon.username = null
+	const result = await getMultiplePokemon(body);
+
+	if (result) {
+		console.log(result);
+		for (const pokemon of result.pokemon) {
+			pokemon.shiny = false;
+			pokemon.username = null;
+		}
+		return {
+			result: {
+				examined: result.examined,
+				data: result.pokemon
+			},
+			error: undefined
+		};
 	}
-	return { result: results, error: undefined };
+
+	return {
+		result: { examined: 0, data: [] },
+		error: 500
+	};
 }
 
 async function queryGyms(bounds: Bounds, filter: FilterGym) {
-	return await query(
+	return await query<GymData[]>(
 		"SELECT * FROM gym " +
 			"WHERE lat BETWEEN ? AND ? " +
 			"AND lon BETWEEN ? AND ? " +
 			"AND deleted = 0 " +
-			"LIMIT " + LIMIT_GYM,
+			"LIMIT " +
+			LIMIT_GYM,
 		[bounds.minLat, bounds.maxLat, bounds.minLon, bounds.maxLon]
 	);
 }
 
 async function queryStations(bounds: Bounds, filter: FilterStation) {
-	return await query(
+	return await query<StationData[]>(
 		"SELECT * FROM station " +
 			"WHERE lat BETWEEN ? AND ? " +
 			"AND lon BETWEEN ? AND ? " +
 			"AND end_time > UNIX_TIMESTAMP() " +
-			"LIMIT " + LIMIT_STATION,
+			"LIMIT " +
+			LIMIT_STATION,
 		[bounds.minLat, bounds.maxLat, bounds.minLon, bounds.maxLon]
 	);
 }

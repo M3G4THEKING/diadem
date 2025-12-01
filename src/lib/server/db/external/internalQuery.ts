@@ -4,7 +4,7 @@ import { getDbUri } from '@/lib/services/config/dbUri.server';
 
 const connection = mysql.createPool(getDbUri(getServerConfig().db));
 
-export async function query<T extends mysql.QueryResult>(
+export async function query<T>(
 	sql: string,
 	values: any | undefined = undefined
 ): Promise<{
