@@ -44,30 +44,23 @@ export function formatNumberCompact(value: number | null | undefined, decimals: 
  * Format a ratio as "1:X" where X is formatted based on size
  * @param numerator The count of the specific item
  * @param denominator The total count
- * @param useCompact Whether to use compact notation for large numbers
  * @returns Formatted ratio string (e.g., "1:500", "1:1.5M")
  */
 export function formatRatio(
 	numerator: number | null | undefined,
 	denominator: number | null | undefined,
-	useCompact: boolean = false
 ): string {
-	if (
-		numerator === null || numerator === undefined ||
-		denominator === null || denominator === undefined ||
-		numerator === 0 || denominator === 0 ||
-		isNaN(numerator) || isNaN(denominator)
-	) {
+	if (!numerator || !denominator) {
 		return 'N/A';
 	}
 
 	const ratio = denominator / numerator;
 
-	if (useCompact && ratio >= 1000) {
+	if (ratio >= 100_000) {
 		return `1:${formatNumberCompact(ratio, 1)}`;
 	}
 
-	return `1:${formatNumber(ratio.toFixed(1))}`;
+	return `1:${formatNumber(ratio, { maximumFractionDigits: ratio >= 1_000 ? 0 : 1 })}`;
 }
 
 /**

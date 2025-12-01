@@ -209,5 +209,6 @@
     "total_seen": "Total seen",
     "no_shiny": "No shiny",
     "rarity": "Rarity",
-    "showing_showing_of_examined": "Showing {showing} of {examined}"
+    "showing_showing_of_examined": "Showing {showing} of {examined}",
+    "showing_showing": "Showing {showing}"
 }

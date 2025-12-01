@@ -107,7 +107,6 @@ async function queryPokemon(
 	const result = await getMultiplePokemon(body);
 
 	if (result) {
-		console.log(result);
 		for (const pokemon of result.pokemon) {
 			pokemon.shiny = false;
 			pokemon.username = null;

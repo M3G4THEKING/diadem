@@ -77,15 +77,19 @@
 				</p>
 				{#if isEnabled}
 					{#if mapObject}
-						{@const counts = getMapObjectCounts(mapObject)}
+						{@const { showing, examined } = getMapObjectCounts(mapObject)}
 						<p class="text-sm text-muted-foreground font-semibold">
-							{m.showing_showing_of_examined({
-								showing: formatNumberCompact(counts.showing),
-								examined: formatNumberCompact(counts.examined)
-							})}
+							{#if showing === examined}
+								{m.showing_showing({ showing })}
+							{:else}
+								{m.showing_showing_of_examined({
+									showing: formatNumberCompact(showing),
+									examined: formatNumberCompact(examined)
+								})}
+							{/if}
 						</p>
 					{/if}
-					{#if isFilterable}
+					{#if isFilterable && !hasAnyFilterset}
 						<Button class="-ml-2" variant="ghost" size="sm" onclick={onAddFilter}>
 							<FunnelPlus size="14" />
 							<span>Add {title} filter</span>

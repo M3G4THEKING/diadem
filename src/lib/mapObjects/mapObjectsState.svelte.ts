@@ -11,16 +11,7 @@ export type MapObjectsStateType = {
 };
 
 let mapObjectsState: MapObjectsStateType = $state({});
-let mapObjectCounts: {
-	[key in MapObjectType]: { showing: number; examined: number }
-} = $state(
-	Object.fromEntries(
-		allMapObjectTypes.map(type => [
-			type,
-			{ showing: 0, examined: 0 }
-		])
-	) as Record<MapObjectType, { showing: number; examined: number }>
-)
+let mapObjectCounts = $state(getInitialMapObjectCount())
 
 
 export function getMapObjects() {
@@ -42,6 +33,8 @@ export function delMapObject(key: string) {
 }
 
 export function clearMapObjects(type: MapObjectType) {
+	mapObjectCounts[type] = { showing: 0, examined: 0 }
+
 	for (const key in getMapObjects()) {
 		// skip selected data
 		if (getCurrentSelectedData()?.mapId === key) continue
@@ -54,8 +47,18 @@ export function clearMapObjects(type: MapObjectType) {
 
 export function clearAllMapObjects() {
 	mapObjectsState = {};
+	mapObjectCounts = getInitialMapObjectCount()
 }
 
 export function getMapObjectCounts(type: MapObjectType) {
 	return mapObjectCounts[type]
+}
+
+function getInitialMapObjectCount(): { [key in MapObjectType]: { showing: number; examined: number } } {
+	return Object.fromEntries(
+		allMapObjectTypes.map(type => [
+			type,
+			{ showing: 0, examined: 0 }
+		])
+	) as Record<MapObjectType, { showing: number; examined: number }>
 }
