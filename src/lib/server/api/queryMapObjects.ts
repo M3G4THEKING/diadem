@@ -28,29 +28,40 @@ export type WrappedMapObjectResponse<Data extends MapData> = {
 	error: number | undefined;
 };
 
+export type SqlExaminedResult = {
+	examined: number
+}[]
+
 export async function queryMapObjects<Data extends MapData>(
 	type: MapObjectType,
 	bounds: Bounds,
 	filter: AnyFilter
 ): Promise<WrappedMapObjectResponse<Data>> {
-	let dbResponse: { result: Data[], error?: string } | undefined = undefined
+	let dbResponse: { result: Data[], error: number | undefined } | undefined = undefined
+	let examinedResponse: { result: SqlExaminedResult, error: number | undefined } | undefined = undefined
 
 	if (type === "pokemon" && filter.enabled) {
 		return await queryPokemon(bounds, filter as FilterPokemon);
 	} else if (type === "gym" && filter.enabled) {
 		dbResponse = await queryGyms(bounds, filter as FilterGym);
 	} else if (type === "pokestop" && filter.enabled) {
-		dbResponse = await queryPokestops(bounds, filter as FilterPokestop);
+		[ dbResponse, examinedResponse ] = await queryPokestops(bounds, filter as FilterPokestop);
 	} else if (type === "station" && filter.enabled) {
 		dbResponse = await queryStations(bounds, filter as FilterStation);
 	} else {
 		return { result: { examined: 0, data: [] }, error: 404 };
 	}
 
-	if (!dbResponse || dbResponse.error) {
+	if (!dbResponse || dbResponse.error !== undefined) {
 		return { result: { examined: 0, data: [] }, error: 500 };
 	}
-	return { result: { examined: 0, data: dbResponse?.result ?? [] }, error: undefined };
+
+	let examined = dbResponse.result.length
+	if (examinedResponse && examinedResponse.result[0] && examinedResponse.error === undefined) {
+		examined = examinedResponse.result[0].examined
+	}
+
+	return { result: { examined, data: dbResponse?.result ?? [] }, error: undefined };
 }
 
 async function queryPokemon(

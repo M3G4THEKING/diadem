@@ -23,6 +23,7 @@
 		};
 		if (evenColumns) {
 			cols['0'] = childCount === 5 ? 3 : 4;
+			cols['0'] = childCount === 6 ? 3 : 4;
 			cols['1'] = childCount === 4 ? 2 : 3;
 		}
 

@@ -9,6 +9,14 @@
 	import type { FiltersetPokemon, FiltersetQuest } from '@/lib/features/filters/filtersets';
 	import { getCurrentSelectedFilterset } from '@/lib/features/filters/filtersetPageData.svelte';
 	import { makeAttributePokemonLabel } from '@/lib/features/filters/makeAttributeChipLabel';
+	import { getAttributeLabelAr } from '@/lib/features/filters/filterUtilsQuest';
+	import ArAttribute from '@/components/menus/filters/filterset/quest/ArAttribute.svelte';
+	import RewardAttribute from '@/components/menus/filters/filterset/quest/RewardAttribute.svelte';
+	import Card from '@/components/ui/Card.svelte';
+	import { pokemonBounds } from '@/lib/features/filters/filterUtilsPokemon';
+	import AppearanceChips from '@/components/menus/filters/filterset/pokemon/AppearanceChips.svelte';
+	import AppearanceAttribute from '@/components/menus/filters/filterset/pokemon/AppearanceAttribute.svelte';
+	import { rewardTypeLabel } from '@/lib/utils/pokestopUtils';
 
 	let data: FiltersetQuest | undefined = $derived(getCurrentSelectedFilterset()?.data) as | FiltersetQuest | undefined;
 </script>
@@ -21,114 +29,62 @@
 	titleNew={m.new_quest_filter()}
 	titleEdit={m.edit_quest_filter()}
 >
+	{#snippet base()}
+		{#if data}
+			attr overview quests
+		{/if}
+	{/snippet}
 	{#snippet overview()}
 		{#if data}
-			<AttributesOverview>
-				<Attribute label="AR Quests">
-					<AttributeChip
-						label={makeAttributePokemonLabel(data.pokemon ?? [])}
-						isEmpty={!data.pokemon}
-						onremove={() => delete data.pokemon}
-					/>
-					{#snippet page()}
-						todo
-					{/snippet}
-				</Attribute>
-			</AttributesOverview>
-			<AttributesOverview>
-				<Attribute
-					label="Pokemon"
-				>
-					<AttributeChip
-						label="Any"
-						color="muted"
-					/>
-					{#snippet page()}
-						<PageAttribute>
-							<div></div>
-						</PageAttribute>
-					{/snippet}
-				</Attribute>
-				<Attribute
-					label="Items"
-				>
-					<AttributeChip
-						label="Any"
-						color="muted"
-					/>
-					{#snippet page()}
-						<PageAttribute>
-							<div></div>
-						</PageAttribute>
-					{/snippet}
-				</Attribute>
-				<Attribute
-					label="Mega Energy"
-				>
-					<AttributeChip
-						label="Any"
-						color="muted"
-					/>
-					{#snippet page()}
-						<PageAttribute>
-							<div></div>
-						</PageAttribute>
-					{/snippet}
-				</Attribute>
-				<Attribute
-					label="Candy XL"
-				>
-					<AttributeChip
-						label="Any"
-						color="muted"
-					/>
-					{#snippet page()}
-						<PageAttribute>
-							<div></div>
-						</PageAttribute>
-					{/snippet}
-				</Attribute>
-				<Attribute
-					label="Candy"
-				>
-					<AttributeChip
-						label="Any"
-						color="muted"
-					/>
-					{#snippet page()}
-						<PageAttribute>
-							<div></div>
-						</PageAttribute>
-					{/snippet}
-				</Attribute>
-				<Attribute
-					label="Stardust"
-				>
-					<AttributeChip
-						label="Any"
-						color="muted"
-					/>
-					{#snippet page()}
-						<PageAttribute>
-							<div></div>
-						</PageAttribute>
-					{/snippet}
-				</Attribute>
-				<Attribute
-					label="XP"
-				>
-					<AttributeChip
-						label="Any"
-						color="muted"
-					/>
-					{#snippet page()}
-						<PageAttribute>
-							<div></div>
-						</PageAttribute>
-					{/snippet}
-				</Attribute>
+			<Card class="w-full px-4 pt-2 pb-3">
+				<ArAttribute data={data} />
+			</Card>
+			<Card class="w-full px-4 pt-2 pb-3">
+				<RewardAttribute data={data} />
+			</Card>
 
-			</AttributesOverview>
+			{#if data.rewardType !== undefined}
+				<AttributesOverview>
+					<Attribute label={rewardTypeLabel(data.rewardType)}>
+						<AppearanceChips {data} sizeBounds={pokemonBounds.size} />
+						{#snippet page(thisData: FiltersetPokemon)}
+							<AppearanceAttribute data={thisData} sizeBounds={pokemonBounds.size} />
+						{/snippet}
+					</Attribute>
+					<Attribute label="Tasks">
+						<AppearanceChips {data} sizeBounds={pokemonBounds.size} />
+						{#snippet page(thisData: FiltersetPokemon)}
+							<AppearanceAttribute data={thisData} sizeBounds={pokemonBounds.size} />
+						{/snippet}
+					</Attribute>
+				</AttributesOverview>
+			{/if}
+<!--			<ArAttribute data={data} />-->
+<!--			<RewardAttribute data={data} />-->
+<!--			<AttributesOverview>-->
+<!--				<Attribute label={m.ar_layer()}>-->
+<!--					<AttributeChip-->
+<!--						label={getAttributeLabelAr(data.ar)}-->
+<!--						isEmpty={!data.ar}-->
+<!--						onremove={() => delete data.ar}-->
+<!--					/>-->
+<!--					{#snippet page(thisData: FiltersetQuest)}-->
+<!--						<ArAttribute data={thisData} />-->
+<!--					{/snippet}-->
+<!--				</Attribute>-->
+<!--			</AttributesOverview>-->
+<!--			<AttributesOverview>-->
+<!--				<Attribute label={m.reward()}>-->
+<!--					<AttributeChip-->
+<!--						label={getAttributeLabelAr(data.ar)}-->
+<!--						isEmpty={!data.ar}-->
+<!--						onremove={() => delete data.ar}-->
+<!--					/>-->
+<!--					{#snippet page(thisData: FiltersetQuest)}-->
+<!--						<RewardAttribute data={thisData} />-->
+<!--					{/snippet}-->
+<!--				</Attribute>-->
+<!--			</AttributesOverview>-->
 		{/if}
 	{/snippet}
 </FiltersetModal>

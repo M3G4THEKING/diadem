@@ -210,5 +210,14 @@
     "no_shiny": "No shiny",
     "rarity": "Rarity",
     "showing_showing_of_examined": "Showing {showing} of {examined}",
-    "showing_showing": "Showing {showing}"
+    "showing_showing": "Showing {showing}",
+    "both": "Both",
+    "ar_layer": "AR Layer",
+    "reward": "Reward",
+    "items": "Items",
+    "mega_energy": "Mega Energy",
+    "candy": "Candy",
+    "stardust": "Stardust",
+    "xp": "XP",
+    "xl_candy": "Candy XL"
 }

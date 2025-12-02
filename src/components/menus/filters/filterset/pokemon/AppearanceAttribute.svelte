@@ -15,6 +15,8 @@
 		data: FiltersetPokemon
 		sizeBounds: MinMax
 	} = $props();
+
+	let thisValues = $state(data.gender?.map(String) ?? ["1", "2", "3"])
 </script>
 
 <SliderRange
@@ -34,14 +36,15 @@
 
 	<ToggleGroup
 		childCount={3}
-		values={data.gender?.map(String) ?? ["1", "2", "3"]}
+		values={thisValues}
 		onchange={(values) => {
-				if (values.length > 0 && values.length < 3) {
-					data.gender = values.map(Number)
-				} else {
-					delete data.gender
-				}
-			}}
+			if (values.length > 0 && values.length < 3) {
+				data.gender = values.map(Number)
+			} else {
+				delete data.gender
+			}
+			thisValues = values
+		}}
 		class="w-full"
 	>
 		<SelectGroupItem

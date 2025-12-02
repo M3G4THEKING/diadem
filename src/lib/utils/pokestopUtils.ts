@@ -1,12 +1,7 @@
-import type {
-	ContestFocus,
-	Incident,
-	PokestopData,
-	QuestReward
-} from "@/lib/types/mapObjectData/pokestop";
-import { mAlignment, mGeneration, mItem, mPokemon, mType } from "@/lib/services/ingameLocale";
-import * as m from "@/lib/paraglide/messages";
-import { currentTimestamp } from "@/lib/utils/currentTimestamp";
+import type { ContestFocus, Incident, PokestopData, QuestReward } from '@/lib/types/mapObjectData/pokestop';
+import { mAlignment, mGeneration, mItem, mPokemon, mType } from '@/lib/services/ingameLocale';
+import * as m from '@/lib/paraglide/messages';
+import { currentTimestamp } from '@/lib/utils/currentTimestamp';
 import { getUserSettings } from '@/lib/services/userSettings.svelte';
 
 export const CONTEST_SLOTS = 200;
@@ -14,6 +9,25 @@ export const INCIDENT_DISPLAY_GOLD = 7
 export const INCIDENT_DISPLAY_KECLEON = 8
 export const INCIDENT_DISPLAY_CONTEST = 9
 export const INCIDENT_DISPLAYS_INVASION = [1, 2, 3]
+
+export enum RewardType {
+	XP = 1,
+	ITEM = 2,
+	STARDUST = 3,
+	CANDY = 4,
+	AVATAR_CLOTHING = 5,
+	QUEST = 6,
+	POKEMON = 7,
+	POKECOINS = 8,
+	XL_CANDY = 9,
+	LEVEL_CAP = 10,
+	STICKER = 11,
+	MEGA_ENERGY = 12,
+	INCIDENT = 13,
+	PLAYER_ATTRIBUTE = 14,
+	EVENT_BADGE = 15,
+	POKEMON_EGG = 16
+}
 
 export function parseQuestReward(reward?: string | null) {
 	return JSON.parse(reward ?? "[]")[0] as QuestReward | undefined;
@@ -48,40 +62,65 @@ export function isIncidentContest(incident: Incident) {
 
 export function getRewardText(reward: QuestReward) {
 	switch (reward.type) {
-		case 1:
+		case RewardType.XP:
 			return m.quest_xp({ count: reward.info.amount });
-		case 2:
+		case RewardType.ITEM:
 			return m.quest_item({ count: reward.info.amount, item: mItem(reward.info.item_id) });
-		case 3:
+		case RewardType.STARDUST:
 			return m.quest_stardust({ count: reward.info.amount });
-		case 4:
+		case RewardType.CANDY:
 			return m.quest_candy({ count: reward.info.amount, pokemon: mPokemon(reward.info) });
-		case 5:
-			return "Avatar Clothing";
-		case 6:
-			return "Quest";
-		case 7:
+		case RewardType.POKEMON:
 			return mPokemon(reward.info);
-		case 8:
-			return "Pokecoins";
-		case 9:
+		case RewardType.XL_CANDY:
 			return m.quest_xl_candy({
 				count: reward.info.amount,
 				pokemon: mPokemon(reward.info)
 			});
-		case 10:
-			return "Level Cap";
-		case 11:
-			return "Sticker";
-		case 12:
+		case RewardType.MEGA_ENERGY:
 			return m.quest_mega_resource({
 				count: reward.info.amount,
 				pokemon: mPokemon(reward.info)
 			});
-		case 13:
-			return "Incdent";
-		case 14:
+		default:
+			return rewardTypeLabel(reward.type);
+	}
+}
+
+export function rewardTypeLabel(rewardType: RewardType) {
+	switch (rewardType) {
+		case RewardType.XP:
+			return m.xp();
+		case RewardType.ITEM:
+			return m.items();
+		case RewardType.STARDUST:
+			return m.stardust();
+		case RewardType.CANDY:
+			return m.candy();
+		case RewardType.AVATAR_CLOTHING:
+			return "Avatar Clothing";
+		case RewardType.QUEST:
+			return "Quest";
+		case RewardType.POKEMON:
+			return m.pogo_pokemon();
+		case RewardType.POKECOINS:
+			return "Pokecoins";
+		case RewardType.XL_CANDY:
+			return m.xl_candy();
+		case RewardType.LEVEL_CAP:
+			return "Level Cap";
+		case RewardType.STICKER:
+			return "Sticker";
+		case RewardType.MEGA_ENERGY:
+			return m.mega_energy();
+		case RewardType.INCIDENT:
+			return "Incident";
+		case RewardType.PLAYER_ATTRIBUTE:
 			return "Player Attribute";
+		case RewardType.EVENT_BADGE:
+			return "Event Badge";
+		case RewardType.POKEMON_EGG:
+			return "Egg";
 		default:
 			return "";
 	}
@@ -164,11 +203,11 @@ export function shouldDisplayQuest(reward: QuestReward) {
 }
 
 export function shouldDisplayLure(data: Partial<PokestopData>) {
-	if (!hasFortActiveLure(data)) return false
-	const pokestopFilters = getUserSettings().filters.pokestopMajor
-	if (!pokestopFilters.enabled || !pokestopFilters.lure.enabled) return false
+	if (!hasFortActiveLure(data)) return false;
+	const pokestopFilters = getUserSettings().filters.pokestopMajor;
+	if (!pokestopFilters.enabled || !pokestopFilters.lure.enabled) return false;
 
-	const lureFilters = pokestopFilters.lure.filters.filter(f => f.enabled)
-	if (lureFilters.length === 0) return true
-	return lureFilters.some(f => f.items.includes(data?.lure_id ?? 0))
+	const lureFilters = pokestopFilters.lure.filters.filter((f) => f.enabled);
+	if (lureFilters.length === 0) return true;
+	return lureFilters.some((f) => f.items.includes(data?.lure_id ?? 0));
 }

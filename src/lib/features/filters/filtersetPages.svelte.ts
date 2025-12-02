@@ -1,7 +1,14 @@
 import type { Snippet } from "svelte";
 import { FiniteStateMachine } from "runed";
 import { closeModal, type ModalType } from "@/lib/ui/modal.svelte.js";
-import { getCurrentSelectedFiltersetInEdit, saveCurrentSelectedAttribute, saveSelectedFilterset } from '@/lib/features/filters/filtersetPageData.svelte.js';
+import {
+	getCurrentSelectedFilterset,
+	getCurrentSelectedFiltersetInEdit,
+	getNewFilterset,
+	saveCurrentSelectedAttribute,
+	saveSelectedFilterset,
+	setCurrentSelectedFilterset
+} from "@/lib/features/filters/filtersetPageData.svelte.js";
 import type { AnyFilterset } from '@/lib/features/filters/filtersets';
 
 export type FiltersetPage = "base" | "new" | "overview" | "attribute";
@@ -56,7 +63,11 @@ const pageStates = new FiniteStateMachine<FiltersetPage, PageEvents>("base", {
 			hasSelectedSuggestedFilter = false
 		},
 		reset: resetPages,
-		newFilter: () => pageForward("overview"),
+		newFilter: () => {
+			const category = getCurrentSelectedFilterset()?.category
+			if (category) setCurrentSelectedFilterset(category, getNewFilterset(), false);
+			return pageForward("overview")
+		},
 		select: () => {
 			hasSelectedSuggestedFilter = true
 			return pageForward("base")

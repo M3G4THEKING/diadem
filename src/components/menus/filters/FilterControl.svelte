@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { ChevronDown, Eye, EyeClosed, FunnelPlus } from 'lucide-svelte';
+	import { ChevronDown, ChevronRight, Eye, EyeClosed, FunnelPlus } from 'lucide-svelte';
 	import type { AnyFilter, FilterCategory } from '@/lib/features/filters/filters';
 	import Switch from '@/components/ui/input/Switch.svelte';
 	import Button from '@/components/ui/input/Button.svelte';
@@ -63,6 +63,22 @@
 	}
 </script>
 
+{#snippet showingCount()}
+	{#if mapObject}
+		{@const { showing, examined } = getMapObjectCounts(mapObject)}
+		<p class="text-sm text-muted-foreground font-semibold">
+			{#if showing === examined}
+				{m.showing_showing({ showing })}
+			{:else}
+				{m.showing_showing_of_examined({
+					showing: formatNumberCompact(showing),
+					examined: formatNumberCompact(examined)
+				})}
+			{/if}
+		</p>
+	{/if}
+{/snippet}
+
 <div
 	class="py-2 pr-4 pl-0 --border-red-200 --border-1"
 	class:py-0!={isEnabled && isFilterable && !hasAnyFilterset}
@@ -76,19 +92,7 @@
 					{title}
 				</p>
 				{#if isEnabled}
-					{#if mapObject}
-						{@const { showing, examined } = getMapObjectCounts(mapObject)}
-						<p class="text-sm text-muted-foreground font-semibold">
-							{#if showing === examined}
-								{m.showing_showing({ showing })}
-							{:else}
-								{m.showing_showing_of_examined({
-									showing: formatNumberCompact(showing),
-									examined: formatNumberCompact(examined)
-								})}
-							{/if}
-						</p>
-					{/if}
+					{@render showingCount()}
 					{#if isFilterable && !hasAnyFilterset}
 						<Button class="-ml-2" variant="ghost" size="sm" onclick={onAddFilter}>
 							<FunnelPlus size="14" />
@@ -100,7 +104,7 @@
 
 		{:else}
 			<Button
-				class="flex-col items-start! h-fit"
+				class="flex-col gap-0! items-start! w-full! h-fit"
 				variant="ghost"
 				onclick={() => expanded = !expanded}
 			>
@@ -109,18 +113,16 @@
 						{title}
 					</p>
 					{#if isExpandable}
-						<ChevronDown size="20" />
+							<ChevronRight
+							size="16"
+							class="transition-[rotate] mt-px"
+							style="rotate: {expanded ? '90deg' : '0deg'}"
+						/>
 					{/if}
 				</div>
 
-				{#if isEnabled && mapObject}
-					{@const counts = getMapObjectCounts(mapObject)}
-					<p class="text-sm text-muted-foreground font-semibold">
-						{m.showing_showing_of_examined({
-							showing: formatNumberCompact(counts.showing),
-							examined: formatNumberCompact(counts.examined)
-						})}
-					</p>
+				{#if isEnabled}
+					{@render showingCount()}
 				{/if}
 			</Button>
 

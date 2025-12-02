@@ -1,5 +1,7 @@
 import * as m from "@/lib/paraglide/messages";
 import type { IconCategory } from "@/lib/features/filters/icons";
+import { QuestArType } from "@/lib/features/filters/filterUtilsQuest";
+import type { RewardType } from '@/lib/utils/pokestopUtils';
 
 export type AnyFilterset =
 	| FiltersetPokemon
@@ -64,7 +66,8 @@ export type FiltersetPokestopPlain = BaseFilterset & {
 };
 
 export type FiltersetQuest = BaseFilterset & {
-	ar?: "ar" | "noar" | "all";
+	ar?: QuestArType;
+	rewardType?: RewardType;
 	pokemon?: Pokemon[];
 	item?: QuestReward[];
 	megaResource?: QuestReward[];

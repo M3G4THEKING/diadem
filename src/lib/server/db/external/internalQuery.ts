@@ -8,11 +8,12 @@ export async function query<T>(
 	sql: string,
 	values: any | undefined = undefined
 ): Promise<{
-	error?: string;
+	error: number | undefined;
 	result: T;
 }> {
+	const start = performance.now()
 	let result: mysql.QueryResult = [];
-	let error: string | undefined = undefined;
+	let error: number | undefined = undefined;
 
 	try {
 		const queryResult = await connection.query(
@@ -25,7 +26,7 @@ export async function query<T>(
 		result = queryResult[0];
 	} catch (e) {
 		console.error('SQL exception', e);
-		error = 'Internal error durng query';
+		error = 500;
 	}
 
 	const parsedResult: mysql.QueryResult = [];
@@ -56,6 +57,8 @@ export async function query<T>(
 			}
 		}
 	}
+
+	console.log(`Query took ${performance.now() - start}ms: ${sql}`)
 
 	return {
 		error,
