@@ -1,17 +1,23 @@
 import { error } from "@sveltejs/kit";
 import { getClientConfig } from "@/lib/services/config/config.server";
 import sharp, { type ResizeOptions } from "sharp";
-import { getLogger } from '@/lib/server/logging';
+import { getLogger } from "@/lib/server/logging";
 
 const log = getLogger("uicons");
-const CACHE_AGE = 86400 * 7  // 7 days
+const CACHE_AGE = 86400 * 7; // 7 days
+const ALLOWED_WIDTHS = ["64"];
 
 export async function GET({ params, fetch, url }) {
+	const start = performance.now();
 	const config = getClientConfig();
 
 	const width = url.searchParams.get("w");
 	const iconSetId = params.iconset;
 	const iconPath = params.path;
+
+	if (width && !ALLOWED_WIDTHS.includes(width)) {
+		error(401, "Invalid width");
+	}
 
 	const iconSet = config.uiconSets.find((s) => s.id === iconSetId);
 	if (!iconSet) {
@@ -31,12 +37,20 @@ export async function GET({ params, fetch, url }) {
 		if (!res.ok) {
 			error(500, "Fetching image failed");
 		}
+		const fetchDone = performance.now();
 
 		const buffer = Buffer.from(await res.arrayBuffer());
 
 		const webp = await sharp(buffer).resize(resizeOptions).webp({ quality: 80 }).toBuffer();
 
-		log.info("[%s] Serving icon %s (width=%s)", iconSetId, iconPath, width ?? "oiginal")
+		log.info(
+			"[%s] Serving icon %s (width=%s) / fetch: %fms + optimizing: %fms",
+			iconSetId,
+			iconPath,
+			width ?? "oiginal",
+			(fetchDone - start).toFixed(),
+			(performance.now() - fetchDone).toFixed(1)
+		);
 
 		return new Response(webp, {
 			headers: {

@@ -6,7 +6,7 @@ A WIP next-gen map frontend for pogo.
 1. `cp src/lib/server/config.example.toml config.toml && ln config.toml src/lib/server/config.toml` + fill out config.toml
 2. `pnpm run db:push`
 3. `pnpm install` && `pnpm run build`
-4. Start with `PORT=3900 HOST=127.0.0.1 pm2 start build/index.js -n "smap"`
+4. Start with `PORT=3900 HOST=127.0.0.1 FORCE_COLOR=1 pm2 start build/index.js -n "smap"`
 5. Set up a reverse proxy, I use caddy with this config:
     ```
     map.co {
