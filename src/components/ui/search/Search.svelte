@@ -1,5 +1,4 @@
 <script lang="ts">
-	// noinspection ES6UnusedImports
 	import { Command } from 'bits-ui';
 	import { onMount } from 'svelte';
 	import { Search, X } from 'lucide-svelte';
@@ -16,9 +15,9 @@
 	let input: HTMLInputElement | undefined = $state();
 	let searchQuery: string = $state('');
 
-	// onMount(() => {
-	// 	input?.focus();
-	// });
+	onMount(() => {
+		input?.focus();
+	});
 </script>
 
 <ModalTop modalType="search">
@@ -31,6 +30,7 @@
 
 			<Command.Input
 				bind:value={searchQuery}
+				ref={input}
 				placeholder={m.search_placeholder()}
 				autocomplete="off"
 				spellcheck="false"

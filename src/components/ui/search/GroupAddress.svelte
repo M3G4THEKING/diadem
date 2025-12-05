@@ -5,6 +5,7 @@
 	import { watch } from 'runed';
 	import { type AddressData, geocode } from '@/lib/features/geocoding';
 	import * as m from '@/lib/paraglide/messages';
+	import { closeModal } from '@/lib/ui/modal.svelte';
 
 	let {
 		searchQuery
@@ -38,7 +39,10 @@
 <SearchGroup title="{m.search_place_title()}{extraTitle}">
 	{#each addresses as address (address.id)}
 		<SearchItem
-			onselect={() => flyTo(address.center, 14)}
+			onselect={() => {
+				flyTo(address.center, 14)
+				closeModal("search")
+			}}
 			value={"" + address.id}
 			label={address.name}
 			iconName={"MapPin"}

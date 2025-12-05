@@ -33,7 +33,7 @@
 	function getShareUrl() {
 		const filterset = getCurrentSelectedFilterset()
 		if (filterset) {
-			return `${window.location.origin}/filter/${filterset.category}/${getCurrentSelectedFiltersetEncoded()}`
+			return `${window.location.origin}/filter/${filterset.subCategory}/${getCurrentSelectedFiltersetEncoded()}`
 		} else {
 			return window.location.origin
 		}

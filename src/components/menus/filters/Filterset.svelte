@@ -1,23 +1,28 @@
 <script lang="ts">
 	import Button from '@/components/ui/input/Button.svelte';
-	import Switch from '@/components/ui/input/Switch.svelte';
-	import { Eye, EyeClosed, Pencil } from 'lucide-svelte';
+	import { Eye, EyeClosed } from 'lucide-svelte';
 
 	import type { AnyFilterset } from '@/lib/features/filters/filtersets';
 	import { openModal } from '@/lib/ui/modal.svelte';
 	import {
+		type SelectedFiltersetData,
 		setCurrentSelectedFilterset,
-		toggleFiltersetEnabled
+		toggleCurrentSelectedFilterset
 	} from '@/lib/features/filters/filtersetPageData.svelte';
 	import { filtersetPageReset } from '@/lib/features/filters/filtersetPages.svelte';
 	import { filterTitle } from '@/lib/features/filters/filtersetUtils';
 	import FiltersetIcon from '@/lib/features/filters/FiltersetIcon.svelte';
+	import type { FilterCategory } from '@/lib/features/filters/filters';
 
 	let {
-		filter
+		filter,
+		majorCategory,
+		subCategory
 	}: {
 		filter: AnyFilterset
-	} = $props()
+		majorCategory: SelectedFiltersetData["majorCategory"],
+		subCategory?: FilterCategory,
+	} = $props();
 </script>
 
 <Button
@@ -25,7 +30,7 @@
 	variant="outline"
 	size="lg"
 	onclick={() => {
-		setCurrentSelectedFilterset("pokemon", filter, true)
+		setCurrentSelectedFilterset(majorCategory, subCategory, filter, true)
 		filtersetPageReset()
 		openModal("filtersetPokemon")
 	}}
@@ -53,7 +58,7 @@
 		size="icon"
 		onclick={(e) => {
 			e.stopPropagation()
-			toggleFiltersetEnabled("pokemon", filter.id)
+			toggleCurrentSelectedFilterset()
 		}}
 	>
 		{#if filter.enabled}

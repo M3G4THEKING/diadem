@@ -27,7 +27,7 @@
 
 <FiltersetModal
 	modalType="filtersetPokemon"
-	category="pokemon"
+	majorCategory="pokemon"
 	titleBase={m.pokemon_filter()}
 	titleShared={m.shared_pokemon_filter()}
 	titleNew={m.filterset_title_new_pokemon()}

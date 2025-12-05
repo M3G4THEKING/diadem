@@ -18,7 +18,7 @@
 	import {
 		existsCurrentSelectedFilterset, getCurrentSelectedFilterset, getCurrentSelectedFiltersetInEdit,
 		getCurrentSelectedFiltersetIsShared,
-		resetCurrentSelectedFilterset
+		resetCurrentSelectedFilterset, type SelectedFiltersetData
 	} from '@/lib/features/filters/filtersetPageData.svelte.js';
 	import PageBase from '@/components/menus/filters/filterset/PageBase.svelte';
 	import type { FilterCategory } from '@/lib/features/filters/filters';
@@ -30,7 +30,8 @@
 		titleShared,
 		titleNew,
 		titleEdit,
-		category,
+		majorCategory,
+		subCategory = undefined,
 		overview,
 		base,
 		height = 130
@@ -40,7 +41,8 @@
 		titleShared: string
 		titleNew: string
 		titleEdit: string
-		category: FilterCategory
+		majorCategory: SelectedFiltersetData["majorCategory"],
+		subCategory?: FilterCategory,
 		overview: Snippet
 		base: Snippet
 		height?: number
@@ -79,7 +81,7 @@
 	>
 		<div class="relative h-full">
 			{#if getCurrentFiltersetPage() === "new"}
-				<PageNewFilterset {category} />
+				<PageNewFilterset {majorCategory} {subCategory} />
 			{:else if getCurrentFiltersetPage() === "base"}
 				<PageBase {base} />
 			{:else if getCurrentFiltersetPage() === "overview"}

@@ -7,17 +7,25 @@
 		filtersetPageSelect,
 		getFiltersetPageTransition
 	} from '@/lib/features/filters/filtersetPages.svelte.js';
-	import { setCurrentSelectedFilterset } from '@/lib/features/filters/filtersetPageData.svelte.js';
+	import {
+		type SelectedFiltersetData,
+		setCurrentSelectedFilterset
+	} from '@/lib/features/filters/filtersetPageData.svelte.js';
 	import { filterTitle } from '@/lib/features/filters/filtersetUtils';
 	import FiltersetIcon from '@/lib/features/filters/FiltersetIcon.svelte';
 	import { premadeFiltersets } from '@/lib/features/filters/premadeFiltersets';
 	import type { FilterCategory } from '@/lib/features/filters/filters';
 
 	let {
-		category
+		majorCategory,
+		subCategory = undefined,
 	}: {
-		category: FilterCategory
+		majorCategory: SelectedFiltersetData["majorCategory"],
+		subCategory?: FilterCategory,
 	} = $props();
+
+	// @ts-ignore
+	let premades = $derived(premadeFiltersets[majorCategory] ?? premadeFiltersets[subCategory] ?? [])
 </script>
 
 <div
@@ -44,14 +52,14 @@
 
 	<div class="overflow-y-auto h-full -mx-4 px-4">
 		<div class="flex flex-col gap-1">
-			{#each premadeFiltersets[category] ?? [] as filterset}
+			{#each premades as filterset}
 				<Button
 					class="w-full flex gap-2 items-center justify-start rounded-md py-2 h-12 m-0! pl-4 pr-2"
 					size=""
 					variant="outline"
 					onclick={() => {
 						filterset.id = crypto.randomUUID()
-						setCurrentSelectedFilterset("pokemon", filterset, false)
+						setCurrentSelectedFilterset(majorCategory, subCategory, filterset, false)
 						filtersetPageSelect()
 					}}
 				>

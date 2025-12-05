@@ -36,6 +36,7 @@ function pageForward(page: FiltersetPage) {
 
 function resetPages() {
 	isFilterPageReset = true
+	hasSelectedSuggestedFilter = false
 	setTimeout(() => isFilterPageReset = false, 100)
 	return getCurrentSelectedFiltersetInEdit() ? "base" : "new"
 }
@@ -64,8 +65,10 @@ const pageStates = new FiniteStateMachine<FiltersetPage, PageEvents>("base", {
 		},
 		reset: resetPages,
 		newFilter: () => {
-			const category = getCurrentSelectedFilterset()?.category
-			if (category) setCurrentSelectedFilterset(category, getNewFilterset(), false);
+			const majorCategory = getCurrentSelectedFilterset()?.majorCategory
+			const subCategory = getCurrentSelectedFilterset()?.subCategory
+			// @ts-ignore
+			if (majorCategory) setCurrentSelectedFilterset(majorCategory, subCategory, getNewFilterset(), false);
 			return pageForward("overview")
 		},
 		select: () => {
@@ -85,12 +88,11 @@ const pageStates = new FiniteStateMachine<FiltersetPage, PageEvents>("base", {
 		editAttribute: () => pageForward("attribute"),
 		// @ts-ignore
 		save: (modalType: ModalType) => {
-			if (!hasSelectedSuggestedFilter) saveSelectedFilterset()
-
-			if (getCurrentSelectedFiltersetInEdit() || hasSelectedSuggestedFilter) {
-				return pageBack("base")
-			} else {
+			if (!hasSelectedSuggestedFilter) {
+				saveSelectedFilterset()
 				closeModal(modalType)
+			} else {
+				return pageBack("base")
 			}
 		}
 	},

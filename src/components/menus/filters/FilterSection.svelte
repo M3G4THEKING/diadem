@@ -39,12 +39,12 @@
 
 	let subcategoriesExpanded: boolean = $state(false);
 
-	function onEnabledChange(thisCategory: ParentCategory, value: boolean) {
-		const filter: AnyFilter = getUserSettings().filters[thisCategory];
+	function onEnabledChange(_, value: boolean) {
+		const filter: AnyFilter = getUserSettings().filters[category];
 		filter.enabled = value;
 
 		subCategories.forEach(subcategory => {
-			getUserSettings().filters[thisCategory][subcategory.category].enabled = value;
+			getUserSettings().filters[category][subcategory.category].enabled = value;
 		});
 
 		updateUserSettings();
@@ -53,8 +53,6 @@
 
 	function onSubEnabledChange(thisCategory: FilterCategory, value: boolean) {
 		getUserSettings().filters[category][thisCategory].enabled = value;
-		console.log(!Object.values(getUserSettings().filters[category]).find(subcategory => subcategory.enabled))
-		console.log(Object.values(getUserSettings().filters[category]).find(subcategory => subcategory.enabled))
 
 		if (
 			value
@@ -75,10 +73,10 @@
 	<Card class="py-1 px-2">
 		<FilterControl
 			{title}
-			{category}
 			{isFilterable}
 			{filterModal}
 			{mapObject}
+			majorCategory={category}
 			onEnabledChange={onEnabledChange}
 			isExpandable={subCategories.length > 0}
 			filter={getUserSettings().filters[category]}
@@ -91,7 +89,8 @@
 					{#each subCategories as subcategory}
 						<FilterControl
 							title={subcategory.title}
-							category={subcategory.category}
+							majorCategory={category}
+							subCategory={subcategory.category}
 							filterModal={subcategory.filterModal}
 							isFilterable={subcategory.filterable ?? true}
 							onEnabledChange={onSubEnabledChange}

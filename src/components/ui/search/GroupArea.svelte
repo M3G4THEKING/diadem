@@ -7,6 +7,7 @@
 	import NothingFound from '@/components/ui/search/NothingFound.svelte';
 	import SearchItem from '@/components/ui/search/SearchItem.svelte';
 	import * as m from '@/lib/paraglide/messages';
+	import { closeModal } from '@/lib/ui/modal.svelte';
 
 	let {
 		searchQuery
@@ -30,7 +31,10 @@
 	{/if}
 	{#each areas as feature (feature.properties.name)}
 		<SearchItem
-			onselect={() => flyTo(getPolygonCenter(feature), 14)}
+			onselect={() => {
+				flyTo(getPolygonCenter(feature), 14)
+				closeModal("search")
+			}}
 			value={feature.properties.name.toLowerCase()}
 			label={feature.properties.name}
 			iconName={feature.properties.lucideIcon || "Globe"}

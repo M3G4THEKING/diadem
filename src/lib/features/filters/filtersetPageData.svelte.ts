@@ -1,27 +1,31 @@
 import { closeModal, type ModalType } from "@/lib/ui/modal.svelte";
 import type { AnyFilterset, BaseFilterset } from "@/lib/features/filters/filtersets";
 import type { AnyFilter, FilterCategory } from "@/lib/features/filters/filters";
-import { getUserSettings, updateUserSettings } from "@/lib/services/userSettings.svelte";
+import { getUserSettings, updateUserSettings, type UserSettings } from "@/lib/services/userSettings.svelte";
 import { updateAllMapObjects } from "@/lib/mapObjects/updateMapObject";
 import { FiltersetPokemonSchema } from "@/lib/features/filters/filtersetSchemas";
 
-let filtersetPageData:
-	| {
-			category: FilterCategory;
-			selectedAttribute: AnyFilterset | undefined;
-			inEdit: boolean;
-			isShared: boolean;
-			data: AnyFilterset;
-	  }
-	| undefined = $state(undefined);
+type DataGeneric<M extends keyof UserSettings["filters"]> = {
+	majorCategory: M
+	subCategory: keyof UserSettings["filters"][M] | undefined;
+	selectedAttribute: AnyFilterset | undefined;
+	inEdit: boolean;
+	isShared: boolean;
+	data: AnyFilterset;
+}
+export type SelectedFiltersetData = DataGeneric<keyof UserSettings["filters"]>
+
+let filtersetPageData: SelectedFiltersetData | undefined = $state(undefined);
 
 export function setCurrentSelectedFilterset(
-	category: FilterCategory,
+	majorCategory: FilterCategory,
+	subCategory: FilterCategory | undefined,
 	data: AnyFilterset,
 	inEdit: boolean,
 	isShared: boolean = false
 ) {
-	filtersetPageData = { category, data, inEdit, isShared, selectedAttribute: undefined };
+	// @ts-ignore my IDE doesn't allow the correct subCategory as defined in DataGeneric here, so this is easier with autocomplete
+	filtersetPageData = { majorCategory, subCategory, data, inEdit, isShared, selectedAttribute: undefined };
 }
 
 export function resetCurrentSelectedFilterset() {
@@ -32,14 +36,23 @@ export function getCurrentSelectedFilterset() {
 	return filtersetPageData;
 }
 
-export function existsCurrentSelectedFilterset() {
-	if (!getCurrentSelectedFilterset()) {
-		return false;
-	} else {
-		return getUserSettings().filters[getCurrentSelectedFilterset()?.category]?.filters.some(
-			(f) => f.id === getCurrentSelectedFilterset().data.id
-		);
+function getFilter<Filterset extends AnyFilter>(): Filterset | undefined {
+	const selectedFilterset = getCurrentSelectedFilterset()
+	if (!selectedFilterset) return
+
+	const majorFilterset = getUserSettings().filters[selectedFilterset.majorCategory]
+	if (selectedFilterset.subCategory) {
+		// @ts-ignore
+		return majorFilterset[selectedFilterset.subCategory] as Filterset
 	}
+	// @ts-ignore
+	return majorFilterset as Filterset
+}
+
+export function existsCurrentSelectedFilterset() {
+	return getFilter()?.filters.some(
+		(f) => f.id === getCurrentSelectedFilterset()?.data.id
+	) ?? false;
 }
 
 export function getCurrentSelectedFiltersetIsEmpty() {
@@ -58,42 +71,37 @@ export function getCurrentSelectedFiltersetIsShared() {
 }
 
 export function saveSelectedFilterset() {
-	const filterset = filtersetPageData;
+	const filterset = filtersetPageData?.data
+	if (!filterset) return
+	const filter = getFilter()
+	if (!filter) return
 
-	if (filterset) {
-		const filters: AnyFilterset[] | undefined =
-			getUserSettings().filters[filterset.category]?.filters;
-		if (!filters) return;
-
-		const exists = filters.some((f) => f.id === filterset.data.id);
-		if (exists) {
-			getUserSettings().filters[filterset.category].filters = filters.map((f) =>
-				f.id === filterset.data.id ? filterset.data : f
-			);
-		} else {
-			getUserSettings().filters[filterset.category].filters.push(filterset.data);
-		}
-
-		updateUserSettings();
-		updateAllMapObjects().then();
+	const exists = filter.filters.some((f) => f.id === filterset.id) ?? false;
+	if (exists) {
+		filter.filters = filter.filters.map((f) =>
+			f.id === filterset.id ? filterset : f
+		);
+	} else {
+		// @ts-ignore
+		filter.filters.push(filterset)
 	}
+
+	updateUserSettings();
+	updateAllMapObjects().then();
 }
 
 export function deleteCurrentSelectedFilterset() {
-	const filterset = filtersetPageData;
+	const filterset = filtersetPageData?.data
+	if (!filterset) return
+	const filter = getFilter()
+	if (!filter) return
 
-	if (filterset) {
-		const filters: AnyFilterset[] | undefined =
-			getUserSettings().filters[filterset.category]?.filters;
-		if (!filters) return;
+	filter.filters = filter.filters.filter(
+		(f) => f.id !== filterset.id
+	);
 
-		getUserSettings().filters[filterset.category].filters = filters.filter(
-			(f) => f.id !== filterset.data.id
-		);
-
-		updateUserSettings();
-		updateAllMapObjects().then();
-	}
+	updateUserSettings();
+	updateAllMapObjects().then();
 }
 
 export function getCurrentSelectedAttribute() {
@@ -110,14 +118,20 @@ export function resetCurrentSelectedAttribute() {
 }
 
 export function saveCurrentSelectedAttribute() {
-	if (filtersetPageData && filtersetPageData.selectedAttribute)
+	if (filtersetPageData && filtersetPageData.selectedAttribute) {
 		filtersetPageData.data = filtersetPageData.selectedAttribute;
+	}
 }
 
-export function toggleFiltersetEnabled(category: FilterCategory, id: string) {
-	getUserSettings().filters[category].filters = getUserSettings().filters[category].filters.map(
+export function toggleCurrentSelectedFilterset() {
+	const filterset = filtersetPageData?.data
+	if (!filterset) return
+	const filter = getFilter()
+	if (!filter) return
+
+	filter.filters = filter.filters.map(
 		(filter: AnyFilterset) => (
-			filter.id === id ? { ...filter, enabled: !filter.enabled } : filter
+			filter.id === filterset.id ? { ...filter, enabled: !filter.enabled } : filter
 		)
 	);
 

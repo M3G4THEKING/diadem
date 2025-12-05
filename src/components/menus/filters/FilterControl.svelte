@@ -8,7 +8,11 @@
 	import Filterset from '@/components/menus/filters/Filterset.svelte';
 	import { type ModalType, openModal } from '@/lib/ui/modal.svelte.js';
 	import { filtersetPageNew, filtersetPageReset } from '@/lib/features/filters/filtersetPages.svelte';
-	import { getNewFilterset, setCurrentSelectedFilterset } from '@/lib/features/filters/filtersetPageData.svelte';
+	import {
+		getNewFilterset,
+		type SelectedFiltersetData,
+		setCurrentSelectedFilterset
+	} from '@/lib/features/filters/filtersetPageData.svelte';
 	import { getUserSettings, updateUserSettings } from '@/lib/services/userSettings.svelte';
 	import { updateAllMapObjects } from '@/lib/mapObjects/updateMapObject';
 	import * as m from '@/lib/paraglide/messages';
@@ -18,7 +22,8 @@
 	import { tick } from 'svelte';
 
 	let {
-		category,
+		majorCategory,
+		subCategory = undefined,
 		title,
 		onEnabledChange,
 		filter,
@@ -28,7 +33,8 @@
 		isFilterable = true,
 		expanded = $bindable(false)
 	}: {
-		category: FilterCategory,
+		majorCategory: SelectedFiltersetData["majorCategory"],
+		subCategory?: FilterCategory,
 		title: string,
 		onEnabledChange: (thisCategory: FilterCategory, value: boolean) => void,
 		filter: AnyFilter,
@@ -48,16 +54,20 @@
 
 	function onAddFilter() {
 		if (!filterModal) return;
-		setCurrentSelectedFilterset(category, getNewFilterset(), false);
+		setCurrentSelectedFilterset(majorCategory, subCategory, getNewFilterset(), false);
 		filtersetPageReset();
 		openModal(filterModal);
 	}
 
 	function onToggleAll() {
 		const shouldEnable = allFiltersetsDisabled;
-		getUserSettings().filters[category].filters = getUserSettings().filters[category].filters.map(
-			(filterset) => ({ ...filterset, enabled: shouldEnable })
-		);
+		let filter = getUserSettings().filters[majorCategory]
+
+		// @ts-ignore
+		if (subCategory) filter = filter[subCategory]
+		// @ts-ignore
+		filter.filters = filter.filters.map((filterset) => ({ ...filterset, enabled: shouldEnable }))
+
 		updateUserSettings();
 		tick().then(() => updateAllMapObjects().then());
 	}
@@ -139,7 +149,7 @@
 			<!--			</Button>-->
 			<!--		{/if}-->
 
-			<Switch class="" bind:checked={isEnabled} onCheckedChange={v => onEnabledChange(category, v)} />
+			<Switch class="" bind:checked={isEnabled} onCheckedChange={v => onEnabledChange(subCategory, v)} />
 		</div>
 	</div>
 
@@ -150,7 +160,7 @@
 				transition:slide={{ duration: 90 }}
 			>
 				{#each filter.filters ?? [] as filterset (filterset.id)}
-					<Filterset filter={filterset} />
+					<Filterset filter={filterset} {majorCategory} {subCategory} />
 				{/each}
 			</div>
 

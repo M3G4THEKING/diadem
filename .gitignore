@@ -2,6 +2,7 @@ node_modules
 .idea
 config.toml
 .vite/*
+src/components/custom/*
 
 # Output
 .output
