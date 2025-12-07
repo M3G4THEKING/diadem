@@ -13,8 +13,10 @@ const statsCache: TTLCache<"stats", MasterStats> = new TTLCache({
 
 export async function GET() {
 	const stats = statsCache.get("stats");
-	log.info("Serving cached master stats")
-	if (stats) return json(stats);
+	if (stats) {
+		log.info("Serving cached master stats")
+		return json(stats)
+	};
 
 	try {
 		const start = performance.now()

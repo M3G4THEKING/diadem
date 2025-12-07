@@ -19,10 +19,11 @@ export function onSettingsChange<K extends keyof UserSettings>(key: K, value: Us
 	updateUserSettings()
 }
 
-export function onThemeChange(value: string) {
-	if (value === "true") {
+export function onThemeChange(value: "true" | "false" | boolean | any) {
+	// TODO refactor dark mode to use svecosystem thingy
+	if (value === "true" || value === true) {
 		getUserSettings().isDarkMode = true
-	} else if (value === "false") {
+	} else if (value === "false" || value === false) {
 		getUserSettings().isDarkMode = false
 	} else {
 		getUserSettings().isDarkMode = null

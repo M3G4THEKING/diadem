@@ -1,7 +1,6 @@
-
 import type { MasterStats, PokemonStatEntry, TotalPokemonStats } from "@/lib/server/api/queryStats";
 
-let masterStats: MasterStats | undefined = undefined;
+let masterStats: MasterStats | undefined = $state(undefined);
 
 export type PokemonStats = {
 	total: TotalPokemonStats;
@@ -16,6 +15,10 @@ export async function loadMasterStats() {
 	}
 
 	masterStats = await response.json();
+}
+
+export function getMasterStats() {
+	return masterStats
 }
 
 export function getPokemonStats(pokemonId: number, formId: number): PokemonStats | undefined {
