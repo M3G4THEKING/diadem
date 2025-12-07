@@ -19,7 +19,6 @@
 	import { getContextMenuEvent, getIsContextMenuOpen } from '@/lib/ui/contextmenu.svelte.js';
 	import { isMenuSidebar, isUiLeft } from '@/lib/utils/device';
 	import { page } from '$app/state';
-
 	import Home from '@/components/custom/Home.svelte';
 
 	let showSignInButton = $derived(
@@ -66,7 +65,7 @@
 				<BottomNav />
 			</div>
 
-			<div class="flex flex-col items-end gap-2 w-[30rem] shrink basis-120">
+			<div class="flex flex-col items-end gap-2 w-120 shrink basis-120">
 				<Fabs />
 				<PopupContainer />
 			</div>

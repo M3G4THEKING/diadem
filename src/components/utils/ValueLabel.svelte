@@ -11,7 +11,7 @@
 </script>
 
 {#if value}
-	<div class="flex gap-[1px] text-sm mx-0.5">
+	<div class="flex gap-px text-sm mx-0.5">
 		<span class=" pl-2 pr-1 rounded-l-lg ring-2 {class_}">
 			{unit}
 		</span>

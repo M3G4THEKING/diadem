@@ -82,7 +82,7 @@
 					<MapLibre
 						center={[9.979, 53.563]}
 						zoom={12}
-						class="w-20 h-[4.5rem] border-b-2 border-accent"
+						class="w-20 h-18 border-b-2 border-accent"
 						style={mapStyle.url}
 						attributionControl={false}
 						interactive={false}

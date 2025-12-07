@@ -49,7 +49,7 @@
 			</Button>
 		</div>
 
-		<Command.List class="overflow-y-auto overflow-x-hidden mx-1 pb-1 max-h-[32rem]">
+		<Command.List class="overflow-y-auto overflow-x-hidden mx-1 pb-1 max-h-128">
 			<Command.Viewport>
 				{#if isSupportedFeature("geocoding")}
 					<GroupAddress {searchQuery} />

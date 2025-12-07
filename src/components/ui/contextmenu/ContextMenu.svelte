@@ -101,7 +101,7 @@
 	{#if getIsContextMenuOpen()}
 		<div
 			bind:this={div}
-			class="absolute py-2 flex flex-col z-50 bg-popover text-popover-foreground min-w-[8rem] rounded-md border p-1 shadow-md focus:outline-hidden"
+			class="absolute py-2 flex flex-col z-50 bg-popover text-popover-foreground min-w-32 rounded-md border p-1 shadow-md focus:outline-hidden"
 			style={style}
 		>
 			{@render menuItems()}

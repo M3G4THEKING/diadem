@@ -25,7 +25,7 @@
 	>
 		<div class="flex overflow-x-auto gap-2 pb-3 mt-1">
 			{#each data.pokemon as species}
-				<div class="border-border border-1 rounded-lg px-2 py-1 flex gap-2 items-center shrink-0">
+				<div class="border-border border rounded-lg px-2 py-1 flex gap-2 items-center shrink-0">
 					<img
 						class="size-9"
 						src={getIconPokemon(species)}
