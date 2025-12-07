@@ -7,6 +7,7 @@ config.toml
 src/components/custom/*
 static/custom/*
 src/routes/(custom)/*
+src/custom.css
 
 # Output
 .output
