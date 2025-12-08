@@ -45,7 +45,7 @@ mkdir -p "src/routes/(custom)"
 ensure_linked_file \
   "src/custom.css" \
   "config/custom.css" \
-  "config/custom.example.anything"
+  "config/custom.example.css"
 
 ensure_linked_file \
   "src/components/custom/Home.svelte" \
@@ -55,4 +55,4 @@ ensure_linked_file \
 ensure_linked_file \
   "src/lib/server/config.toml" \
   "config/config.toml" \
-  "config/config.example."
+  "config/config.example.toml"
