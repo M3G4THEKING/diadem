@@ -1,10 +1,21 @@
 import { z } from "zod";
+import { IconCategory } from "@/lib/features/filters/icons";
 
 const BaseFiltersetSchema = z.object({
 	id: z.string(),
-	title: z.string(),
+	title: z.object({
+		title: z.string().optional(),
+		message: z.string()
+	}),
 	enabled: z.boolean(),
-	icon: z.any(),
+	icon: z.object({
+		isUserSelected: z.boolean(),
+		emoji: z.string().optional(),
+		uicon: z.object({
+			category: z.enum(Object.values(IconCategory)),
+			params: z.record(z.string(), z.any())
+		}).optional()
+	}),
 });
 
 const MinMaxSchema = z.object({

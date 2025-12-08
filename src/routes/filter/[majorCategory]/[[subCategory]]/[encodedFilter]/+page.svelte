@@ -22,11 +22,11 @@
 	let { data }: PageProps = $props();
 
 	let title = $derived.by(() => {
-		if (!data.category) return "";
+		if (!data.majorCategory) return "";
 
 		let title = "";
 
-		if (data.category === "pokemon") {
+		if (data.majorCategory === "pokemon") {
 			title += m.pokemon_filter();
 		}
 
@@ -36,10 +36,10 @@
 	});
 
 	let text = $derived.by(() => {
-		if (browser || !data.filterset || !data.category) return "";
+		if (browser || !data.filterset || !data.majorCategory) return "";
 
 		let text = "";
-		if (data.category === "pokemon") {
+		if (data.majorCategory === "pokemon") {
 			const filterset = data.filterset as FiltersetPokemon;
 
 			if (filterset.pokemon) {

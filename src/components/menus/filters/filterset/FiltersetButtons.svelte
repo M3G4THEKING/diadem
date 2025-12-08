@@ -33,8 +33,9 @@
 	function getShareUrl() {
 		const filterset = getCurrentSelectedFilterset()
 		if (filterset) {
-			// TODO: major category / subCategory
-			return `${window.location.origin}/filter/${filterset.subCategory}/${getCurrentSelectedFiltersetEncoded()}`
+			let subCat = ""
+			if (filterset.subCategory) subCat = `/${filterset.subCategory}`
+			return `${window.location.origin}/filter/${filterset.majorCategory}${subCat}/${getCurrentSelectedFiltersetEncoded()}`
 		} else {
 			return window.location.origin
 		}

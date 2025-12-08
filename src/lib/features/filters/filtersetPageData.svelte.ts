@@ -5,6 +5,7 @@ import { getUserSettings, updateUserSettings, type UserSettings } from "@/lib/se
 import { updateAllMapObjects } from "@/lib/mapObjects/updateMapObject";
 import { FiltersetPokemonSchema } from "@/lib/features/filters/filtersetSchemas";
 import { getId } from "@/lib/utils/uuid";
+import * as m from "@/lib/paraglide/messages";
 
 type DataGeneric<M extends keyof UserSettings["filters"]> = {
 	majorCategory: M
@@ -162,17 +163,4 @@ export function getCurrentSelectedFiltersetEncoded() {
 	thisData.enabled = true;
 	const jsonStr = JSON.stringify(thisData);
 	return btoa(encodeURIComponent(jsonStr));
-}
-
-export function decodeFilterset(category: FilterCategory | string, str: string) {
-	const decoded: AnyFilterset = JSON.parse(decodeURIComponent(atob(str)));
-	decoded.id = getId();
-
-	let safe: AnyFilterset | undefined = undefined;
-
-	if (category === "pokemon") {
-		safe = FiltersetPokemonSchema.safeParse(decoded)?.data;
-	}
-
-	return safe;
 }
