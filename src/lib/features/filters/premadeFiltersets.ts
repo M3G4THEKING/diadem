@@ -3,7 +3,7 @@ import type {
 	BaseFilterset,
 	FiltersetPokemon,
 	FiltersetQuest,
-	Pokemon
+	QuestRewardPokemon
 } from "@/lib/features/filters/filtersets";
 import type { FilterCategory } from '@/lib/features/filters/filters';
 import { filtersetPageNew } from '@/lib/features/filters/filtersetPages.svelte';

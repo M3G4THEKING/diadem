@@ -40,11 +40,12 @@ type MinMax = {
 	max: number;
 };
 
-type Pokemon = { pokemon_id: number; form: number };
+type QuestRewardPokemon = { pokemon_id: number; form: number };
 type QuestReward = { id: string; amount?: MinMax };
+type QuestRewardAmount = { amount: MinMax };
 
 export type FiltersetPokemon = BaseFilterset & {
-	pokemon?: Pokemon[];
+	pokemon?: QuestRewardPokemon[];
 	iv?: MinMax;
 	cp?: MinMax;
 	ivAtk?: MinMax;
@@ -70,13 +71,13 @@ export type FiltersetQuest = BaseFilterset & {
 	rewardType?: RewardType;
 	title?: string
 	target?: number
-	pokemon?: Pokemon[];
+	pokemon?: QuestRewardPokemon[];
 	item?: QuestReward[];
-	megaResource?: QuestReward[];
-	stardust?: MinMax;
-	xp?: MinMax;
+	megaresource?: QuestReward[];
+	stardust?: QuestRewardAmount;
+	xp?: QuestRewardAmount;
 	candy?: QuestReward[];
-	xlCandy?: QuestReward[];
+	xlcandy?: QuestReward[];
 };
 
 export type FiltersetInvasion = BaseFilterset & {
@@ -97,7 +98,7 @@ export type FiltersetGymPlain = BaseFilterset & {
 
 export type FiltersetRaid = BaseFilterset & {
 	levels?: number[];
-	bosses?: Pokemon[];
+	bosses?: QuestRewardPokemon[];
 	hatchState?: "egg" | "boss" | "all";
 };
 
@@ -105,7 +106,7 @@ export type FiltersetStationPlain = BaseFilterset & {};
 
 export type FiltersetMaxBattle = BaseFilterset & {
 	levels?: number[];
-	bosses?: Pokemon[];
+	bosses?: QuestRewardPokemon[];
 	isActive?: boolean;
 	hasGmax?: boolean;
 };
