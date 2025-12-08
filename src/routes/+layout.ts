@@ -5,12 +5,16 @@ import {
 	setUserSettings,
 	updateUserSettings
 } from "@/lib/services/userSettings.svelte";
+import { browser } from "$app/environment";
 
 export const load: LayoutLoad = async ({ fetch }) => {
 	const configResponse = await fetch("/api/config");
 	setConfig(await configResponse.json());
 
-	const rawUserSettings = localStorage.getItem("userSettings");
+	let rawUserSettings: string | null = null
+	if (browser && window.localStorage) {
+		rawUserSettings = localStorage.getItem("userSettings");
+	}
 
 	if (rawUserSettings) {
 		setUserSettings(JSON.parse(rawUserSettings));

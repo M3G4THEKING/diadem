@@ -8,6 +8,7 @@ import type {
 	FilterStation
 } from "@/lib/features/filters/filters";
 import { getUserDetails } from "@/lib/services/user/userDetails.svelte.js";
+import { browser } from "$app/environment";
 
 type UiconSetUS = {
 	id: string;
@@ -149,7 +150,10 @@ export function getUserSettings() {
 
 export function updateUserSettings() {
 	const serializedUserSettings = JSON.stringify(userSettings);
-	localStorage.setItem("userSettings", serializedUserSettings);
+
+	if (browser && window.localStorage) {
+		localStorage.setItem("userSettings", serializedUserSettings);
+	}
 
 	if (getUserDetails().details) {
 		fetch("/api/user/settings", { method: "POST", body: serializedUserSettings }).then();

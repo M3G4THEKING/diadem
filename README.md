@@ -27,3 +27,8 @@ But I suggest adding your own caching rules, i.e. with Cloudflare:
 - In you CF dashboard, go to your domain -> Caching -> Cache rules -> Create rule
 - Set a name, and set `URI Full` | `wildcard` | `https://map.co/assets/*`
 - Optionally configure the caching rule and save
+
+## Contributing
+
+To set up a local dev environment, follow the setup instructions and run `pnpm run dev`.
+
