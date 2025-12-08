@@ -25,7 +25,7 @@
 		RewardType.POKEMON,
 		RewardType.ITEM,
 		RewardType.STARDUST,
-		RewardType.MEGA_ENERGY,
+		RewardType.MEGARESOURCE,
 		RewardType.XP,
 		RewardType.CANDY
 	]

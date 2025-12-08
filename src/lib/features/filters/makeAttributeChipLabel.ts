@@ -1,4 +1,4 @@
-import type { MinMax, Pokemon } from "@/lib/features/filters/filtersets";
+import type { MinMax, QuestRewardPokemon } from "@/lib/features/filters/filtersets";
 import { mPokemon } from '@/lib/services/ingameLocale';
 import * as m from '@/lib/paraglide/messages';
 import { getGenderLabel } from '@/lib/utils/pokemonUtils';
@@ -19,7 +19,7 @@ export function makeAttributeRangeLabel(value: MinMax | undefined = undefined, m
 	return m.range_to({ x: minLabel, y: maxLabel })
 }
 
-export function makeAttributePokemonLabel(pokemon: Pokemon[]) {
+export function makeAttributePokemonLabel(pokemon: QuestRewardPokemon[]) {
 	if (pokemon.length === 1) return mPokemon(pokemon[0])
 
 	return m.count_pokemon({ count: pokemon.length })

@@ -19,10 +19,10 @@ export enum RewardType {
 	QUEST = 6,
 	POKEMON = 7,
 	POKECOINS = 8,
-	XL_CANDY = 9,
+	XLCANDY = 9,
 	LEVEL_CAP = 10,
 	STICKER = 11,
-	MEGA_ENERGY = 12,
+	MEGARESOURCE = 12,
 	INCIDENT = 13,
 	PLAYER_ATTRIBUTE = 14,
 	EVENT_BADGE = 15,
@@ -72,12 +72,12 @@ export function getRewardText(reward: QuestReward) {
 			return m.quest_candy({ count: reward.info.amount, pokemon: mPokemon(reward.info) });
 		case RewardType.POKEMON:
 			return mPokemon(reward.info);
-		case RewardType.XL_CANDY:
+		case RewardType.XLCANDY:
 			return m.quest_xl_candy({
 				count: reward.info.amount,
 				pokemon: mPokemon(reward.info)
 			});
-		case RewardType.MEGA_ENERGY:
+		case RewardType.MEGARESOURCE:
 			return m.quest_mega_resource({
 				count: reward.info.amount,
 				pokemon: mPokemon(reward.info)
@@ -105,13 +105,13 @@ export function rewardTypeLabel(rewardType: RewardType) {
 			return m.pogo_pokemon();
 		case RewardType.POKECOINS:
 			return "Pokecoins";
-		case RewardType.XL_CANDY:
+		case RewardType.XLCANDY:
 			return m.xl_candy();
 		case RewardType.LEVEL_CAP:
 			return "Level Cap";
 		case RewardType.STICKER:
 			return "Sticker";
-		case RewardType.MEGA_ENERGY:
+		case RewardType.MEGARESOURCE:
 			return m.mega_energy();
 		case RewardType.INCIDENT:
 			return "Incident";
