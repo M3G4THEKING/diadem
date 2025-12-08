@@ -9,6 +9,7 @@ import type { FilterCategory } from '@/lib/features/filters/filters';
 import { filtersetPageNew } from '@/lib/features/filters/filtersetPages.svelte';
 import { IconCategory, IconFeature } from "@/lib/features/filters/icons";
 import { League } from '@/lib/services/uicons.svelte';
+import { getId } from "@/lib/utils/uuid";
 
 export const premadeFiltersets: { [key in FilterCategory]?: FiltersetPokemon[] } = {
 	pokemon: [
@@ -82,7 +83,7 @@ function filterset<Filterset extends AnyFilterset>(options: Params<Filterset>): 
 	const { title, uicon, emoji, ...rest } = options
 
 	const data: Filterset =  {
-		id: crypto.randomUUID(),
+		id: getId(),
 		icon: {
 			isUserSelected: false,
 		},

@@ -4,6 +4,7 @@ import type { AnyFilter, FilterCategory } from "@/lib/features/filters/filters";
 import { getUserSettings, updateUserSettings, type UserSettings } from "@/lib/services/userSettings.svelte";
 import { updateAllMapObjects } from "@/lib/mapObjects/updateMapObject";
 import { FiltersetPokemonSchema } from "@/lib/features/filters/filtersetSchemas";
+import { getId } from "@/lib/utils/uuid";
 
 type DataGeneric<M extends keyof UserSettings["filters"]> = {
 	majorCategory: M
@@ -141,7 +142,7 @@ export function toggleCurrentSelectedFilterset() {
 
 export function getNewFilterset(): BaseFilterset {
 	return {
-		id: crypto.randomUUID(),
+		id: getId(),
 		title: {
 			message: "pokemon_filter",
 			title: undefined
@@ -165,7 +166,7 @@ export function getCurrentSelectedFiltersetEncoded() {
 
 export function decodeFilterset(category: FilterCategory | string, str: string) {
 	const decoded: AnyFilterset = JSON.parse(decodeURIComponent(atob(str)));
-	decoded.id = crypto.randomUUID();
+	decoded.id = getId();
 
 	let safe: AnyFilterset | undefined = undefined;
 

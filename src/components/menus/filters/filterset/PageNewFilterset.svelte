@@ -15,6 +15,7 @@
 	import FiltersetIcon from '@/lib/features/filters/FiltersetIcon.svelte';
 	import { premadeFiltersets } from '@/lib/features/filters/premadeFiltersets';
 	import type { FilterCategory } from '@/lib/features/filters/filters';
+	import { getId } from "@/lib/utils/uuid";
 
 	let {
 		majorCategory,
@@ -58,7 +59,7 @@
 					size=""
 					variant="outline"
 					onclick={() => {
-						filterset.id = crypto.randomUUID()
+						filterset.id = getId()
 						setCurrentSelectedFilterset(majorCategory, subCategory, filterset, false)
 						filtersetPageSelect()
 					}}

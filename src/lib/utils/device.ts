@@ -27,7 +27,7 @@ export function copyToClipboard(content: string) {
 }
 
 export function canBackupShare(shareData: ShareData) {
-	return canNativeShare(shareData) || hasClipboardWrite()
+	return canNativeShare(shareData) || hasClipboardWrite();
 }
 
 export function backupShareUrl(url: string) {
@@ -37,4 +37,8 @@ export function backupShareUrl(url: string) {
 	} else if (hasClipboardWrite()) {
 		copyToClipboard(url);
 	}
+}
+
+export function hasTouch() {
+	return "ontouchstart" in window || (navigator?.maxTouchPoints ?? 0) > 0 || (navigator?.msMaxTouchPoints ?? 0) > 0;
 }
