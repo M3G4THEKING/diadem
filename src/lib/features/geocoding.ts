@@ -1,4 +1,5 @@
 import { getUserSettings } from '@/lib/services/userSettings.svelte.js';
+import { getLocale } from "@/lib/paraglide/runtime";
 
 export type AddressData = {
 	name: string
@@ -7,7 +8,7 @@ export type AddressData = {
 }
 
 export async function geocode(query: string) {
-	const lang = getUserSettings().languageTag
+	const lang = getLocale()
 
 	const result = await fetch("/api/address/" + encodeURIComponent(query) + "?lang=" + lang)
 

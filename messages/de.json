@@ -107,7 +107,7 @@
 	"league_rank": "{league} Rang",
 	"until": "bis",
 	"x_type": "{type}-Typ",
-	"connected_and": "{1}- und {2}",
+	"connected_and": "{first}- und {second}",
 	"pogo_dynamax_pokemon": "Dynamax {pokemon}",
 	"pogo_gigantamax_pokemon": "Gigadynamax {pokemon}",
 	"start": "Start",

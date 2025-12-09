@@ -33,7 +33,6 @@ export type UserSettings = {
 	loadMapObjectsWhileMoving: boolean;
 	loadMapObjectsPadding: number;
 	showDebugMenu: boolean;
-	languageTag: string | "auto";
 	mapIconSize: number;
 	filters: {
 		pokemon: FilterPokemon;
@@ -67,7 +66,6 @@ export function getDefaultUserSettings(): UserSettings {
 		themeMode: "system",
 		loadMapObjectsWhileMoving: false,
 		loadMapObjectsPadding: 20,
-		languageTag: "auto",
 		showDebugMenu: false,
 		mapIconSize: 1,
 		filters: {

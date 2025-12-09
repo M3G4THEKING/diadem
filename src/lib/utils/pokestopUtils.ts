@@ -151,8 +151,8 @@ export function getContestText(data: PokestopData) {
 	} else if (focus.type === "type") {
 		if (focus.pokemon_type_2) {
 			name = m.connected_and({
-				1: mType(focus.pokemon_type_1),
-				2:  m.x_type({ type: mType(focus.pokemon_type_2) })
+				first: mType(focus.pokemon_type_1),
+				second:  m.x_type({ type: mType(focus.pokemon_type_2) })
 			})
 		} else {
 			name = m.x_type({ type: mType(focus.pokemon_type_1) })

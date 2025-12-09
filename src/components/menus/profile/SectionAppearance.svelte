@@ -12,22 +12,20 @@
 	import MenuGeneric from "@/components/menus/MenuGeneric.svelte";
 	import RadioGroup from "@/components/ui/input/selectgroup/RadioGroup.svelte";
 	import { MapLibre } from "svelte-maplibre";
-	import { AVAILABLE_LANGUAGES } from "@/lib/constants";
 	import SelectGroupItem from "@/components/ui/input/selectgroup/SelectGroupItem.svelte";
 	import { mode } from "mode-watcher";
 	import { setThemeMode } from "@/lib/services/themeMode";
+	import { getLocale, setLocale } from "@/lib/paraglide/runtime";
 
-	type Language = {
-		label: string
-		value: string
-	}
-
-	const languages: Language[] = [
+	export const languages = [
 		{
-			label: m.language_auto(),
-			value: "auto"
+			label: m.language_english(),
+			value: "en"
 		},
-		...AVAILABLE_LANGUAGES
+		{
+			label: m.language_german(),
+			value: "de"
+		}
 	];
 </script>
 
@@ -37,8 +35,8 @@
 >
 	<Select
 		title={m.settings_language()}
-		value={getUserSettings().languageTag}
-		onselect={(tag) => onSettingsChange("languageTag", tag)}
+		value={getLocale()}
+		onselect={(locale) => setLocale(locale)}
 		options={languages}
 	/>
 

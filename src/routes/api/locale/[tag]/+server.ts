@@ -1,44 +1,46 @@
 import { json } from "@sveltejs/kit";
 import { prefixes as localePrefixesObject } from "@/lib/services/ingameLocale";
-import { AVAILABLE_LANGUAGES } from "@/lib/constants";
 import TTLCache from "@isaacs/ttlcache";
 import { getLogger } from "@/lib/server/logging";
+import { locales } from "@/lib/paraglide/runtime";
 
+type Locale = (typeof locales)[number];
 type RemoteLocale = { [key: string]: string };
 
-const log = getLogger("locale");
+const log = getLogger("remotelocale");
 
-const allowedLanguages = AVAILABLE_LANGUAGES.map((v) => v.value);
 const url =
 	"https://raw.githubusercontent.com/WatWowMap/pogo-translations/refs/heads/master/static/locales/{}.json";
 const allowedPrefixes = Object.values(localePrefixesObject);
 const updateCache: TTLCache<string, undefined> = new TTLCache({ ttl: 24 * 60 * 60 * 1000 }); // update once per day
 
-let remoteLocales: { [key: string]: RemoteLocale } = {};
+let remoteLocales: { [key in Locale]: RemoteLocale } = Object.fromEntries(
+	locales.map((l) => [l, {}])
+);
 
 let initialUpdatePromise: Promise<void> | undefined = updateAllRemoteLocales();
 initialUpdatePromise.then(() => (initialUpdatePromise = undefined));
 
 async function updateAllRemoteLocales() {
 	await Promise.all(
-		allowedLanguages.map((tag) => {
+		locales.map((tag) => {
 			return loadRemoteLocale(tag);
 		})
 	);
 }
 
-async function loadRemoteLocale(languageTag: string) {
-	if (!allowedLanguages.includes(languageTag)) return;
+async function loadRemoteLocale(locale: Locale) {
+	if (!locales.includes(locale)) return;
 
-	if (updateCache.has(languageTag)) return;
-	updateCache.set(languageTag, undefined);
+	if (updateCache.has(locale)) return;
+	updateCache.set(locale, undefined);
 
-	log.info("[%s] Updating remote locale", languageTag);
+	log.info("[%s] Updating remote locale", locale);
 
-	const result = await fetch(url.replaceAll("{}", languageTag));
+	const result = await fetch(url.replaceAll("{}", locale));
 
 	if (!result.ok) {
-		log.crit("[%s] Fetching remote locale failed: %s", languageTag, await result.text());
+		log.crit("[%s] Fetching remote locale failed: %s", locale, await result.text());
 		return;
 	}
 
@@ -55,11 +57,13 @@ async function loadRemoteLocale(languageTag: string) {
 		}
 	}
 
-	remoteLocales[languageTag] = remoteLocale;
-	log.info("[%s] Updated remote locale", languageTag);
+	remoteLocales[locale] = remoteLocale;
+	log.info("[%s] Updated remote locale", locale);
 }
 
 export async function GET({ params }) {
+	if (!locales.includes(params.tag)) return;
+
 	// update locale in the background (only once per 24h)
 	loadRemoteLocale(params.tag).then();
 

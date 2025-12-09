@@ -6,8 +6,8 @@ import { getUserDetails, updateUserDetails } from "@/lib/services/user/userDetai
 import { browser } from "$app/environment";
 import { getUserSettings, getUserSettingsFromServer } from "@/lib/services/userSettings.svelte.js";
 import { loadRemoteLocale } from "@/lib/services/ingameLocale";
-import { resolveLanguageTag } from "@/lib/services/i18n";
 import { loadMasterStats } from "@/lib/features/masterStats.svelte";
+import { getLocale } from "@/lib/paraglide/runtime";
 
 export enum LoadedFeature {
 	ICON_SETS = "iconSets",
@@ -59,7 +59,7 @@ export async function load() {
 		loadingWrapper(loadMasterStats(), LoadedFeature.MASTER_STATS),
 		loadingWrapper(updateUserDetails(), LoadedFeature.USER_DETAILS),
 		loadingWrapper(
-			loadRemoteLocale(resolveLanguageTag(getUserSettings().languageTag)),
+			loadRemoteLocale(getLocale()),
 			LoadedFeature.REMOTE_LOCALE
 		),
 	]);
@@ -69,7 +69,7 @@ export async function load() {
 			await getUserSettingsFromServer();
 		}
 
-		await loadRemoteLocale(resolveLanguageTag(getUserSettings().languageTag));
+		await loadRemoteLocale(getLocale());
 	}
 
 	loadedFeatures.push(LoadedFeature.SERVER_USER_SETTINGS);

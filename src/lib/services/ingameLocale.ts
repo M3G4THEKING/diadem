@@ -1,8 +1,6 @@
-import type { MasterFile } from '@/lib/types/masterfile';
-import { getUserSettings } from '@/lib/services/userSettings.svelte.js';
-import * as m from "@/lib/paraglide/messages"
-import type { PokemonData } from '@/lib/types/mapObjectData/pokemon';
-import { resolveLanguageTag } from '@/lib/services/i18n';
+import * as m from "@/lib/paraglide/messages";
+import type { PokemonData } from "@/lib/types/mapObjectData/pokemon";
+import { getLocale } from "@/lib/paraglide/runtime";
 
 export const prefixes = {
 	pokemon: "poke_",
@@ -16,33 +14,33 @@ export const prefixes = {
 	generation: "generation_",
 	quest: "quest_title_",
 	character: "grunt_a_"
-}
+};
 
-let remoteLocales: { [key: string]: { [key: string]: string } } = {}
+let remoteLocales: { [key: string]: { [key: string]: string } } = {};
 
 export async function loadRemoteLocale(languageTag: string, thisFetch: typeof fetch = fetch) {
-	if (Object.keys(remoteLocales).includes(languageTag)) return
+	if (Object.keys(remoteLocales).includes(languageTag)) return;
 
-	const result = await thisFetch("/api/locale/" + languageTag)
-	const data = await result.json()
-	remoteLocales[languageTag] = data
+	const result = await thisFetch("/api/locale/" + languageTag);
+	const data = await result.json();
+	remoteLocales[languageTag] = data;
 }
 
 function mIngame(key: string): string {
-	const languageTag = resolveLanguageTag(getUserSettings().languageTag)
-	let locale = remoteLocales[languageTag]
+	const languageTag = getLocale();
+	let locale = remoteLocales[languageTag];
 
 	if (!locale) {
-		const allRemoteLocales = Object.values(remoteLocales)
+		const allRemoteLocales = Object.values(remoteLocales);
 
 		if (allRemoteLocales) {
-			locale = allRemoteLocales[0]
+			locale = allRemoteLocales[0];
 		} else {
-			return ""
+			return "";
 		}
 	}
 
-	return locale[key] ?? ""
+	return locale[key] ?? "";
 }
 
 /**
@@ -53,16 +51,20 @@ function mIngame(key: string): string {
  * @param id the ID to translate, can be nullish
  * @param defaultName placeholder for missing translations, defaults to "unknown X"
  */
-function mBasicId(name: keyof typeof prefixes, id?: string | number | null, defaultName?: string  | null): string {
+function mBasicId(
+	name: keyof typeof prefixes,
+	id?: string | number | null,
+	defaultName?: string | null
+): string {
 	// @ts-ignore dynamic message
-	if (!id) return m["unknown_" + name]()
+	if (!id) return m["unknown_" + name]();
 
-	const localeString = mIngame(prefixes[name] + id)
+	const localeString = mIngame(prefixes[name] + id);
 
 	// @ts-ignore dynamic message
-	if (!localeString) return defaultName ?? m["unknown_" + name]()
+	if (!localeString) return defaultName ?? m["unknown_" + name]();
 
-	return localeString
+	return localeString;
 }
 
 /**
@@ -70,33 +72,33 @@ function mBasicId(name: keyof typeof prefixes, id?: string | number | null, defa
  * @param data The Pokemon Data
  */
 export function mPokemon(data: Partial<PokemonData>) {
-	if (!data.pokemon_id) return m.unknown_pokemon()
+	if (!data.pokemon_id) return m.unknown_pokemon();
 
 	// base pokemon name
-	let key = prefixes.pokemon + data.pokemon_id
+	let key = prefixes.pokemon + data.pokemon_id;
 
 	// get full name if it's a temp evolution
-	if (data.temp_evolution_id) key += "_e" + data.temp_evolution_id
+	if (data.temp_evolution_id) key += "_e" + data.temp_evolution_id;
 
-	let name = mIngame(key)
-	if (!name) return m.unknown_pokemon()
+	let name = mIngame(key);
+	if (!name) return m.unknown_pokemon();
 
 	// add sparkles if shiny
-	if (data.shiny) name += " ✨"
+	if (data.shiny) name += " ✨";
 
 	// if it's a special form, append in ()
-	const normalFormName = mIngame(prefixes.form + "45")
-	const formName = data.form ? mIngame(prefixes.form + data.form) : ""
-	if (formName && formName !== normalFormName) name += " (" + formName + ")"
+	const normalFormName = mIngame(prefixes.form + "45");
+	const formName = data.form ? mIngame(prefixes.form + data.form) : "";
+	if (formName && formName !== normalFormName) name += " (" + formName + ")";
 
 	// get dynamax/gigantamax names
 	if (data.bread_mode === 1) {
-		name = m.pogo_dynamax_pokemon({ pokemon: name })
+		name = m.pogo_dynamax_pokemon({ pokemon: name });
 	} else if (data.bread_mode === 2) {
-		name = m.pogo_gigantamax_pokemon({ pokemon: name })
+		name = m.pogo_gigantamax_pokemon({ pokemon: name });
 	}
 
-	return name
+	return name;
 }
 
 /**
@@ -106,12 +108,12 @@ export function mPokemon(data: Partial<PokemonData>) {
  */
 export function mQuest(questTitle?: string | null, target?: number | null) {
 	// get basic quest text
-	let questText = mBasicId("quest", questTitle, questTitle)
+	let questText = mBasicId("quest", questTitle, questTitle);
 
 	// insert the target into the quest text
-	questText = questText.replaceAll("%{amount_0}", "" + (target ?? ""))
+	questText = questText.replaceAll("%{amount_0}", "" + (target ?? ""));
 
-	return questText
+	return questText;
 }
 
 /**
@@ -119,7 +121,7 @@ export function mQuest(questTitle?: string | null, target?: number | null) {
  * @param weatherId The weather ID
  */
 export function mWeather(weatherId?: number | string | null) {
-	return mBasicId("weather", weatherId)
+	return mBasicId("weather", weatherId);
 }
 
 /**
@@ -127,7 +129,7 @@ export function mWeather(weatherId?: number | string | null) {
  * @param typeId
  */
 export function mType(typeId?: number | string | null) {
-	return mBasicId("type", typeId)
+	return mBasicId("type", typeId);
 }
 
 /**
@@ -135,7 +137,7 @@ export function mType(typeId?: number | string | null) {
  * @param itemId
  */
 export function mItem(itemId?: number | string | null) {
-	return mBasicId("item", itemId)
+	return mBasicId("item", itemId);
 }
 
 /**
@@ -143,7 +145,7 @@ export function mItem(itemId?: number | string | null) {
  * @param raidLevel
  */
 export function mRaid(raidLevel?: number | string | null) {
-	return mBasicId("raid", raidLevel)
+	return mBasicId("raid", raidLevel);
 }
 
 /**
@@ -151,7 +153,7 @@ export function mRaid(raidLevel?: number | string | null) {
  * @param moveId
  */
 export function mMove(moveId?: number | string | null) {
-	return mBasicId("move", moveId)
+	return mBasicId("move", moveId);
 }
 
 /**
@@ -159,7 +161,7 @@ export function mMove(moveId?: number | string | null) {
  * @param alignmentId
  */
 export function mAlignment(alignmentId?: number | string | null) {
-	return mBasicId("alignment", alignmentId)
+	return mBasicId("alignment", alignmentId);
 }
 
 /**
@@ -167,7 +169,7 @@ export function mAlignment(alignmentId?: number | string | null) {
  * @param generationId
  */
 export function mGeneration(generationId?: number | string | null) {
-	return mBasicId("generation", generationId)
+	return mBasicId("generation", generationId);
 }
 
 /**
@@ -175,5 +177,5 @@ export function mGeneration(generationId?: number | string | null) {
  * @param characterId
  */
 export function mCharacter(characterId?: number | string | null) {
-	return mBasicId("character", characterId)
+	return mBasicId("character", characterId);
 }

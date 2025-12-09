@@ -1,9 +1,4 @@
-import { getUserSettings } from '@/lib/services/userSettings.svelte';
-import { resolveLanguageTag } from '@/lib/services/i18n';
-
-function getLocale(): string {
-	return resolveLanguageTag(getUserSettings().languageTag);
-}
+import { getLocale } from "@/lib/paraglide/runtime";
 
 /**
  * Format a number with full precision and locale-specific formatting
