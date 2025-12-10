@@ -108,7 +108,11 @@ export function mPokemon(data: Partial<PokemonData>) {
  */
 export function mQuest(questTitle?: string | null, target?: number | null) {
 	// get basic quest text
-	let questText = mBasicId("quest", questTitle, questTitle);
+	let questText = mBasicId(
+		"quest",
+		questTitle?.toLowerCase(),
+		questTitle?.toLowerCase()?.replaceAll("_", " ") ?? m.unknown_quest()
+	);
 
 	// insert the target into the quest text
 	questText = questText.replaceAll("%{amount_0}", "" + (target ?? ""));
