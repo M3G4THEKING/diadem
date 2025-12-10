@@ -1,10 +1,10 @@
 <script lang="ts">
-	import type { PokemonData } from '@/lib/types/mapObjectData/pokemon';
-	import Countdown from '@/components/utils/Countdown.svelte';
-	import { getWeatherIcon } from '@/lib/utils/weatherIcons.js';
-	import BasePopup from '@/components/ui/popups/BasePopup.svelte';
-	import ImagePopup from '@/components/ui/popups/common/ImagePopup.svelte';
-	import { getIconPokemon } from '@/lib/services/uicons.svelte.js';
+	import type { PokemonData } from "@/lib/types/mapObjectData/pokemon";
+	import Countdown from "@/components/utils/Countdown.svelte";
+	import { getWeatherIcon } from "@/lib/utils/weatherIcons.js";
+	import BasePopup from "@/components/ui/popups/BasePopup.svelte";
+	import ImagePopup from "@/components/ui/popups/common/ImagePopup.svelte";
+	import { getIconPokemon } from "@/lib/services/uicons.svelte.js";
 	import {
 		ArrowLeftRight,
 		BicepsFlexed,
@@ -24,15 +24,15 @@
 		Swords,
 		Trophy,
 		Venus
-	} from 'lucide-svelte';
-	import IconValue from '@/components/ui/popups/common/IconValue.svelte';
-	import * as m from '@/lib/paraglide/messages';
-	import { mMove, mPokemon, mWeather } from '@/lib/services/ingameLocale';
-	import TimeWithCountdown from '@/components/ui/popups/common/TimeWithCountdown.svelte';
-	import { getMapObjects } from '@/lib/mapObjects/mapObjectsState.svelte.js';
-	import { POKEMON_MIN_RANK } from '@/lib/constants';
-	import PvpEntry from '@/components/ui/popups/pokemon/PvpEntry.svelte';
-	import { getCurrentSelectedData } from '@/lib/mapObjects/currentSelectedState.svelte';
+	} from "lucide-svelte";
+	import IconValue from "@/components/ui/popups/common/IconValue.svelte";
+	import * as m from "@/lib/paraglide/messages";
+	import { mMove, mPokemon, mWeather } from "@/lib/services/ingameLocale";
+	import TimeWithCountdown from "@/components/ui/popups/common/TimeWithCountdown.svelte";
+	import { getMapObjects } from "@/lib/mapObjects/mapObjectsState.svelte.js";
+	import { POKEMON_MIN_RANK } from "@/lib/constants";
+	import PvpEntry from "@/components/ui/popups/pokemon/PvpEntry.svelte";
+	import { getCurrentSelectedData } from "@/lib/mapObjects/currentSelectedState.svelte";
 	import {
 		getPokemonSize,
 		getRank,
@@ -41,11 +41,11 @@
 		showGreat,
 		showLittle,
 		showUltra
-	} from '@/lib/utils/pokemonUtils';
-	import Metadata from '@/components/utils/Metadata.svelte';
-	import { getPokemonStats as getMasterPokemonStats, type PokemonStats } from '@/lib/features/masterStats.svelte';
-	import Button from '@/components/ui/input/Button.svelte';
-	import { formatNumber, formatNumberCompact, formatRatio } from '@/lib/utils/numberFormat';
+	} from "@/lib/utils/pokemonUtils";
+	import Metadata from "@/components/utils/Metadata.svelte";
+	import { getPokemonStats as getMasterPokemonStats, type PokemonStats } from "@/lib/features/masterStats.svelte";
+	import { formatRatio } from "@/lib/utils/numberFormat";
+	import StatsDisplay from "@/components/ui/popups/common/StatsDisplay.svelte";
 
 	let { mapId }: { mapId: string } = $props();
 	let data: PokemonData = $derived(getMapObjects()[mapId] as PokemonData ?? getCurrentSelectedData() as PokemonData);
@@ -54,7 +54,7 @@
 
 	let stats: PokemonStats | undefined = $derived(getMasterPokemonStats(data.pokemon_id, data.form ?? 0));
 
-	</script>
+</script>
 
 <svelte:head>
 	<Metadata title={mPokemon(data)} />
@@ -181,16 +181,10 @@
 	{#snippet content()}
 		{#if stats && stats.entry}
 			{@const entry = stats.entry}
-			<div class="rounded-sm bg-accent text-accent-foreground border border-border px-4 -mx-4 pt-3 pb-3.5 mb-2 mt-3">
-				<p class="text-xs mb-2">
-					{m.stats()}
-					· {m.last_x_days({ days: formatNumber(stats.total.days) })}
-					· {m.total_seen()}: {formatNumberCompact(entry?.shiny?.total ?? entry?.spawns?.count)}
-<!--					·-->
-<!--					<Button variant="link" size="sm" class="p-0! m-0! h-fit! text-xs! underline">-->
-<!--						See more-->
-<!--					</Button>-->
-				</p>
+			<StatsDisplay
+				days={stats.total.days}
+				total={entry?.shiny?.total ?? entry?.spawns?.count}
+			>
 				{#if entry.shiny && entry.shiny.shinies > 0}
 					<IconValue Icon={Sparkles}>
 						{m.shiny_rate()}:
@@ -214,7 +208,7 @@
 						</span>
 					</IconValue>
 				{/if}
-			</div>
+			</StatsDisplay>
 		{/if}
 
 		<div class="mb-3">

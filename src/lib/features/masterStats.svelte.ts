@@ -1,4 +1,6 @@
 import type { MasterStats, PokemonStatEntry, TotalPokemonStats } from "@/lib/server/api/queryStats";
+import { getQuestKey } from "@/lib/utils/pokestopUtils";
+import type { QuestReward } from "@/lib/types/mapObjectData/pokestop";
 
 let masterStats: MasterStats | undefined = $state(undefined);
 
@@ -29,4 +31,17 @@ export function getPokemonStats(pokemonId: number, formId: number): PokemonStats
 		total: masterStats.totalPokemon,
 		entry: masterStats.pokemon[key]
 	}
+}
+
+export function getQuestCount(reward: string, title: string, target: number) {
+	return masterStats?.quests[getQuestKey(reward, title, target)]?.count ?? 0
+}
+
+export function getQuestStatsForRewardFilter(reward: QuestReward) {
+	const allQuests = Object.values(masterStats?.quests ?? {})
+	return allQuests.find(q => q.reward === reward)
+}
+
+export function getQuestStatsForTask(title: string, target: number) {
+	
 }

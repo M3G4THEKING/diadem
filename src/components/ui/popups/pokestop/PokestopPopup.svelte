@@ -11,7 +11,7 @@
 	import UpdatedTimes from '@/components/ui/popups/common/UpdatedTimes.svelte';
 	import FortPowerUp from '@/components/ui/popups/common/FortPowerUp.svelte';
 	import { getConfig } from '@/lib/services/config/config';
-	import { ClockAlert, Smartphone } from 'lucide-svelte';
+	import { ClockAlert, Crown, Smartphone, Sparkles } from "lucide-svelte";
 	import IconValue from '@/components/ui/popups/common/IconValue.svelte';
 	import QuestDisplay from '@/components/ui/popups/pokestop/QuestDisplay.svelte';
 	import PokestopSection from '@/components/ui/popups/pokestop/PokestopSection.svelte';
@@ -27,6 +27,9 @@
 		isIncidentKecleon, shouldDisplayIncidient, shouldDisplayLure
 	} from '@/lib/utils/pokestopUtils';
 	import { isFortOutdated } from '@/lib/utils/gymUtils';
+	import { formatRatio } from "@/lib/utils/numberFormat";
+	import { getRarityLabel } from "@/lib/utils/pokemonUtils";
+	import StatsDisplay from "@/components/ui/popups/common/StatsDisplay.svelte";
 
 	let { mapId } : { mapId: string } = $props()
 	let data: PokestopData = $derived(getMapObjects()[mapId] as PokestopData ?? getCurrentSelectedData() as PokestopData)
