@@ -4,7 +4,7 @@ A WIP next-gen map frontend for pogo.
 
 [Demo](https://map.malt.ee) | [Discord](https://discord.com/invite/VGgsQN2hYG)
 
-![](https://raw.githubusercontent.com/ccev/diadem/main/.github/map.png)
+![](https://raw.githubusercontent.com/ccev/diadem/refs/heads/main/.github/map.png)
 
 ## Features & Roadmap
 
