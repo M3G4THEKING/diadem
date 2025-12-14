@@ -1,0 +1,21 @@
+import { getMap } from "@/lib/map/map.svelte";
+import type { GeoJSONSource } from "maplibre-gl";
+import type { GeoJSON as GeoJsonType } from 'geojson';
+
+export enum MapSourceId {
+	MAP_OBJECTS = "mapObjects",
+	S2_CELLS = "s2cells",
+	SELECTED_WEATHER = "selectedWeather",
+	SCOUT_BIG_POINTS = "scoutBigPoints",
+	SCOUT_SMALL_POINTS = "scoutSmallPoints"
+}
+
+export function updateMapGeojsonSource(sourceId: MapSourceId, data: GeoJsonType) {
+	const map = getMap()
+	if (!map) return
+
+	const source = map.getSource<GeoJSONSource>(sourceId)
+	if (!source) return
+
+	source.setData(data)
+}

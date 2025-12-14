@@ -13,6 +13,7 @@ let sessionImageUrls: string[] = [];
 
 export function updateMapObjectsGeoJson(features: Feature[]) {
 	mapObjectsGeoJson = { type: 'FeatureCollection', features };
+
 	getMap()?.getSource('mapObjects')?.setData(mapObjectsGeoJson);
 	Promise.all(
 		mapObjectsGeoJson.features.map((f) => {

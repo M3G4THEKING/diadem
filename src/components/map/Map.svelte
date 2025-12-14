@@ -1,18 +1,18 @@
 <script lang="ts">
-	import { GeoJSON, MapLibre, SymbolLayer } from 'svelte-maplibre';
-	import { getUserSettings, updateUserSettings } from '@/lib/services/userSettings.svelte.js';
-	import { onDestroy, onMount, tick } from 'svelte';
-	import { getDirectLinkObject } from '@/lib/features/directLinks.svelte.js';
-	import { clickFeatureHandler, clickMapHandler, openPopup, updateCurrentPath } from '@/lib/mapObjects/interact';
-	import { updateAllMapObjects } from '@/lib/mapObjects/updateMapObject';
-	import Card from '@/components/ui/Card.svelte';
-	import * as m from '@/lib/paraglide/messages';
-	import { isWebglSupported } from '@/lib/map/utils';
-	import { clearUpdateMapObjectsInterval, resetUpdateMapObjectsInterval } from '@/lib/map/mapObjectsInterval';
-	import { getMap, setMap } from '@/lib/map/map.svelte';
-	import { clearPressTimer, onContextMenu } from '@/lib/ui/contextmenu.svelte.js';
-	import { clearSessionImageUrls, getMapObjectsGeoJson } from '@/lib/map/featuresManage.svelte';
-	import { loadMapObjectInterval } from '@/lib/map/loadMapObjects';
+	import { GeoJSON, MapLibre, SymbolLayer } from "svelte-maplibre";
+	import { getUserSettings, updateUserSettings } from "@/lib/services/userSettings.svelte.js";
+	import { onDestroy, onMount, tick } from "svelte";
+	import { getDirectLinkObject } from "@/lib/features/directLinks.svelte.js";
+	import { clickFeatureHandler, clickMapHandler, openPopup, updateCurrentPath } from "@/lib/mapObjects/interact";
+	import { updateAllMapObjects } from "@/lib/mapObjects/updateMapObject";
+	import Card from "@/components/ui/Card.svelte";
+	import * as m from "@/lib/paraglide/messages";
+	import { isWebglSupported } from "@/lib/map/utils";
+	import { clearUpdateMapObjectsInterval, resetUpdateMapObjectsInterval } from "@/lib/map/mapObjectsInterval";
+	import { getMap, setMap } from "@/lib/map/map.svelte";
+	import { clearPressTimer, onContextMenu } from "@/lib/ui/contextmenu.svelte.js";
+	import { clearSessionImageUrls } from "@/lib/map/featuresManage.svelte";
+	import { loadMapObjectInterval } from "@/lib/map/loadMapObjects";
 	import {
 		onMapMove,
 		onMapMoveEnd,
@@ -21,26 +21,22 @@
 		onTouchStart,
 		onWindowFocus
 	} from "@/lib/map/events";
-	import maplibre from 'maplibre-gl';
-	import { getS2CellGeojson } from '@/lib/mapObjects/s2cells.svelte.js';
-	import S2CellLayer from '@/components/map/S2CellLayer.svelte';
-	import { getSelectedWeatherS2Cells } from '@/lib/mapObjects/weather.svelte';
-	import DebugMenu from '@/components/map/DebugMenu.svelte';
-	import { hasLoadedFeature, LoadedFeature } from '@/lib/services/initialLoad.svelte.js';
-	import { openToast } from '@/lib/ui/toasts.svelte.js';
-	import { addMapObjects, getMapObjects } from "@/lib/mapObjects/mapObjectsState.svelte";
-	import MarkerCurrentLocation from '@/components/map/MarkerCurrentLocation.svelte';
-	import MarkerContextMenu from '@/components/map/MarkerContextMenu.svelte';
-	import { getCurrentScoutData } from '@/lib/features/scout.svelte.js';
-	import { Coords } from '@/lib/utils/coordinates';
-	import { isAnyModalOpen, openModal } from '@/lib/ui/modal.svelte.js';
-	import {
-		getCurrentSelectedFilterset,
-		getCurrentSelectedFiltersetIsShared
-	} from '@/lib/features/filters/filtersetPageData.svelte';
-	import { filtersetPageReset } from '@/lib/features/filters/filtersetPages.svelte';
-	import { openMenu } from '@/lib/ui/menus.svelte';
-	import { updateFeatures } from "@/lib/map/featuresGen.svelte";
+	import maplibre from "maplibre-gl";
+	import { getS2CellGeojson } from "@/lib/mapObjects/s2cells.svelte.js";
+	import GeometryLayer from "@/components/map/GeometryLayer.svelte";
+	import DebugMenu from "@/components/map/DebugMenu.svelte";
+	import { hasLoadedFeature, LoadedFeature } from "@/lib/services/initialLoad.svelte.js";
+	import { openToast } from "@/lib/ui/toasts.svelte.js";
+	import { addMapObjects } from "@/lib/mapObjects/mapObjectsState.svelte";
+	import MarkerCurrentLocation from "@/components/map/MarkerCurrentLocation.svelte";
+	import MarkerContextMenu from "@/components/map/MarkerContextMenu.svelte";
+	import { getCurrentScoutData } from "@/lib/features/scout.svelte.js";
+	import { Coords } from "@/lib/utils/coordinates";
+	import { isAnyModalOpen, openModal } from "@/lib/ui/modal.svelte.js";
+	import { getCurrentSelectedFiltersetIsShared } from "@/lib/features/filters/filtersetPageData.svelte";
+	import { filtersetPageReset } from "@/lib/features/filters/filtersetPages.svelte";
+	import { openMenu } from "@/lib/ui/menus.svelte";
+	import { MapSourceId } from "@/lib/map/layers";
 
 	let map: maplibre.Map | undefined = $state(undefined);
 	const initialMapPosition = JSON.parse(JSON.stringify(getUserSettings().mapPosition));
@@ -138,13 +134,13 @@
 		onload={onMapLoad}
 		oncontextmenu={onContextMenu}
 	>
-		<S2CellLayer id="s2cells" data={getS2CellGeojson()} />
-		<S2CellLayer id="selectedWeatherLayer" data={getSelectedWeatherS2Cells()} />
-		<S2CellLayer id="scoutBigPoints" data={getCurrentScoutData().bigPoints} />
-		<S2CellLayer id="scoutSmallPoints" data={getCurrentScoutData().smallPoints} />
+		<GeometryLayer id={MapSourceId.S2_CELLS} data={getS2CellGeojson()} />
+		<GeometryLayer id={MapSourceId.SELECTED_WEATHER} reactive={false} />
+		<GeometryLayer id={MapSourceId.SCOUT_BIG_POINTS} data={getCurrentScoutData().bigPoints} />
+		<GeometryLayer id={MapSourceId.SCOUT_SMALL_POINTS} data={getCurrentScoutData().smallPoints} />
 
 		<GeoJSON
-			id="mapObjects"
+			id={MapSourceId.MAP_OBJECTS}
 			data={{
 				type: 'FeatureCollection',
 				features: []

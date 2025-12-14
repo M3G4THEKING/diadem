@@ -58,6 +58,8 @@ export async function GET({ params, url }) {
 		error(500)
 	}
 
+	log.info("Succcessfully serving address search results")
+
 	const data: FeatureCollection<Point, NominatimProps> = await response.json();
 
 	return json({
