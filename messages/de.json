@@ -131,6 +131,7 @@
 	"quest_stardust": "{count} Sternenstaub",
 	"quest_candy": "{count} {pokemon} Bonbons",
 	"quest_xl_candy": "{count} {pokemon} XL Bonbons",
+	"quest_mega_resource": "{count} {pokemon} Mega Energie",
 	"quest_ar_notice": "Beim Drehen musst du eine AR-Scan Aufgabe halten",
 	"quest_noar_notice": "Beim Drehen darfst du keine AR-Scan Aufgabe halten",
 	"signin_toast_error": "Fehler beim Einloggen, bitte probiere es nochmal",
