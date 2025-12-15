@@ -45,15 +45,16 @@ export type UserSettings = {
 };
 
 export function getDefaultUserSettings(): UserSettings {
+	const general = getConfig().general;
 	const defaultMapStyle = getDefaultMapStyle()
 
 	return {
 		mapPosition: {
 			center: {
-				lat: 53.86762990550971,
-				lng: 10.687758976519007
+				lat: general.defaultLat ?? 51.516855,
+				lng: general.defaultLon ?? -0.080500
 			},
-			zoom: 15
+			zoom: general.defaultZoom ?? 15
 		},
 		mapStyle: {
 			id: defaultMapStyle.id,

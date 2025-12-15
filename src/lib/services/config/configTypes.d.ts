@@ -32,6 +32,9 @@ type General = {
 	mapName: string
 	defaultLocale: string
 	customHome: boolean
+	defaultLat?: number
+	defaultLon?: number
+	defaultZoom?: number
 }
 
 export type DbCreds = {
