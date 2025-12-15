@@ -25,6 +25,10 @@
 		{
 			label: m.language_german(),
 			value: "de"
+		},
+		{
+			label: m.language_spanish(),
+			value: "es"
 		}
 	];
 </script>

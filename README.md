@@ -10,8 +10,8 @@ A WIP next-gen map frontend for pogo.
 
 Diadem is under active development, and as of writing this, not ready for production use.
 
-For a list of planned features (and fixes), check out the [Issue page](https://github.com/ccev/diadem/issues). 
-To get an idea of what's working right now, check out the [Demo](https://map.malt.ee).
+For a list of planned features (and fixes), check out the [issues](https://github.com/ccev/diadem/issues). 
+To get an idea of what's working right now, check out the [demo](https://map.malt.ee).
 
 ## Setup
 
