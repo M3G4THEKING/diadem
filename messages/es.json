@@ -219,7 +219,6 @@
 	"stardust": "Polvo de estrellas",
 	"xp": "XP",
 	"xl_candy": "Caramelo XL",
-	"redirect_notice": "Se le redirigirá automáticamente a {goal} . Haga clic aquí si no funcionó.",
-	"language_spanish": "Español",
-	"signin": "Link"
+	"redirect_notice": "Se le redirigirá automáticamente a {goal}. Haga clic aquí si no funcionó.",
+	"language_spanish": "Español"
 }

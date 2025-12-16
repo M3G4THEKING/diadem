@@ -219,7 +219,6 @@
 	"stardust": "Poeira Estelar",
 	"xp": "XP",
 	"xl_candy": "Doce XL",
-	"redirect_notice": "Você está sendo redirecionado automaticamente para {goal} . Clique aqui se isso não funcionar.",
-	"language_spanish": "Espanhol",
-	"signin": "Link"
+	"redirect_notice": "Você está sendo redirecionado automaticamente para {goal}. Clique aqui se isso não funcionar.",
+	"language_spanish": "Espanhol"
 }
